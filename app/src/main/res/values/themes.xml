@@ -1,7 +1,7 @@
 <resources>
     <style name="Theme.MyApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Splash Screen -->
-        <item name="android:windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowSplashScreenBackground">@color/principal_green</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo</item>
     </style>
 </resources>

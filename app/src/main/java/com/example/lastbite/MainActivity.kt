@@ -20,7 +20,6 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        Thread.sleep(1000)
         startActivity(Intent(this, AuthActivity::class.java))
     }
 }
