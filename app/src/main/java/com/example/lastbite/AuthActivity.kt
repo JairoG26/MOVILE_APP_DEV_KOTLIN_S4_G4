@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 
 class AuthActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class AuthActivity : AppCompatActivity() {
         setContentView(R.layout.activity_auth)
 
         val signInButton: Button = findViewById(R.id.btnSignIn)
-        val signUpButton: Button = findViewById(R.id.btnSignUp)
+        val signUpButton: TextView = findViewById(R.id.btnSignUp)
 
         signInButton.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
