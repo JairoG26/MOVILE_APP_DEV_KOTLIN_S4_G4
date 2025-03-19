@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lastbite"
-        minSdk = 28
+        minSdk = 28 // Samsung Galaxy A8
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
