@@ -8,4 +8,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray_background">#F2F3F2</color>
+    <color name="secondary_green">#53B175</color>
+    <color name="gray_lettering">#7C7C7C</color>
+    <color name="orange_star">#F3603F</color>
 </resources>
