@@ -11,4 +11,5 @@
     <string name="for_you">For you</string>
     <string name="stores_">Stores</string>
     <string name="nearby_p">Nearby places</string>
+    <string name="order_restaurant">This has to be replaced by the associated restaurant.</string>
 </resources>
