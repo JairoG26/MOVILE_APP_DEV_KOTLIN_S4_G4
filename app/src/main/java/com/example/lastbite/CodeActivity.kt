@@ -13,24 +13,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class PhoneActivity : AppCompatActivity() {
+class CodeActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_phone)
+        setContentView(R.layout.activity_code)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
-        val etNewPhoneInput: EditText = findViewById(R.id.etPhoneInput)
+        val etCodeInput: EditText = findViewById(R.id.etCodeInput)
         val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
 
-        etNewPhoneInput.requestFocus()
-        etNewPhoneInput.postDelayed({
+        etCodeInput.requestFocus()
+        etCodeInput.postDelayed({
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(etNewPhoneInput, InputMethodManager.SHOW_IMPLICIT)
+            imm.showSoftInput(etCodeInput, InputMethodManager.SHOW_IMPLICIT)
         }, 200)
 
         fabNext.setOnClickListener {
-            val intent = Intent(this, CodeActivity::class.java)
+            val intent = Intent(this, LocationActivity::class.java)
             startActivity(intent)
         }
     }

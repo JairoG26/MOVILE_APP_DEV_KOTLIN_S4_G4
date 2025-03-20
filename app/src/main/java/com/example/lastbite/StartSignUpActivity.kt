@@ -15,9 +15,19 @@ class StartSignUpActivity : AppCompatActivity() {
 
         val etPhoneNumber: EditText = findViewById(R.id.phoneInput)
 
+        etPhoneNumber.setOnClickListener {
+            if (!etPhoneNumber.isFocused) { // Solo si aún no tiene foco
+                etPhoneNumber.requestFocus()
+            } else {
+                val intent = Intent(this, PhoneActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
         etPhoneNumber.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val intent = Intent(this, PhoneActivity::class.java)
+                etPhoneNumber.clearFocus()
                 startActivity(intent)
             }
         }

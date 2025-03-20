@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingHorizontal="25dp"
         android:gravity="top"
         android:paddingTop="80dp">
 
@@ -18,9 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingVertical="20dp"
-            android:paddingHorizontal="25dp"
-            android:text="Enter your mobile number"
             android:textColor="@color/black"
+            android:text="Enter your 4-digit code"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -28,45 +28,19 @@
             android:id="@+id/grayText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
             android:paddingBottom="5dp"
-            android:text="Mobile Number"
+            android:text="Code"
+            android:textStyle="bold"
             android:textColor="#4D4D4D"
             android:textSize="15dp" />
 
-        <LinearLayout
-            android:id="@+id/llPhoneContainer"
+
+        <EditText
+            android:id="@+id/etCodeInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="25dp">
-
-            <ImageView
-                android:id="@+id/flagIcon"
-                android:layout_width="24dp"
-                android:layout_height="16dp"
-                android:src="@drawable/colombiaflagicon"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/llCountryCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+57"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginEnd="8dp"/>
-
-            <EditText
-                android:id="@+id/etPhoneInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Phone number"
-                android:textColor="@color/black"
-                android:inputType="phone"
-                android:padding="12dp"/>
-        </LinearLayout>
+            android:hint="- - - -"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -78,5 +52,16 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_arrow_white"
         android:backgroundTint="@color/principal_green"/>
+
+    <TextView
+        android:id="@+id/resendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="Resend code"
+        android:textColor="@color/principal_green"
+        android:textStyle="bold" />
 
 </FrameLayout>
