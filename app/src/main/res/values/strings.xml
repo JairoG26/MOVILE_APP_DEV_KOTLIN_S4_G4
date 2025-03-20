@@ -12,4 +12,7 @@
     <string name="stores_">Stores</string>
     <string name="nearby_p">Nearby places</string>
     <string name="order_restaurant">This has to be replaced by the associated restaurant.</string>
+    <string name="back_button">It takes you to the previous page you were.</string>
+    <string name="go_checkout">Go to Checkout</string>
+    <string name="my_cart">My Cart</string>
 </resources>

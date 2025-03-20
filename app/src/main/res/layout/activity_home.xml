@@ -6,9 +6,13 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="412dp"
+        android:layout_height="793dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutCSearch"
@@ -224,48 +228,48 @@
             </LinearLayout>
         </ScrollView>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="7pt" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:background="#D5D6D6"
-            android:outlineAmbientShadowColor="#D5D6D6"
-            android:outlineSpotShadowColor="#D5D6D6"
-            tools:targetApi="28">
-
-            <LinearLayout
-                android:id="@+id/layoutNavBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <ImageButton
-                    android:id="@+id/homeIcon"
-                    android:layout_width="61dp"
-                    android:layout_height="58dp"
-                    android:contentDescription="@string/home_icon"
-                    app:srcCompat="@drawable/home_icon" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/cartIcon"
-                    android:layout_width="61dp"
-                    android:layout_height="58dp"
-                    android:contentDescription="@string/cart_icon"
-                    app:srcCompat="@drawable/shopping_cart_icon" />
-            </LinearLayout>
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="#D5D6D6"
+        android:outlineAmbientShadowColor="#D5D6D6"
+        android:outlineSpotShadowColor="#D5D6D6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="28">
+
+        <LinearLayout
+            android:id="@+id/layoutNavBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageButton
+                android:id="@+id/homeIcon"
+                android:layout_width="61dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/home_icon"
+                app:srcCompat="@drawable/home_icon" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/cartIcon"
+                android:layout_width="61dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/cart_icon"
+                app:srcCompat="@drawable/shopping_cart_icon" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
