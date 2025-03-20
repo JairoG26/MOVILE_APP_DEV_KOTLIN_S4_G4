@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">LastBite</string>
+    <string name="order_preparing">Your order is being prepared…</string>
+    <string name="received">I received it</string>
+    <string name="for_you_description">Scroll horizontally to see some places specially displayed for you where you may order some food.</string>
+    <string name="stores">Scroll horizontally to see other stores where you may order some food.</string>
+    <string name="nearby_places">Scroll horizontally to see other nearby places where you may order some food.</string>
+    <string name="home_icon">It is the home icon that takes you to the main page of the app.</string>
+    <string name="cart_icon">It is the cart icon that takes you to the screen where you may see which products you have added to it.</string>
+    <string name="restaurant_logo">It is the restaurant logo of the last order made.</string>
+    <string name="for_you">For you</string>
+    <string name="stores_">Stores</string>
+    <string name="nearby_p">Nearby places</string>
 </resources>

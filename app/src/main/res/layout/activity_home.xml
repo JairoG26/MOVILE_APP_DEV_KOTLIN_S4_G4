@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutCSearch"
+            android:layout_width="match_parent"
+            android:layout_height="94dp">
+
+            <SearchView
+                android:id="@+id/searchBar"
+                android:layout_width="302dp"
+                android:layout_height="45dp"
+                android:background="@color/gray_background"
+                android:closeIcon="@drawable/delete_icon"
+                android:inputType="text"
+                android:orientation="horizontal"
+                android:searchIcon="@drawable/search_icon"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutCOrderInProgress"
+            android:layout_width="match_parent"
+            android:layout_height="164dp"
+            android:layout_marginTop="4dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/orderInProgress"
+                android:layout_width="364dp"
+                android:layout_height="131dp"
+                android:background="@color/gray_background"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/orderRestaurant"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:contentDescription="@string/restaurant_logo"
+                app:layout_constraintBottom_toBottomOf="@+id/orderInProgress"
+                app:layout_constraintEnd_toStartOf="@+id/orderProgressAdvisor"
+                app:layout_constraintHorizontal_bias="0.542"
+                app:layout_constraintStart_toStartOf="@+id/orderInProgress"
+                app:layout_constraintTop_toTopOf="@+id/orderInProgress"
+                app:layout_constraintVertical_bias="0.51"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/orderProgressAdvisor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_preparing"
+                android:textColorLink="@color/principal_green"
+                app:layout_constraintBottom_toBottomOf="@+id/orderInProgress"
+                app:layout_constraintEnd_toEndOf="@+id/orderInProgress"
+                app:layout_constraintHorizontal_bias="0.68"
+                app:layout_constraintStart_toStartOf="@+id/orderInProgress"
+                app:layout_constraintTop_toTopOf="@+id/orderInProgress"
+                app:layout_constraintVertical_bias="0.214" />
+
+            <Button
+                android:id="@+id/orderConfirmation"
+                android:layout_width="215dp"
+                android:layout_height="53dp"
+                android:backgroundTint="@color/principal_green"
+                android:orientation="horizontal"
+                android:text="@string/received"
+                android:textColorLink="@color/principal_green"
+                app:layout_constraintBottom_toBottomOf="@+id/orderInProgress"
+                app:layout_constraintEnd_toEndOf="@+id/orderInProgress"
+                app:layout_constraintHorizontal_bias="0.375"
+                app:layout_constraintStart_toEndOf="@+id/orderRestaurant"
+                app:layout_constraintTop_toBottomOf="@+id/orderProgressAdvisor"
+                app:layout_constraintVertical_bias="0.378" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/verticalScrollHome"
+            android:layout_width="match_parent"
+            android:layout_height="521dp">
+
+            <LinearLayout
+                android:id="@+id/layoutVerticalScrollHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCForYou"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp">
+
+                    <TextView
+                        android:id="@+id/titleForYou"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/for_you"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.084"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.49" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollForYou"
+                    android:layout_width="match_parent"
+                    android:layout_height="186dp"
+                    android:contentDescription="@string/for_you_description">
+
+                    <LinearLayout
+                        android:id="@+id/layoutLForTYou"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardsForYou"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCStores"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp">
+
+                    <TextView
+                        android:id="@+id/titleStores"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stores_"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.085"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollStores"
+                    android:layout_width="match_parent"
+                    android:layout_height="186dp"
+                    android:contentDescription="@string/stores">
+
+                    <LinearLayout
+                        android:id="@+id/layoutLStores"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardsStores"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCNearby"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp">
+
+                    <TextView
+                        android:id="@+id/titleNearby"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nearby_p"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.117"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollNearby"
+                    android:layout_width="match_parent"
+                    android:layout_height="186dp"
+                    android:contentDescription="@string/nearby_places">
+
+                    <LinearLayout
+                        android:id="@+id/layoutLNearby"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardsNearby"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="7pt" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:background="#D5D6D6"
+            android:outlineAmbientShadowColor="#D5D6D6"
+            android:outlineSpotShadowColor="#D5D6D6"
+            tools:targetApi="28">
+
+            <LinearLayout
+                android:id="@+id/layoutNavBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageButton
+                    android:id="@+id/homeIcon"
+                    android:layout_width="61dp"
+                    android:layout_height="58dp"
+                    android:contentDescription="@string/home_icon"
+                    app:srcCompat="@drawable/home_icon" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/cartIcon"
+                    android:layout_width="61dp"
+                    android:layout_height="58dp"
+                    android:contentDescription="@string/cart_icon"
+                    app:srcCompat="@drawable/shopping_cart_icon" />
+            </LinearLayout>
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
