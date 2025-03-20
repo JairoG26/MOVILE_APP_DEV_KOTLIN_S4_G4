@@ -6,19 +6,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CodeActivity : AppCompatActivity() {
+    private lateinit var signUpViewModel: SignUpViewModel
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_code)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+
+        signUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         val etCodeInput: EditText = findViewById(R.id.etCodeInput)
         val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
@@ -30,8 +36,19 @@ class CodeActivity : AppCompatActivity() {
         }, 200)
 
         fabNext.setOnClickListener {
-            val intent = Intent(this, LocationActivity::class.java)
-            startActivity(intent)
+            val code: String = etCodeInput.text.toString()
+
+            if (code.length == 4 && code.all { it.isDigit() }) {
+                val codeInt = code.toInt()
+                signUpViewModel.verification_code = codeInt
+
+                val intent = Intent(this, LocationActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Ingresa un código de 4 dígitos", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
+
 }

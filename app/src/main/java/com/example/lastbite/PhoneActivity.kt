@@ -11,14 +11,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PhoneActivity : AppCompatActivity() {
+
+    private lateinit var signUpViewModel: SignUpViewModel
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+
+        signUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         val etNewPhoneInput: EditText = findViewById(R.id.etPhoneInput)
         val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
@@ -30,6 +36,7 @@ class PhoneActivity : AppCompatActivity() {
         }, 200)
 
         fabNext.setOnClickListener {
+            signUpViewModel.mobile_number = etNewPhoneInput.text.toString()
             val intent = Intent(this, CodeActivity::class.java)
             startActivity(intent)
         }
