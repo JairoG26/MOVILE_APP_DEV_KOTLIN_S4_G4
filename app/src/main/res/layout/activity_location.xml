@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Code"
+        android:text="Your Zone"
         android:textStyle="bold"
         android:textColor="#4D4D4D"
         android:textSize="15dp" />
@@ -52,7 +52,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Code"
+        android:text="Your Area"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
         android:textColor="#4D4D4D"
@@ -65,7 +65,7 @@
         android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/btnSignUp"
+        android:id="@+id/btnNext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Next"
