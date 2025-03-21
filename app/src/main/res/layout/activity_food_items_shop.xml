@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="412dp"
+        android:layout_height="793dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutCSearch"
+            android:layout_width="match_parent"
+            android:layout_height="94dp">
+
+            <SearchView
+                android:id="@+id/searchBar"
+                android:layout_width="302dp"
+                android:layout_height="45dp"
+                android:background="@color/gray_background"
+                android:closeIcon="@drawable/delete_icon"
+                android:inputType="text"
+                android:orientation="horizontal"
+                android:searchIcon="@drawable/search_icon"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutCFoodTitle"
+            android:layout_width="match_parent"
+            android:layout_height="75dp">
+
+            <TextView
+                android:id="@+id/titleFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/food_title"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.084"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.49" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <GridView
+            android:id="@+id/scrollFoodItemsShop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:clipToPadding="false"
+            android:horizontalSpacing="10dp"
+            android:isScrollContainer="true"
+            android:numColumns="2"
+            android:scrollbarStyle="outsideOverlay"
+            android:verticalSpacing="15dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="#D5D6D6"
+        android:outlineAmbientShadowColor="#D5D6D6"
+        android:outlineSpotShadowColor="#D5D6D6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:targetApi="28">
+
+        <LinearLayout
+            android:id="@+id/layoutNavBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageButton
+                android:id="@+id/homeIcon"
+                android:layout_width="61dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/home_icon"
+                app:srcCompat="@drawable/home_icon" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/cartIcon"
+                android:layout_width="61dp"
+                android:layout_height="58dp"
+                android:contentDescription="@string/cart_icon"
+                app:srcCompat="@drawable/shopping_cart_icon" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
