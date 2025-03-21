@@ -10,4 +10,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="google_blue">#4285F4</color>
     <color name="facebook_blue">#3B5998</color>
+    <color name="gray_background">#F2F3F2</color>
+    <color name="secondary_green">#53B175</color>
+    <color name="gray_lettering">#7C7C7C</color>
+    <color name="orange_star">#F3603F</color>
+    <color name="green_blue_from_palette">#53B095</color>
+    <color name="blue_green_from_palette">#53ACB0</color>
+    <color name="green_plant_from_palette">#77B053</color>
+    <color name="green_pale_from_palette">#8DB09A</color>
 </resources>

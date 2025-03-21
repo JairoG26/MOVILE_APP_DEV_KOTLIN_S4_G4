@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lastbite"
-        minSdk = 33
+        minSdk = 27 // Samsung Galaxy A8
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -37,6 +37,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -58,6 +59,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
