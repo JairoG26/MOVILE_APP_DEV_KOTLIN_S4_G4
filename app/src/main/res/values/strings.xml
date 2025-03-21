@@ -23,7 +23,7 @@
     <string name="payment_text">Payment</string>
     <string name="third_party_text">Third-party</string>
     <string name="total_cost_checkout_text">Total Cost</string>
-    <string name="$">$</string>
+    <string name="money_sign">$</string>
     <string name="total_cost_checkout_value">19.69</string>
     <string name="terms_conditions_advise">Are you ready to place your order?</string>
     <string name="checkout_confirmation">Confirm Checkout</string>
