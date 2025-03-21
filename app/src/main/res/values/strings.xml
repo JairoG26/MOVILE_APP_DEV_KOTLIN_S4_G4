@@ -23,7 +23,7 @@
     <string name="payment_text">Payment</string>
     <string name="third_party_text">Third-party</string>
     <string name="total_cost_checkout_text">Total Cost</string>
-    <string name="$">$</string>
+    <string name="money_sign">$</string>
     <string name="total_cost_checkout_value">19.69</string>
     <string name="terms_conditions_advise">Are you ready to place your order?</string>
     <string name="checkout_confirmation">Confirm Checkout</string>
@@ -38,5 +38,9 @@
     <string name="add_food_item_to_cart">This adds a food item to your cart.</string>
     <string name="food_item_shop_image">This is the image of the food item you are interested.</string>
     <string name="food_title">Food</string>
-
+    <string name="product_detail">Product Detail</string>
+    <string name="detailed_product_text">Apples are nutritious. Apples may be good for weight loss. Apples may be good for your heart as they are part of a healthy and varied diet.</string>
+    <string name="tags_title">Tags</string>
+    <string name="review_title">Review</string>
+    <string name="product_review">4.8</string>
 </resources>
