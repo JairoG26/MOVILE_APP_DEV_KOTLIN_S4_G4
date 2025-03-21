@@ -3,6 +3,7 @@ package com.example.lastbite
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -61,7 +62,8 @@ class LocationActivity : AppCompatActivity() {
         spinnerZones.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedZoneId = locationViewModel.zones.value?.get(position)?.zone_id
-                selectedZoneId?.let { updateAreas(it) }
+                selectedZoneId?.let { updateAreas(it)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -80,7 +82,10 @@ class LocationActivity : AppCompatActivity() {
         // Guardar zona y área seleccionadas cuando se presiona el botón "Continuar"
         btnNext.setOnClickListener {
             val selectedZone = locationViewModel.zones.value?.get(spinnerZones.selectedItemPosition)
-            val selectedArea = locationViewModel.filteredAreas.value?.get(spinnerAreas.selectedItemPosition)
+            val selectedArea = locationViewModel.areas.value?.firstOrNull { it.zone_id == selectedZone?.zone_id && it.area_name == spinnerAreas.selectedItem.toString() }
+            Log.d("LocationActivity", "Zona seleccionada: $selectedZone")
+            Log.d("LocationActivity", "Área seleccionada: $selectedArea")
+
 
             if (selectedZone != null && selectedArea != null) {
                 signUpViewModel.area_id = selectedArea.area_id

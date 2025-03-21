@@ -5,4 +5,4 @@ data class Area(
     val area_name: String,
     val zone_id: Int,
     val users: List<User>
-)
+    )
