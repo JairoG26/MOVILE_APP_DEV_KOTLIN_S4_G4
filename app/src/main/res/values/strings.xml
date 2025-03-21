@@ -38,5 +38,9 @@
     <string name="add_food_item_to_cart">This adds a food item to your cart.</string>
     <string name="food_item_shop_image">This is the image of the food item you are interested.</string>
     <string name="food_title">Food</string>
-
+    <string name="product_detail">Product Detail</string>
+    <string name="detailed_product_text">Apples are nutritious. Apples may be good for weight loss. Apples may be good for your heart as they are part of a healthy and varied diet.</string>
+    <string name="tags_title">Tags</string>
+    <string name="review_title">Review</string>
+    <string name="product_review">4.8</string>
 </resources>
