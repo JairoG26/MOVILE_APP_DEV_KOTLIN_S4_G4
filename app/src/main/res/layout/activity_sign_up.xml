@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Full Name"
+        android:textColor="@color/black"
         android:inputType="textPersonName"
         android:padding="12dp" />
 
@@ -29,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:textColor="@color/black"
         android:inputType="textEmailAddress"
         android:padding="12dp"
         android:layout_marginTop="8dp"/>
@@ -38,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:padding="12dp"
         android:layout_marginTop="8dp"/>
@@ -48,6 +51,7 @@
         android:layout_height="wrap_content"
         android:hint="Confirm password"
         android:inputType="textPassword"
+        android:textColor="@color/black"
         android:padding="12dp"
         android:layout_marginTop="8dp"/>
 

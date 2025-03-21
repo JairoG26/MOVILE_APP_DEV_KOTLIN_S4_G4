@@ -62,14 +62,17 @@ class SignUpActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val name = etName.text.toString().trim()
+            val area_id = signUpViewModel.area_id
+            val description = signUpViewModel.description
+            val mobile_number = signUpViewModel.mobile_number
+            val user_type = signUpViewModel.user_type
+            val verification_code = signUpViewModel.verification_code
 
             if (email.isNotEmpty() && name.isNotEmpty() && password.isNotEmpty() && password == etConfirmPassword.text.toString().trim()) {
-                authViewModel.registerUser(email, password)
+                authViewModel.registerUser(email, password, name, mobile_number, verification_code, area_id, user_type, description)
             } else {
                 Toast.makeText(this, "Por favor ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }
-
-            authViewModel.registerUser(email, password)
         }
     }
 }
