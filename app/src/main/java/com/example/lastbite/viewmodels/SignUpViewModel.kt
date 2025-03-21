@@ -1,15 +1,6 @@
-package com.example.lastbite
+package com.example.lastbite.viewmodels
 
-import android.app.Application
-import android.telecom.Call
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.lastbite.models.Area
-import com.example.lastbite.models.User
-import com.example.lastbite.models.Zone
-import retrofit2.Response
 
 class SignUpViewModel() : ViewModel() {
 

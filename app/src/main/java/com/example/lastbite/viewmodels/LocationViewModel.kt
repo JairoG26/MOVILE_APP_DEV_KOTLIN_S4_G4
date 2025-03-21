@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
+import com.example.lastbite.LocationRepository
 
 class LocationViewModel(private val repository: LocationRepository) : ViewModel() {
 

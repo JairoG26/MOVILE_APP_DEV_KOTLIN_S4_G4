@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

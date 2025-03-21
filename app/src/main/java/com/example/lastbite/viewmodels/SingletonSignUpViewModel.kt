@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.viewmodels
 
 object SingletonSignUpViewModel {
     val instance: SignUpViewModel by lazy {

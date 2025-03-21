@@ -1,10 +1,11 @@
-package com.example.lastbite
+package com.example.lastbite.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.lastbite.R
 
 
 class StartSignUpActivity : AppCompatActivity() {

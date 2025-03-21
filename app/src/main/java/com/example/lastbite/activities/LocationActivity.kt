@@ -1,6 +1,5 @@
-package com.example.lastbite
+package com.example.lastbite.activities
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import com.example.lastbite.ApiClient
+import com.example.lastbite.ApiService
+import com.example.lastbite.LocationRepository
+import com.example.lastbite.viewmodels.LocationViewModel
+import com.example.lastbite.R
+import com.example.lastbite.viewmodels.SingletonSignUpViewModel
+import com.example.lastbite.ViewModelFactory
 
 class LocationActivity : AppCompatActivity() {
     private lateinit var locationViewModel: LocationViewModel
@@ -34,7 +36,8 @@ class LocationActivity : AppCompatActivity() {
         val repository = LocationRepository(apiService)
 
 
-        locationViewModel = ViewModelProvider(this, ViewModelFactory(repository)).get(LocationViewModel::class.java)
+        locationViewModel = ViewModelProvider(this, ViewModelFactory(repository)).get(
+            LocationViewModel::class.java)
 
         val spinnerZones: Spinner = findViewById(R.id.spinnerZone)
         val spinnerAreas: Spinner = findViewById(R.id.spinnerArea)

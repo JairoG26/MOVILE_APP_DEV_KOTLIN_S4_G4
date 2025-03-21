@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,13 +7,10 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import com.example.lastbite.R
+import com.example.lastbite.viewmodels.SingletonSignUpViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CodeActivity : AppCompatActivity() {

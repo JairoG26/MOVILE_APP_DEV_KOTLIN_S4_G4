@@ -16,30 +16,30 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".LocationActivity"
+            android:name=".activities.LocationActivity"
             android:exported="false" />
         <activity
-            android:name=".CodeActivity"
+            android:name=".activities.CodeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".PhoneActivity"
+            android:name=".activities.PhoneActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".StartSignUpActivity"
+            android:name=".activities.StartSignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activities.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".activities.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".activities.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyApp">
