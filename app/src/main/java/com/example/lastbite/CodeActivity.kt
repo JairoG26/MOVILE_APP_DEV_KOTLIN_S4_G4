@@ -13,10 +13,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CodeActivity : AppCompatActivity() {
-    private lateinit var signUpViewModel: SignUpViewModel
+    private val signUpViewModel = SingletonSignUpViewModel.instance
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,6 @@ class CodeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_code)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
-        signUpViewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
 
         val etCodeInput: EditText = findViewById(R.id.etCodeInput)
         val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
@@ -36,7 +36,7 @@ class CodeActivity : AppCompatActivity() {
         }, 200)
 
         fabNext.setOnClickListener {
-            val code: String = etCodeInput.text.toString()
+            val code: String = etCodeInput.getText().toString()
 
             if (code.length == 4 && code.all { it.isDigit() }) {
                 val codeInt = code.toInt()

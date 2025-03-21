@@ -16,10 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 
 class LocationActivity : AppCompatActivity() {
     private lateinit var locationViewModel: LocationViewModel
-    private lateinit var signUpViewModel: SignUpViewModel
+    private val signUpViewModel = SingletonSignUpViewModel.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,8 @@ class LocationActivity : AppCompatActivity() {
         // Inicializar ViewModel con Repository y ApiService
         val apiService = ApiClient.getRetrofit().create(ApiService::class.java)
         val repository = LocationRepository(apiService)
+
+
         locationViewModel = ViewModelProvider(this, ViewModelFactory(repository)).get(LocationViewModel::class.java)
 
         val spinnerZones: Spinner = findViewById(R.id.spinnerZone)
@@ -91,6 +94,7 @@ class LocationActivity : AppCompatActivity() {
                 signUpViewModel.area_id = selectedArea.area_id
 
                 // Ir a la siguiente actividad
+                Log.d("SignUpViewModel", "Teléfono: ${signUpViewModel.mobile_number}")
                 val intent = Intent(this, SignUpActivity::class.java)
                 startActivity(intent)
             } else {
