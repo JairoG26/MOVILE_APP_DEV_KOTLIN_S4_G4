@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@drawable/blur_background">
+
+    <!-- Imagen superior (se oculta con animación) -->
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="204dp"
+        android:layout_height="325dp"
+        android:contentDescription="Descripción de la imagen"
+        android:scaleType="fitCenter"
+        android:src="@drawable/imgphoneactivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Título principal -->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Cheap food with LastBite"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintTop_toBottomOf="@id/myImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Contenedor del código de país y número -->
+    <LinearLayout
+        android:id="@+id/llPhoneContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp">
+
+        <ImageView
+            android:id="@+id/flagIcon"
+            android:layout_width="24dp"
+            android:layout_height="16dp"
+            android:src="@drawable/colombiaflagicon"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/llCountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+57"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="8dp"/>
+
+        <EditText
+            android:id="@+id/phoneInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:background="@null"/>
+    </LinearLayout>
+
+    <!-- Texto para iniciar sesión con redes sociales -->
+    <TextView
+        android:id="@+id/grayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Or connect through your social media accounts"
+        android:textAlignment="center"
+        android:textColor="#CCCCCC"
+        android:textSize="15dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/llPhoneContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Botón de Google -->
+    <Button
+        android:id="@+id/btnGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/google_blue"
+        android:text="Continue with Google"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/grayText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Botón de Facebook -->
+    <Button
+        android:id="@+id/btnFacebook"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/facebook_blue"
+        android:text="Continue with Facebook"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
