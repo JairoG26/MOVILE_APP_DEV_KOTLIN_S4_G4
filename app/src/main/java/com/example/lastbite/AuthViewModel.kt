@@ -8,8 +8,10 @@ import com.google.firebase.auth.FirebaseAuth
 class AuthViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private val _authState = MutableLiveData<Boolean>()
-    val authState: LiveData<Boolean> get() = _authState
+    private val _authStateRegister = MutableLiveData<Boolean>()
+    val authStateRegister: LiveData<Boolean> get() = _authStateRegister
+    private val _authStateLogIn = MutableLiveData<Boolean>()
+    val authStateLogIn: LiveData<Boolean> get() = _authStateLogIn
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
@@ -18,7 +20,7 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = true
+                    _authStateRegister.value = true
                 } else {
                     _errorMessage.value = task.exception?.localizedMessage
                 }
@@ -29,9 +31,9 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = true
+                    _authStateLogIn.value = true
                 } else {
-                    _authState.value = false
+                    _authStateLogIn.value = false
                 }
             }
     }

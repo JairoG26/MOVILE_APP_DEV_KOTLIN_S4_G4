@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
@@ -23,6 +24,8 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
         setContentView(R.layout.activity_sign_up)
+
+        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
         auth = FirebaseAuth.getInstance()
 
@@ -38,10 +41,14 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        authViewModel.authState.observe(this) { isAuthenticated ->
+        authViewModel.authStateRegister.observe(this) { isAuthenticated ->
             if (isAuthenticated) {
                 Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
                 // Aquí podrías navegar a otra actividad
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
         }
 

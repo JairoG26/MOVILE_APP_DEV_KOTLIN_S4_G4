@@ -19,6 +19,7 @@ class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
@@ -26,7 +27,7 @@ class SignInActivity : AppCompatActivity() {
         val passwordEditText: EditText = findViewById(R.id.passwordInput)
         val signInButton: Button = findViewById(R.id.btnSignIn)
 
-        authViewModel.authState.observe(this) { isAuthenticated ->
+        authViewModel.authStateLogIn.observe(this) { isAuthenticated ->
             if (isAuthenticated) {
                 Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                 // Navegar a la siguiente pantalla
