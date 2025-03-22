@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <!-- Espacio entre logo y botón -->
+
+    <!-- Botón para continuar -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="267dp"
+        android:layout_height="175dp"
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:layout_height="153dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Your Order had been accepted"
+        android:textColor="@color/black"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <Button
+        android:id="@+id/btn_continue"
+        android:layout_width="564dp"
+        android:layout_height="82dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#52AF54"
+        android:text="Track Order" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_weight="1"
+        android:backgroundTint="#FDFDFD"
+        android:text="Back home"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:iconTint="#000000"
+        app:rippleColor="#000000"
+        app:strokeColor="#000000" />
+</LinearLayout>
+
