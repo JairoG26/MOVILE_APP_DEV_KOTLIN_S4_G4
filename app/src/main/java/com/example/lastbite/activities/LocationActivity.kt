@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
-import com.example.lastbite.LocationRepository
+import com.example.lastbite.repositories.LocationRepository
 import com.example.lastbite.viewmodels.LocationViewModel
 import com.example.lastbite.R
 import com.example.lastbite.viewmodels.SingletonSignUpViewModel
