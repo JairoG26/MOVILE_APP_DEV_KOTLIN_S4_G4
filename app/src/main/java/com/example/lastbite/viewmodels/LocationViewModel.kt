@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
-import com.example.lastbite.LocationRepository
+import com.example.lastbite.repositories.LocationRepository
 
 class LocationViewModel(private val repository: LocationRepository) : ViewModel() {
 
