@@ -1,5 +1,6 @@
-package com.example.lastbite
+package com.example.lastbite.repositories
 
+import com.example.lastbite.ApiService
 import com.example.lastbite.models.Area
 import com.example.lastbite.models.Zone
 import retrofit2.Call

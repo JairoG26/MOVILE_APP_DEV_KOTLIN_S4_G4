@@ -9,9 +9,9 @@ class SignUpViewModel() : ViewModel() {
     var user_email: String? = null
     var zone_id: Int? = null
     var area_id: Int? = null
-    var description: String? = null
+    var description: String? = "Generic Description"
     var mobile_number: String? = null
-    val user_type: String = "UserType.CUSTOMER"
+    val user_type: String = "CUSTOMER"
     var verification_code: Int? = null
     var password: String? = null
 

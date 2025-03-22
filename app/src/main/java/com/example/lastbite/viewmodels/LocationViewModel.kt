@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
-import com.example.lastbite.LocationRepository
+import com.example.lastbite.repositories.LocationRepository
 
 class LocationViewModel(private val repository: LocationRepository) : ViewModel() {
 
@@ -23,7 +23,7 @@ class LocationViewModel(private val repository: LocationRepository) : ViewModel(
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    // Método para obtener las zonas desde el repositorio
+    // Method for obtaining the zones from the repository
     fun fetchZones() {
 
         repository.getZones().enqueue(object : Callback<List<Zone>> {
