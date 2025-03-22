@@ -14,6 +14,7 @@
             android:layout_width="412dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +22,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutCSearch"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="94dp">
 
@@ -44,6 +46,7 @@
                 android:id="@+id/layoutCOrderInProgress"
                 android:layout_width="match_parent"
                 android:layout_height="164dp"
+                android:background="@color/white"
                 android:layout_marginTop="4dp">
 
                 <com.google.android.material.appbar.MaterialToolbar
@@ -113,6 +116,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layoutCForYou"
+                        android:background="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="75dp">
 
@@ -121,6 +125,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/for_you"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -134,6 +139,7 @@
                         android:id="@+id/horizontalScrollForYou"
                         android:layout_width="match_parent"
                         android:layout_height="186dp"
+                        android:background="@color/white"
                         android:contentDescription="@string/for_you_description">
 
                         <LinearLayout
@@ -152,13 +158,15 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layoutCStores"
                         android:layout_width="match_parent"
-                        android:layout_height="75dp">
+                        android:layout_height="75dp"
+                        android:background="@color/white">
 
                         <TextView
                             android:id="@+id/titleStores"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/stores_"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -170,6 +178,7 @@
                     <HorizontalScrollView
                         android:id="@+id/horizontalScrollStores"
                         android:layout_width="match_parent"
+                        android:background="@color/white"
                         android:layout_height="186dp"
                         android:contentDescription="@string/stores">
 
@@ -189,6 +198,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layoutCNearby"
                         android:layout_width="match_parent"
+                        android:background="@color/white"
                         android:layout_height="75dp">
 
                         <TextView
@@ -197,6 +207,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/nearby_p"
                             android:textSize="20sp"
+                            android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.117"

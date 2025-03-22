@@ -17,6 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutCSearch"
             android:layout_width="match_parent"
+            android:backgroundTint="@color/white"
             android:layout_height="94dp">
 
             <SearchView
@@ -109,6 +110,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layoutCForYou"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/white"
                     android:layout_height="75dp">
 
                     <TextView
@@ -116,6 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/for_you"
+                        android:textColor="@color/black"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -154,6 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/stores_"
+                        android:textColor="@color/black"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -166,6 +170,7 @@
                     android:id="@+id/horizontalScrollStores"
                     android:layout_width="match_parent"
                     android:layout_height="186dp"
+                    android:backgroundTint="@color/white"
                     android:contentDescription="@string/stores">
 
                     <LinearLayout

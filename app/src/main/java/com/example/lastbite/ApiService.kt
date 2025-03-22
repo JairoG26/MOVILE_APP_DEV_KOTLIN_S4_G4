@@ -38,5 +38,5 @@ interface ApiService {
     /// Stores Services
 
     @GET("stores")
-    fun getStores(): List<Store>
+    fun getStores(): Call<List<Store>>
 }

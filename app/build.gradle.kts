@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
 }
 
 android {
@@ -44,6 +45,8 @@ android {
 dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.androidx.core.ktx)
