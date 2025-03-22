@@ -1,9 +1,10 @@
-package com.example.lastbite
+package com.example.lastbite.activities
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lastbite.R
 import com.example.lastbite.databinding.ActivityCartListBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -29,6 +30,7 @@ class CartActivity : AppCompatActivity() {
 
         btnCheckout?.setOnClickListener {
             Toast.makeText(this, "Clicked on Confirm Checkout", Toast.LENGTH_SHORT).show()
+
         }
 
         dialog.show()

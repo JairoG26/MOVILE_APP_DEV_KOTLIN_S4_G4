@@ -22,7 +22,7 @@ class CartFragment : Fragment() {
         binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.apply {
-            buttonCheckout.setOnClickListener {
+            btnCheckout.setOnClickListener {
                     showDialog()
             }
         }

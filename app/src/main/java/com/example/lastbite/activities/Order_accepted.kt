@@ -11,7 +11,7 @@ class Order_accepted : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.order_accepted)
 
-        val btnContinue = findViewById<Button>(R.id.btn_continue)
+        val btnContinue = findViewById<Button>(R.id.btnBackToHome)
         btnContinue.setOnClickListener {
             setContentView(R.layout.activity_home) // Cierra esta actividad y vuelve a la anterior
         }
