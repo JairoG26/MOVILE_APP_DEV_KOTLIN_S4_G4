@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeIcon"
+        android:title="@string/home_icon_title"
+        android:layout_width="61dp"
+        android:layout_height="58dp"
+        android:contentDescription="@string/home_icon"
+        android:icon="@drawable/home_icon" />
+
+    <item
+        android:id="@+id/cartIcon"
+        android:title="@string/my_cart"
+        android:layout_width="61dp"
+        android:layout_height="58dp"
+        android:contentDescription="@string/cart_icon"
+        android:icon="@drawable/shopping_cart_icon" />
+
+</menu>
