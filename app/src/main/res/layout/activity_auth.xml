@@ -8,17 +8,29 @@
     android:gravity="bottom"
     android:padding="100px"
     android:background="@drawable/authbackground"
-    tools:context=".AuthActivity">
+    tools:context=".activities.AuthActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="2dp"
+        android:text="Welcome To Our Store"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingBottom="20dp"
-        android:text="Welcome To Our Store"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:text="Get your food cheaper than anywhere"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="25dp"/>
 
     <Button
         android:id="@+id/btnSignIn"
@@ -28,12 +40,21 @@
         android:textColor="@color/white"
         android:text="Sign In" />
 
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/principal_green"
+        android:text="¿Don't have an account? "
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/btnSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:textColor="@color/white" />
+        android:textColor="@color/principal_green"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
