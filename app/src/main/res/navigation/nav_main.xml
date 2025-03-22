@@ -2,17 +2,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_main"
-    app:startDestination="@id/homeFragment3">
-
-    <activity
-        android:id="@+id/homeFragment3"
-        android:name="com.example.lastbite.HomeActivity"
-        android:label="activity_home"
-        tools:layout="@layout/activity_home" />
-    <activity
-        android:id="@+id/cartFragment3"
-        android:name="com.example.lastbite.CartActivity"
-        android:label="activity_cart_list"
-        tools:layout="@layout/activity_cart_list" />
+    android:id="@+id/nav_main">
 </resources>
