@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         replaceFragment(HomeFragment())
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
