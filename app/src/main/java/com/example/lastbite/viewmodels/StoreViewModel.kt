@@ -20,7 +20,7 @@ class StoreViewModel : ViewModel() {
     val stores: LiveData<List<Store>> get() = _stores
 
     fun loadStores() {
-        repository.fetchStores { storeList ->
+        repository.fetchStores { storeList -> 
             Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
             _stores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }

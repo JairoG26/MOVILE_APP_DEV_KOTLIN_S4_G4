@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
 
-class StoreAdapter(private val stores: List<Store>) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+class StoreAdapter(private val stores: List<Store>, private val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val storeImage: ImageView = view.findViewById(R.id.storeImage)
@@ -27,6 +27,10 @@ class StoreAdapter(private val stores: List<Store>) : RecyclerView.Adapter<Store
         holder.storeName.text = store.name
         Log.d("DEBUG", "Mostrando tienda: ${store.name}")
         Glide.with(holder.itemView.context).load(store.logo).into(holder.storeImage)
+
+        holder.itemView.setOnClickListener {
+            onItemClick(store) // Llamamos a la función y pasamos el restaurante seleccionado
+        }
     }
 
     override fun getItemCount(): Int = stores.size

@@ -107,16 +107,6 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/paymentValueText3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:text="S"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <TextView
                 android:id="@+id/costText3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,6 +132,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="3dp"
             android:text="@string/product_detail"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -151,6 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:textColor="@color/black"
             android:layout_marginBottom="20dp"
             android:text="@string/detailed_product_text" />
 
@@ -174,6 +166,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/tags_title"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
