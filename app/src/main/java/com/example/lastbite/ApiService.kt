@@ -28,15 +28,16 @@ interface ApiService {
     fun getProducts(): Call<List<Product>>
 
     @GET("products/{id}")
-    fun getProductById(@Path("id") productId: Int): Product
+    fun getProductById(@Path("id") productId: Int): Call<Product>
 
     @GET("products/store/{store_id}")
-    fun getProductsByStore(@Path("store_id") store_id: Int): List<Product>
+    fun getProductsByStore(@Path("store_id") store_id: Int): Call<List<Product>>
 
 
 
     /// Stores Services
 
     @GET("stores")
-    fun getStores(): List<Store>
+    fun getStores(): Call<List<Store>>
+
 }

@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +21,12 @@
             android:name=".activities.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.PhoneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.StartSignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SignInActivity"
             android:exported="false" />
         <activity
@@ -27,6 +34,12 @@
             android:exported="false" />
         <activity
             android:name=".activities.Order_accepted"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LocationActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
@@ -40,25 +53,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MyApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".activities.HomeActivity"
+            android:exported="true"/>
         <activity
-            android:name=".CartActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MyApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".activities.CartActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

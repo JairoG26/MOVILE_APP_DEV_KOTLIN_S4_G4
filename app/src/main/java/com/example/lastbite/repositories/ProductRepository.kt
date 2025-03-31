@@ -1,9 +1,44 @@
 package com.example.lastbite.repositories
 
+import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Product
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ProductRepository(private val apiService: ApiService) {
-    fun fetchProductsByStore(store_id: Int): List<Product> = apiService.getProductsByStore(store_id)
-    fun fetchProductDetail(productId: Int): Product = apiService.getProductById(productId)
+class ProductRepository {
+    private val apiService = ApiClient.instance.create(ApiService::class.java)
+
+    fun fetchProducts(storeId: Int, callback: (List<Product>?) -> Unit) {
+        apiService.getProductsByStore(storeId).enqueue(object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // 🔹 Pasamos la lista de productos
+                } else {
+                    callback(null) // 🔹 En caso de error, devolvemos null
+                }
+            }
+
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                callback(null) // 🔹 Error de conexión, también devolvemos null
+            }
+        })
+    }
+
+    fun fetchProductById(productId: Int, callback: (Product?) -> Unit) {
+        apiService.getProductById(productId).enqueue(object : Callback<Product> {
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // 🔹 Pasamos el producto recibido
+                } else {
+                    callback(null) // 🔹 En caso de error, devolvemos null
+                }
+            }
+
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+                callback(null) // 🔹 Error de conexión, también devolvemos null
+            }
+        })
+    }
 }

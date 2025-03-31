@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#D5D6D6">
+    android:background="#F0F0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:id="@+id/layoutLConcepts"
-            android:layout_width="409dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -64,6 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/delivery_text"
+                    android:textColor="@color/black"
                     app:emojiCompatEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/inStorePickupText"
@@ -99,6 +100,7 @@
                     android:id="@+id/paymentCheckoutText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/payment_text"
                     app:emojiCompatEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -136,6 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="44dp"
+                    android:textColor="@color/black"
                     android:text="@string/total_cost_checkout_text"
                     app:emojiCompatEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -158,6 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_cost_checkout_value"
+                    android:layout_marginEnd="32dp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

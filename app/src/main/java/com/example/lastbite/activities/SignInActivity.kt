@@ -1,5 +1,6 @@
 package com.example.lastbite.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -28,8 +29,8 @@ class SignInActivity : AppCompatActivity() {
             if (isAuthenticated) {
                 Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                 // Navegar a la siguiente pantalla
-                //startActivity(Intent(this, MainActivity::class.java))
-                //finish()
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(this, "Error en el inicio de sesión", Toast.LENGTH_SHORT).show()
             }

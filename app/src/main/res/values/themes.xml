@@ -3,6 +3,10 @@
         <!-- Splash Screen -->
         <item name="android:windowSplashScreenBackground">@color/principal_green</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="android:colorControlNormal">@color/black</item>
+        <!-- Color de íconos activos (cuando están seleccionados) -->
+        <item name="android:colorControlActivated">@color/principal_green</item>
+
     </style>
 </resources>
 

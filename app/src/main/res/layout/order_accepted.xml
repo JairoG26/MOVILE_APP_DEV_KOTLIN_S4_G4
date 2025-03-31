@@ -3,12 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     android:orientation="vertical">
 
-
-    <!-- Espacio entre logo y botón -->
-
-    <!-- Botón para continuar -->
     <Space
         android:layout_width="match_parent"
         android:layout_height="105dp"
@@ -28,34 +25,26 @@
         android:layout_height="153dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="Your Order had been accepted"
+        android:text="Your order has been accepted"
         android:textColor="@color/black"
-        android:textSize="48sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="150dp" />
 
     <Button
-        android:id="@+id/btn_continue"
-        android:layout_width="564dp"
-        android:layout_height="82dp"
-        android:layout_gravity="center"
-        android:backgroundTint="#52AF54"
-        android:text="Track Order" />
+        android:id="@+id/btnBackToHome"
+        android:layout_width="235dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#4CAF50"
+        android:drawableTint="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:text="Back To Home"
+        android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_weight="1"
-        android:backgroundTint="#FDFDFD"
-        android:text="Back home"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:iconTint="#000000"
-        app:rippleColor="#000000"
-        app:strokeColor="#000000" />
 </LinearLayout>
 
