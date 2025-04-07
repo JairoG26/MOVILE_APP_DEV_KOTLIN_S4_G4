@@ -4,29 +4,45 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.lastbite.viewmodels.ProductViewModel
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import com.example.lastbite.models.CartItem
+import com.example.lastbite.viewmodels.CartViewModel
 
 class ProductDetailFragment : Fragment() {
 
+    private val cartViewModel: CartViewModel by activityViewModels()
     private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.activity_food_item_detail, container, false)
 
         val productId = arguments?.getInt("productId") ?: 0
         productViewModel.loadProductById(productId)
 
+        val backButton = view.findViewById<ImageButton>(R.id.backArrowButton2)
         val productName = view.findViewById<TextView>(R.id.foodItemTitle)
         val productPrice = view.findViewById<TextView>(R.id.costText3)
         val productImage = view.findViewById<ImageView>(R.id.imageView)
         val productDescription = view.findViewById<TextView>(R.id.detailedProductText)
+        var quantity = 1
+        val addButton = view.findViewById<ImageButton>(R.id.addToCartButton2)
+        val removeButton = view.findViewById<ImageButton>(R.id.removeFromCartButton2)
+        val quantityText = view.findViewById<TextView>(R.id.foodItemQuantityText2)
+        val addToBasketButton = view.findViewById<Button>(R.id.buttonCheckout2)
+
 
         productViewModel.product.observe(viewLifecycleOwner) { product ->
             product?.let {
@@ -34,6 +50,59 @@ class ProductDetailFragment : Fragment() {
                 productPrice.text = "$${it.unit_price}"
                 productDescription.text = it.detail
                 Glide.with(this).load(it.image).into(productImage)
+            }
+        }
+
+        backButton.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        productViewModel.product.observe(viewLifecycleOwner) { product ->
+            product?.let {
+                productName.text = it.name
+                productPrice.text = "$${it.unit_price}"
+                productDescription.text = it.detail
+                Glide.with(this).load(it.image).into(productImage)
+
+                // Cuando ya cargue el producto, inicializamos precio y cantidad
+                quantity = 1
+                quantityText.text = quantity.toString()
+                productPrice.text = "$${String.format("%.2f", it.unit_price * quantity)}"
+            }
+        }
+
+        addButton.setOnClickListener {
+            quantity++
+            quantityText.text = quantity.toString()
+            val currentProduct = productViewModel.product.value
+            currentProduct?.let {
+                productPrice.text = "$${String.format("%.2f", it.unit_price * quantity)}"
+            }
+        }
+
+        removeButton.setOnClickListener {
+            if (quantity > 1) {  // No dejamos que baje de 1
+                quantity--
+                quantityText.text = quantity.toString()
+                val currentProduct = productViewModel.product.value
+                currentProduct?.let {
+                    productPrice.text = "$${String.format("%.2f", it.unit_price * quantity)}"
+                }
+            }
+        }
+
+        addToBasketButton.setOnClickListener {
+            val currentProduct = productViewModel.product.value
+            currentProduct?.let { product ->
+                val cartItem = CartItem(
+                    productId = product.product_id,
+                    name = product.name,
+                    unitPrice = product.unit_price,
+                    image = product.image,
+                    quantity = quantity
+                )
+                cartViewModel.addItem(cartItem)
+                Toast.makeText(requireContext(), "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
             }
         }
 

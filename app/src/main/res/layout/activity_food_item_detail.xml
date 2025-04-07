@@ -260,11 +260,12 @@
             android:layout_width="315dp"
             android:layout_height="70dp"
             android:backgroundTint="@color/principal_green"
-            android:text="@string/go_checkout"
+            android:text="Add To Cart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.935" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

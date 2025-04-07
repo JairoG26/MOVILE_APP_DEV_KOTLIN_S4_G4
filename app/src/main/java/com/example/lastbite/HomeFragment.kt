@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
         forYouRecyclerView.adapter = storeAdapter
 
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
-            storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }// 🔹 Actualizamos el adaptador con los datos nuevos
+            storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
             nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
