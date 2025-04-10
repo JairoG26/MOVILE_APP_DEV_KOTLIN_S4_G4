@@ -3,6 +3,7 @@ package com.example.lastbite
 import android.app.Activity
 import androidx.fragment.app.viewModels
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -11,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
+import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 
 class HomeFragment : Fragment() {
@@ -31,6 +35,8 @@ class HomeFragment : Fragment() {
     private val storeViewModel: StoreViewModel by viewModels()
     private val productViewModel: ProductViewModel by viewModels()
     private lateinit var storeAdapter: StoreAdapter
+    private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
+    private var photoBitmap: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -67,6 +73,23 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
+
+        orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
+            orderStatusViewModel.isPhotoTaken.observe(viewLifecycleOwner) { photoTaken ->
+                cameraButton.visibility = if (accepted && !photoTaken) View.VISIBLE else View.GONE
+            }
+        }
+
+        cameraButton.setOnClickListener {
+            if (photoBitmap != null) {
+                orderStatusViewModel.isOrderAccepted.value = false
+                photoBitmap = null
+            }
+        }
+    }
+
     private fun goToProductFragment(store: Store) {
         productViewModel.loadProductsByStore(store.store_id) // Cargar productos en ViewModel
 
@@ -85,7 +108,12 @@ class HomeFragment : Fragment() {
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            Toast.makeText(requireContext(), "Image taken", Toast.LENGTH_SHORT).show()
+            val data = result.data
+            val imageBitmap = data?.extras?.get("data") as? Bitmap
+            if (imageBitmap != null) {
+                photoBitmap = imageBitmap // ✅ Aquí la almacenas
+                orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
+            }
         }
     }
 }
