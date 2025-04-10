@@ -41,6 +41,11 @@ class ProductAdapter(
                 itemView.setOnClickListener {
                     onProductClick(product) // Llamamos a la función al hacer clic
                 }
+
+                // Cuando hagan click específicamente en el botón "Add to Cart"
+                btnAddToCart.setOnClickListener {
+                    onProductClick(product)
+                }
             }
         }
     }
