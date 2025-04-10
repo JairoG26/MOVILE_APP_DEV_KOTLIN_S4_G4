@@ -36,11 +36,11 @@
         android:id="@+id/btnCheckout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Go to Checkout"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#4CAF50"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
+        android:backgroundTint="#4CAF50"
         android:drawableStart="@drawable/colombiaflagicon"
-        android:drawablePadding="8dp"/>
+        android:drawablePadding="8dp"
+        android:text="Go to Checkout"
+        android:textColor="@android:color/white" />
 </LinearLayout>
