@@ -5,17 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.CartAdapter
-import com.example.lastbite.viewmodels.CartViewModel
+import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class CartFragment : Fragment() {
 
     private lateinit var cartRecyclerView: RecyclerView
     private lateinit var cartAdapter: CartAdapter
-    private val cartViewModel: CartViewModel by activityViewModels()
+    private val cartViewModel = SingletonCartViewModel.instance
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,9 +29,20 @@ class CartFragment : Fragment() {
 
         // Observas el LiveData
         cartViewModel.cartItems.observe(viewLifecycleOwner) { cartItems ->
-            cartAdapter.updateItems(cartItems) // << Actualizas el contenido, NO recreas el adapter
+            cartAdapter.updateItems(cartItems)
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Encuentra el botón y configura el listener
+        val checkoutBtn = view.findViewById<View>(R.id.btnCheckout)
+        checkoutBtn.setOnClickListener {
+            val bottomSheet = CheckoutBottomSheet()
+            bottomSheet.show(parentFragmentManager, "CheckoutBottomSheet")
+        }
     }
 }

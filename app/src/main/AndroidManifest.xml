@@ -33,7 +33,7 @@
             android:name=".activities.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.Order_accepted"
+            android:name=".activities.OrderAcceptedActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CodeActivity"
