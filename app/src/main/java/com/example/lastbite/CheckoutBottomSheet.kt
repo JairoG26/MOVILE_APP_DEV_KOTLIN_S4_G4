@@ -13,12 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.example.lastbite.activities.OrderAcceptedActivity
 import com.example.lastbite.viewmodels.SingletonCartViewModel
+import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
     private val cartViewModel = SingletonCartViewModel.instance
+    private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +46,8 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
         val confirmButton = view.findViewById<Button>(R.id.confirmCheckout)
         confirmButton.setOnClickListener {
+            orderStatusViewModel.isOrderAccepted.value = true
+            cartViewModel.clearCart()
             Toast.makeText(requireContext(), "Pedido confirmado", Toast.LENGTH_SHORT).show()
 
             dismiss() // Cierra el BottomSheet
