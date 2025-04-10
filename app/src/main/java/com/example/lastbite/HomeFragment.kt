@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import android.Manifest
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.example.lastbite.models.StoreAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
+import kotlin.math.*
 
 class HomeFragment : Fragment() {
 
@@ -60,17 +62,68 @@ class HomeFragment : Fragment() {
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
-            nearbyRecyclerView.adapter = storeAdapter
+            //nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
+
+            if (userLocation != null) {
+                val nearbyStores = stores.filter { store ->
+                    val distance = calculateDistance(
+                        userLocation!!.latitude,
+                        userLocation!!.longitude,
+                        store.latitude,
+                        store.longitude
+                    )
+                    distance < 10.0
+                }
+
+                val nearbyAdapter = StoreAdapter(nearbyStores) { store -> goToProductFragment(store) }
+                nearbyRecyclerView.adapter = nearbyAdapter
+            } else {
+                // Si no hay ubicación aún, muestra todas por ahora
+                nearbyRecyclerView.adapter = storeAdapter
+            }
         }
 
-        storeViewModel.loadStores()
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            getUserLocation()
+        } else {
+            Toast.makeText(requireContext(), "Permisos de ubicación denegados", Toast.LENGTH_LONG).show()
+        }
+    }
 
-        btnCamera.setOnClickListener {
-            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+    private fun requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            getUserLocation()
+        }
+    }
+    
+    private fun getUserLocation() {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
         }
 
-        return view
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                userLocation = it
+                Log.d("UBICACIÓN", "Latitud: ${it.latitude}, Longitud: ${it.longitude}")
+                // Aquí podrías llamar a tu función para filtrar tiendas cercanas
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,6 +156,24 @@ class HomeFragment : Fragment() {
             .replace(R.id.frame_nav_container, productFragment) // Usa el ID del contenedor en tu Activity
             .addToBackStack(null) // Para que el usuario pueda volver atrás
             .commit()
+    }
+    
+    fun calculateDistance(
+        lat1: Double, lon1: Double,
+        lat2: Double, lon2: Double
+    ): Double {
+        val earthRadius = 6371.0 // Radio de la Tierra en km
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = sin(dLat / 2).pow(2.0) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2).pow(2.0)
+
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return earthRadius * c
     }
 
 
