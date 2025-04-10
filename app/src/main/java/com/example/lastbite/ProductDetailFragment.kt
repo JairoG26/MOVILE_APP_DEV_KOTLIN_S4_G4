@@ -17,10 +17,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lastbite.models.CartItem
 import com.example.lastbite.viewmodels.CartViewModel
+import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class ProductDetailFragment : Fragment() {
 
-    private val cartViewModel: CartViewModel by activityViewModels()
+    private val cartViewModel = SingletonCartViewModel.instance
     private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreateView(

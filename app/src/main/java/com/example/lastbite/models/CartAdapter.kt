@@ -10,9 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
+import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class CartAdapter (private var items: List<CartItem>) :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+
+    private val cartViewModel = SingletonCartViewModel.instance
 
     fun updateItems(newItems: List<CartItem>) {
         items = newItems
@@ -26,6 +29,7 @@ class CartAdapter (private var items: List<CartItem>) :
         val tvProductQuantity: TextView = itemView.findViewById(R.id.tvCartProductQuantity)
         val btnDecrease: ImageButton = itemView.findViewById(R.id.btnDecrease)
         val btnIncrease: ImageButton = itemView.findViewById(R.id.btnIncrease)
+        val btnRemove: ImageButton = itemView.findViewById(R.id.btnRemove)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -39,15 +43,21 @@ class CartAdapter (private var items: List<CartItem>) :
         Glide.with(holder.itemView.context).load(item.image).into(holder.imgProduct)
         holder.tvProductName.text = item.name
         Log.d("DEBUG", "Mostrando producto: ${item.name}")
-        holder.tvProductPrice.text = "$${item.unitPrice}"
+        holder.tvProductPrice.text = "$${item.unitPrice * item.quantity}"
         holder.tvProductQuantity.text = item.quantity.toString()
 
         holder.btnIncrease.setOnClickListener {
-
+            cartViewModel.increaseQuantity(item) // Aumenta 1 unidad
         }
+
         holder.btnDecrease.setOnClickListener {
-
+            cartViewModel.decreaseItemQuantity(item) // Disminuye 1 unidad
         }
+
+        holder.btnRemove.setOnClickListener {
+            cartViewModel.removeItem(item) // Elimina del carrito
+        }
+
     }
 
     override fun getItemCount(): Int = items.size
