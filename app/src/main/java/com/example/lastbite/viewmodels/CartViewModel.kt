@@ -52,4 +52,8 @@ class CartViewModel: ViewModel() {
 
         _cartItems.value = currentItems
     }
+
+    fun clearCart() {
+        _cartItems.value = emptyList()
+    }
 }
