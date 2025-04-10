@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
         android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:padding="12dp">
 
         <!-- Imagen del producto -->
@@ -28,29 +28,29 @@
             android:id="@+id/tvProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Organic Bananas"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:layout_marginTop="8dp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <!-- Cantidad y descripción -->
         <TextView
             android:id="@+id/tvProductDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="7pcs, Priceg"
-            android:textSize="14sp"
             android:textColor="#888888"
-            android:layout_marginTop="4dp" />
+            android:textSize="14sp" />
 
         <!-- Contenedor del precio y botón -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <!-- Precio -->
             <TextView
@@ -59,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="$4.99"
-                android:textSize="16sp"
                 android:textColor="@android:color/black"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <!-- Botón de agregar -->
