@@ -18,6 +18,7 @@ firebaseAuthKtx = "23.2.0"
 navigationFragmentKtx = "2.8.9"
 navigationUiKtx = "2.8.9"
 playServicesMaps = "19.1.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version = "2.9.0" }
@@ -45,6 +46,7 @@ firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx",
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
