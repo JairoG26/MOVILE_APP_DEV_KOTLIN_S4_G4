@@ -46,6 +46,7 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.play.services.location)
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
