@@ -98,7 +98,7 @@ class HomeFragment : Fragment() {
         if (isGranted) {
             getUserLocation()
         } else {
-            Toast.makeText(requireContext(), "Permiso de ubicación denegado", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Permisos de ubicación denegados", Toast.LENGTH_LONG).show()
         }
     }
 
