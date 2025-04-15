@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
-            //nearbyRecyclerView.adapter = storeAdapter
+            nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
 
             if (userLocation != null) {
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
                         store.latitude,
                         store.longitude
                     )
-                    distance < 10.0
+                    distance < 1.0
                 }
 
                 val nearbyAdapter = StoreAdapter(nearbyStores) { store -> goToProductFragment(store) }
