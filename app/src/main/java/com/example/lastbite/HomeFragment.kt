@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import android.Manifest
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -87,9 +88,8 @@ class HomeFragment : Fragment() {
                 // Si no hay ubicación aún, muestra todas por ahora
                 nearbyRecyclerView.adapter = storeAdapter
             }
-
+            
         }
-
         storeViewModel.loadStores()
 
         btnCamera.setOnClickListener {
