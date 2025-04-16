@@ -3,7 +3,9 @@ package com.example.lastbite
 import android.app.Activity
 import androidx.fragment.app.viewModels
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -12,11 +14,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import android.Manifest
 import androidx.navigation.fragment.findNavController
@@ -27,6 +29,8 @@ import com.example.lastbite.models.StoreAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
+import com.google.android.gms.location.LocationServices
+import android.Manifest
 import kotlin.math.*
 
 class HomeFragment : Fragment() {
@@ -39,6 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var storeAdapter: StoreAdapter
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
     private var photoBitmap: Bitmap? = null
+    private var userLocation: Location? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -54,6 +59,7 @@ class HomeFragment : Fragment() {
         forYouRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
 
+
         storeAdapter = StoreAdapter(emptyList()) { store -> goToProductFragment(store) }
         allStoresRecyclerView.adapter = storeAdapter
         nearbyRecyclerView.adapter = storeAdapter
@@ -62,7 +68,7 @@ class HomeFragment : Fragment() {
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
-            //nearbyRecyclerView.adapter = storeAdapter
+            nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
 
             if (userLocation != null) {
@@ -73,7 +79,7 @@ class HomeFragment : Fragment() {
                         store.latitude,
                         store.longitude
                     )
-                    distance < 10.0
+                    distance < 1.0
                 }
 
                 val nearbyAdapter = StoreAdapter(nearbyStores) { store -> goToProductFragment(store) }
@@ -82,7 +88,16 @@ class HomeFragment : Fragment() {
                 // Si no hay ubicación aún, muestra todas por ahora
                 nearbyRecyclerView.adapter = storeAdapter
             }
+            
         }
+        storeViewModel.loadStores()
+
+        btnCamera.setOnClickListener {
+            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+        requestLocationPermission()
+        return view
+    }
 
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -90,7 +105,7 @@ class HomeFragment : Fragment() {
         if (isGranted) {
             getUserLocation()
         } else {
-            Toast.makeText(requireContext(), "Permisos de ubicación denegados", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Permiso de ubicación denegado", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -105,7 +120,7 @@ class HomeFragment : Fragment() {
             getUserLocation()
         }
     }
-    
+
     private fun getUserLocation() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -126,38 +141,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
-
-        orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
-            orderStatusViewModel.isPhotoTaken.observe(viewLifecycleOwner) { photoTaken ->
-                cameraButton.visibility = if (accepted && !photoTaken) View.VISIBLE else View.GONE
-            }
-        }
-
-        cameraButton.setOnClickListener {
-            if (photoBitmap != null) {
-                orderStatusViewModel.isOrderAccepted.value = false
-                photoBitmap = null
-            }
-        }
-    }
-
-    private fun goToProductFragment(store: Store) {
-        productViewModel.loadProductsByStore(store.store_id) // Cargar productos en ViewModel
-
-        val productFragment = ProductFragment()
-        val bundle = Bundle().apply {
-            putInt("storeId", store.store_id) // Guardamos el ID como Int
-        }
-        productFragment.arguments = bundle
-
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_nav_container, productFragment) // Usa el ID del contenedor en tu Activity
-            .addToBackStack(null) // Para que el usuario pueda volver atrás
-            .commit()
-    }
-    
     fun calculateDistance(
         lat1: Double, lon1: Double,
         lat2: Double, lon2: Double
@@ -176,13 +159,46 @@ class HomeFragment : Fragment() {
         return earthRadius * c
     }
 
+    private fun goToProductFragment(store: Store) {
+        productViewModel.loadProductsByStore(store.store_id) // Cargar productos en ViewModel
+
+        val productFragment = ProductFragment()
+        val bundle = Bundle().apply {
+            putInt("storeId", store.store_id) // Guardamos el ID como Int
+        }
+        productFragment.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_nav_container, productFragment) // Usa el ID del contenedor en tu Activity
+            .addToBackStack(null) // Para que el usuario pueda volver atrás
+            .commit()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
+
+        orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
+            orderStatusViewModel.isPhotoTaken.observe(viewLifecycleOwner) { photoTaken ->
+                cameraButton.visibility = if (accepted && !photoTaken) View.VISIBLE else View.GONE
+            }
+        }
+
+        cameraButton.setOnClickListener {
+            if (photoBitmap != null) {
+                orderStatusViewModel.isOrderAccepted.value = false
+                photoBitmap = null
+            }
+        }
+    }
+
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
+            Toast.makeText(requireContext(), "Image taken", Toast.LENGTH_SHORT).show()
             val data = result.data
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             if (imageBitmap != null) {
-                photoBitmap = imageBitmap // ✅ Aquí la almacenas
+                photoBitmap = imageBitmap
                 orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
             }
         }
