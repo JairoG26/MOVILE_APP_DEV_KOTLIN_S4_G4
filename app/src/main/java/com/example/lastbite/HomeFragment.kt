@@ -30,7 +30,6 @@ import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
-import android.Manifest
 import kotlin.math.*
 
 class HomeFragment : Fragment() {
