@@ -89,12 +89,13 @@ class HomeFragment : Fragment() {
             }
             
         }
+        requestLocationPermission()
         storeViewModel.loadStores()
 
         btnCamera.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
-        requestLocationPermission()
+
         return view
     }
 
