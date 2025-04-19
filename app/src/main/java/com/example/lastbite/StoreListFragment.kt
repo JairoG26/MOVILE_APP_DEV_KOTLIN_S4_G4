@@ -39,19 +39,14 @@ class StoreListFragment : Fragment() {
             Log.d("DEBUG", "Tiendas recibidas: ${store}")
             goToStoreDetail(store)
         }
-        Log.d("DEBUG", "Tiendas recibidas:")
         recyclerView.adapter = adapter
-        Log.d("DEBUG", "Tiendas recibidas:1")
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        Log.d("DEBUG", "Tiendas recibidas:2")
 
         // Paso 1: Observar usuario logueado
-        authViewModel.user.observe(viewLifecycleOwner) { user ->
-            Log.d("DEBUG", "Tiendas recibidas: ${user}")
-            user?.let {
-                // Paso 2: Pedir los IDs de tiendas asociadas a este usuario
-                userStoreViewModel.fetchStoreIdsByUser(user.user_id)
-            }
+        val currentUser = SessionManager.getUser()
+        currentUser?.let {
+            userStoreViewModel.fetchStoreIdsByUser(it.user_id)
+            Log.d("DEBUG", "Tiendas recibidas: ${it}")
         }
 
         // Paso 3: Cuando ya tengamos los IDs, pedimos las tiendas

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
+import com.example.lastbite.SessionManager
 import com.example.lastbite.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
@@ -53,6 +54,7 @@ class AuthViewModel : ViewModel() {
                             if (response.isSuccessful && response.body() != null) {
                                 val user = response.body()!!
                                 _user.value = user
+                                SessionManager.saveUser(user)
                                 Log.d("DEBUG", "Tiendas recibidass: ${_user.value}")
                                 _userType.value = user.user_type // "store" o "customer"
                             } else {
