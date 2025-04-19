@@ -28,9 +28,20 @@ class SignInActivity : AppCompatActivity() {
         authViewModel.authStateLogIn.observe(this) { isAuthenticated ->
             if (isAuthenticated) {
                 Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-                // Navegar a la siguiente pantalla
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+
+                authViewModel.userType.observe(this) { type ->
+                    when (type) {
+                        "UserType.STORE" -> {
+                            startActivity(Intent(this, StoreHomeActivity::class.java))
+                        }
+                        "UserType.CUSTOMER" -> {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    } else -> {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    }
+                    }
+                    finish()
+                }
             } else {
                 Toast.makeText(this, "Error en el inicio de sesión", Toast.LENGTH_SHORT).show()
             }

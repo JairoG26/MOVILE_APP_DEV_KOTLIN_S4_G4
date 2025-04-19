@@ -23,6 +23,9 @@
             android:name=".activities.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.StoreHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.PhoneActivity"
             android:exported="false" />
         <activity

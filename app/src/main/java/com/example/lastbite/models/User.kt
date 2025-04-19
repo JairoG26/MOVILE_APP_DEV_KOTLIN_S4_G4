@@ -1,7 +1,7 @@
 package com.example.lastbite.models
 
 data class User(
-    //val user_id: Int,
+    val user_id: Int? = null,
     val area_id: Int?,
     val description: String?,
     val mobile_number: String?,
