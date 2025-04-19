@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
 import com.example.lastbite.viewmodels.AuthViewModel
+import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.example.lastbite.viewmodels.UserStoreViewModel
 
@@ -21,9 +22,9 @@ class StoreListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: StoreAdapter
 
-    private val authViewModel: AuthViewModel by viewModels()
     private val userStoreViewModel: UserStoreViewModel by viewModels()
     private val storeViewModel: StoreViewModel by viewModels()
+    private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +67,15 @@ class StoreListFragment : Fragment() {
     }
 
     private fun goToStoreDetail(store: Store) {
-        Toast.makeText(requireContext(), "Tienda seleccionada: ${store.name}", Toast.LENGTH_SHORT).show()
-        // Aquí podrías navegar a otro fragment si lo deseas
+        val storeProductFragment = StoreProductFragment()
+        val bundle = Bundle().apply {
+            putInt("storeId", store.store_id) // Guardamos el ID como Int
+        }
+        storeProductFragment.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_store_nav_container, storeProductFragment) // Usa el ID del contenedor en tu Activity
+            .addToBackStack(null) // Para que el usuario pueda volver atrás
+            .commit()
     }
 }

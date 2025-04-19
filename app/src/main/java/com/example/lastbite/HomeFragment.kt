@@ -159,7 +159,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun goToProductFragment(store: Store) {
-        productViewModel.loadProductsByStore(store.store_id) // Cargar productos en ViewModel
 
         val productFragment = ProductFragment()
         val bundle = Bundle().apply {
