@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lastbite.models.Store
@@ -24,7 +25,6 @@ class StoreListFragment : Fragment() {
 
     private val userStoreViewModel: UserStoreViewModel by viewModels()
     private val storeViewModel: StoreViewModel by viewModels()
-    private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,13 +35,13 @@ class StoreListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.recyclerViewStores1)
+        recyclerView = view.findViewById(R.id.recyclerViewStores)
         adapter = StoreAdapter(emptyList()) { store ->
             Log.d("DEBUG", "Tiendas recibidas: ${store}")
             goToStoreDetail(store)
         }
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         // Paso 1: Observar usuario logueado
         val currentUser = SessionManager.getUser()
@@ -68,6 +68,7 @@ class StoreListFragment : Fragment() {
 
     private fun goToStoreDetail(store: Store) {
         val storeProductFragment = StoreProductFragment()
+        StoreManager.storeId = store.store_id
         val bundle = Bundle().apply {
             putInt("storeId", store.store_id) // Guardamos el ID como Int
         }

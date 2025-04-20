@@ -14,18 +14,29 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Owned Stores"
+            android:text="Products"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             android:paddingBottom="8dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewStores"
+            android:id="@+id/recyclerProducts"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:scrollbars="vertical" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Agregar producto"
+        android:src="@drawable/add_white_icon"
+        app:backgroundTint="@color/principal_green"
+        app:tint="@color/white" />
 
 </FrameLayout>

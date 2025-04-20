@@ -45,7 +45,7 @@ class ProductFragment : Fragment() {
     private fun goToProductDetail(product: Product) {
         val productDetailFragment = ProductDetailFragment()
         val bundle = Bundle().apply {
-            putInt("productId", product.product_id) // Enviamos el ID del producto
+            putInt("productId", product.product_id!!) // Enviamos el ID del producto
         }
         productDetailFragment.arguments = bundle
 

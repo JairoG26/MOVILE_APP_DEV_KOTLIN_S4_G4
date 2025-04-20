@@ -40,6 +40,18 @@ class StoreProductDetailFragment : Fragment() {
         val deleteButton = view.findViewById<Button>(R.id.btnDelete)
         val saveButton = view.findViewById<Button>(R.id.btnSave)
 
+        deleteButton.setOnClickListener {
+            productViewModel.deleteProduct(productId)
+        }
+
+        productViewModel.productDeleted.observe(viewLifecycleOwner) { wasDeleted ->
+            if (wasDeleted) {
+                Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressed()
+            } else {
+                Toast.makeText(requireContext(), "Error al eliminar", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         productViewModel.product.observe(viewLifecycleOwner) { product ->
             product?.let {
