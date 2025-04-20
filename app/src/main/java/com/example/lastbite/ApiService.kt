@@ -11,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -44,6 +45,9 @@ interface ApiService {
 
     @DELETE("products/{id}")
     fun deleteProduct(@Path("id") productId: Int): Call<Void>
+
+    @PUT("products/{id}")
+    fun updateProduct(@Path("id") productId: Int, @Body product: Product): Call<Product>
 
     /// Stores Services
 

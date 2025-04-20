@@ -17,6 +17,8 @@ class ProductViewModel : ViewModel() {
     val product: LiveData<Product?> get() = _product
     private val _productDeleted = MutableLiveData<Boolean>()
     val productDeleted: LiveData<Boolean> = _productDeleted
+    private val _productUpdated = MutableLiveData<Boolean>()
+    val productUpdated: LiveData<Boolean> = _productUpdated
 
     fun loadProductsByStore(storeId: Int) {
         repository.fetchProducts(storeId) { productList ->
@@ -45,10 +47,19 @@ class ProductViewModel : ViewModel() {
     fun deleteProduct(productId: Int) {
         repository.deleteProduct(productId) { success ->
             if (success) {
-                // Puedes emitir un LiveData para avisar al fragment que se eliminó
                 _productDeleted.postValue(true)
             } else {
                 _productDeleted.postValue(false)
+            }
+        }
+    }
+
+    fun updateProduct(productId: Int, updatedProduct: Product) {
+        repository.updateProduct(productId, updatedProduct) { updatedProduct ->
+            if (updatedProduct != null) {
+                _productUpdated.postValue(true)
+            } else {
+                _productUpdated.postValue(false)
             }
         }
     }

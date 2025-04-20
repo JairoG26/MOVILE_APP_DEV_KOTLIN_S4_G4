@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.lastbite.models.CartItem
+import com.example.lastbite.models.Product
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 
@@ -44,12 +45,34 @@ class StoreProductDetailFragment : Fragment() {
             productViewModel.deleteProduct(productId)
         }
 
+        saveButton.setOnClickListener {
+            val updatedProduct = Product(
+                product_id = null,
+                name = productName.text.toString(),
+                unit_price = productPrice.text.toString().toFloat(),
+                detail = productDetail.text.toString(),
+                product_type = productType.text.toString(),
+                score = productScore.text.toString().toFloat(),
+                image = imageUrl.text.toString(),
+                store_id = StoreManager.storeId!!
+            )
+            productViewModel.updateProduct(productId, updatedProduct)
+        }
+
         productViewModel.productDeleted.observe(viewLifecycleOwner) { wasDeleted ->
             if (wasDeleted) {
                 Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressed()
             } else {
                 Toast.makeText(requireContext(), "Error al eliminar", Toast.LENGTH_SHORT).show()
+            }
+        }
+        productViewModel.productUpdated.observe(viewLifecycleOwner) { wasUpdated ->
+            if (wasUpdated) {
+                Toast.makeText(requireContext(), "Producto actualizado", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressed()
+            } else {
+                Toast.makeText(requireContext(), "Error al actualizar", Toast.LENGTH_SHORT).show()
             }
         }
 
