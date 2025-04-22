@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lastbite.viewmodels.AuthViewModel
 import com.example.lastbite.R
+import com.example.lastbite.SessionManager
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthViewModel
@@ -28,6 +29,10 @@ class SignInActivity : AppCompatActivity() {
         authViewModel.authStateLogIn.observe(this) { isAuthenticated ->
             if (isAuthenticated) {
                 Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+
+                authViewModel.user.observe(this) { user ->
+                    SessionManager.saveUser(user)
+                }
 
                 authViewModel.userType.observe(this) { type ->
                     when (type) {
