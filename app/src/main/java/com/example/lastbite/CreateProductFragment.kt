@@ -45,7 +45,7 @@ class CreateProductFragment : Fragment() {
         val etDetail = view.findViewById<EditText>(R.id.etDetail)
         val etType = view.findViewById<EditText>(R.id.etType)
         val etScore = view.findViewById<EditText>(R.id.etScore)
-        etImageUrl = view.findViewById<EditText>(R.id.etImageUrl)
+        etImageUrl = view.findViewById(R.id.etImageUrl)
         val btnSave = view.findViewById<Button>(R.id.btnSaveProduct)
 
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -66,29 +66,39 @@ class CreateProductFragment : Fragment() {
         }
         
         btnSave.setOnClickListener {
-            val name = etName.text.toString()
-            val price = etPrice.text.toString().toFloatOrNull() ?: 0f
-            val detail = etDetail.text.toString()
-            val type = etType.text.toString()
-            val score = etScore.text.toString().toFloatOrNull() ?: 0f
-            val image = etImageUrl.text.toString()
-            val storeId = StoreManager.storeId
+            if (!productViewModel.hayConexion(requireContext())) {
+                Toast.makeText(
+                    requireContext(),
+                    "You need to have internet to do this",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (etImageUrl.text.isNullOrEmpty()){
+                Toast.makeText(requireContext(), "Image is blank or is not uploaded yet", Toast.LENGTH_SHORT).show()
+            } else {
+                val name = etName.text.toString()
+                val price = etPrice.text.toString().toFloatOrNull() ?: 0f
+                val detail = etDetail.text.toString()
+                val type = etType.text.toString()
+                val score = etScore.text.toString().toFloatOrNull() ?: 0f
+                val image = etImageUrl.text.toString()
+                val storeId = StoreManager.storeId
 
-            val newProduct = Product(
-                product_id = null,
-                name = name,
-                unit_price = price,
-                detail = detail,
-                product_type = type,
-                score = score,
-                image = image,
-                store_id = storeId!!
-            )
+                val newProduct = Product(
+                    product_id = null,
+                    name = name,
+                    unit_price = price,
+                    detail = detail,
+                    product_type = type,
+                    score = score,
+                    image = image,
+                    store_id = storeId!!
+                )
 
-            productViewModel.createProduct(newProduct)
+                productViewModel.createProduct(newProduct)
 
-            Toast.makeText(requireContext(), "Producto creado", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressed()
+                Toast.makeText(requireContext(), "Producto creado", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressed()
+            }
         }
 
         val btnTakePhoto = view.findViewById<Button>(R.id.btnTakePhoto)
