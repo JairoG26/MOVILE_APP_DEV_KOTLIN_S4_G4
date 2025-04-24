@@ -19,10 +19,21 @@ class StoreViewModel : ViewModel() {
     private val _stores = MutableLiveData<List<Store>>()
     val stores: LiveData<List<Store>> get() = _stores
 
+    private val _storesByUser = MutableLiveData<List<Store>>()
+    val storesByUser: LiveData<List<Store>> get() = _storesByUser
+
     fun loadStores() {
         repository.fetchStores { storeList -> 
             Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
             _stores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
     }
+
+    fun fetchStoresByIds(storeIds: List<Int>) {
+        repository.fetchStoresByIds(storeIds) { storeList ->
+            Log.d("DEBUG", "storeIds: $storeIds")
+            _storesByUser.postValue(storeList ?: emptyList()) // Si no hay tiendas, mandamos lista vacía
+        }
+    }
+
 }

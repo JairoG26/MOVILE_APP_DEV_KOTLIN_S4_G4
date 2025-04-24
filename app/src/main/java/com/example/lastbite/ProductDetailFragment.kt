@@ -96,7 +96,7 @@ class ProductDetailFragment : Fragment() {
             val currentProduct = productViewModel.product.value
             currentProduct?.let { product ->
                 val cartItem = CartItem(
-                    productId = product.product_id,
+                    productId = product.product_id!!,
                     name = product.name,
                     unitPrice = product.unit_price,
                     image = product.image,

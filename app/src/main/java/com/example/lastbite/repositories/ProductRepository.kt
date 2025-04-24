@@ -26,6 +26,38 @@ class ProductRepository {
         })
     }
 
+    fun createProduct(product: Product, callback: (Product?) -> Unit) {
+        apiService.createProduct(product).enqueue(object : Callback<Product> {
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // Producto creado exitosamente
+                } else {
+                    callback(null) // Falló la creación
+                }
+            }
+
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+                callback(null) // Error de red
+            }
+        })
+    }
+
+    fun updateProduct(productId: Int, updatedProduct: Product, callback: (Product?) -> Unit) {
+        apiService.updateProduct(productId, updatedProduct).enqueue(object : Callback<Product> {
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // Producto creado exitosamente
+                } else {
+                    callback(null) // Falló la actualización
+                }
+            }
+
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+                callback(null) // Error de red
+            }
+        })
+    }
+
     fun fetchProductById(productId: Int, callback: (Product?) -> Unit) {
         apiService.getProductById(productId).enqueue(object : Callback<Product> {
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
@@ -41,4 +73,16 @@ class ProductRepository {
             }
         })
     }
+
+    fun deleteProduct(productId: Int, callback: (Boolean) -> Unit) {
+        apiService.deleteProduct(productId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                callback(response.isSuccessful)
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                callback(false)
+            }
+        })
+    }
+
 }

@@ -15,6 +15,10 @@ class ProductViewModel : ViewModel() {
     val products: LiveData<List<Product>> get() = _products
     private val _product = MutableLiveData<Product?>() // 🔹 Para un solo producto
     val product: LiveData<Product?> get() = _product
+    private val _productDeleted = MutableLiveData<Boolean>()
+    val productDeleted: LiveData<Boolean> = _productDeleted
+    private val _productUpdated = MutableLiveData<Boolean>()
+    val productUpdated: LiveData<Boolean> = _productUpdated
 
     fun loadProductsByStore(storeId: Int) {
         repository.fetchProducts(storeId) { productList ->
@@ -25,6 +29,38 @@ class ProductViewModel : ViewModel() {
     fun loadProductById(productId: Int) {
         repository.fetchProductById(productId) { product ->
             _product.postValue(product) // 🔹 Guardamos directamente el producto
+        }
+    }
+
+    fun createProduct(product: Product) {
+        repository.createProduct(product) { createdProduct ->
+            if (createdProduct != null) {
+                // Producto creado con éxito
+                Log.d("POST", "Producto creado: ${createdProduct.name}")
+            } else {
+                // Error al crear producto
+                Log.e("POST", "Error al crear el producto")
+            }
+        }
+    }
+
+    fun deleteProduct(productId: Int) {
+        repository.deleteProduct(productId) { success ->
+            if (success) {
+                _productDeleted.postValue(true)
+            } else {
+                _productDeleted.postValue(false)
+            }
+        }
+    }
+
+    fun updateProduct(productId: Int, updatedProduct: Product) {
+        repository.updateProduct(productId, updatedProduct) { updatedProduct ->
+            if (updatedProduct != null) {
+                _productUpdated.postValue(true)
+            } else {
+                _productUpdated.postValue(false)
+            }
         }
     }
 }
