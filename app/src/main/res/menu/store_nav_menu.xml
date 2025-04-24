@@ -22,4 +22,5 @@
         android:id="@+id/navigationIcon"
         android:icon="@drawable/baseline_account_circle_24"
         android:title="Account" />
+
 </menu>

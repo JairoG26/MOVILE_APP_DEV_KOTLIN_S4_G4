@@ -1,5 +1,4 @@
 package com.example.lastbite
-
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.lastbite.models.User
@@ -30,6 +29,7 @@ object SessionManager {
         if (userJson != null) {
             currentUser = Gson().fromJson(userJson, User::class.java)
         }
+
     }
 
     fun getUser(): User? {

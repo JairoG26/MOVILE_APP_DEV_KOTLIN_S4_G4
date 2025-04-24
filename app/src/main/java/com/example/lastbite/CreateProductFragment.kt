@@ -1,5 +1,4 @@
 package com.example.lastbite
-
 import android.content.ContentValues
 import android.net.Uri
 import android.os.Bundle
@@ -31,6 +30,7 @@ class CreateProductFragment : Fragment() {
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private var photoUri: Uri? = null
     private lateinit var etImageUrl: EditText
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +64,7 @@ class CreateProductFragment : Fragment() {
                 }
             }
         }
-
+        
         btnSave.setOnClickListener {
             val name = etName.text.toString()
             val price = etPrice.text.toString().toFloatOrNull() ?: 0f
@@ -119,5 +119,4 @@ class CreateProductFragment : Fragment() {
             imageRef.downloadUrl.await().toString()
         }
     }
-
 }
