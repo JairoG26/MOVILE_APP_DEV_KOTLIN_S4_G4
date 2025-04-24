@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.lastbite.AccountFragment
 import com.example.lastbite.CartFragment
 import com.example.lastbite.StoreListFragment
 import com.example.lastbite.R
@@ -27,6 +28,10 @@ class StoreHomeActivity : AppCompatActivity() {
                 }
                 R.id.cartIcon -> {
                     replaceFragment(CartFragment())
+                    true
+                }
+                R.id.navigationIcon -> {
+                    replaceFragment(AccountFragment())
                     true
                 } else -> false
             }
