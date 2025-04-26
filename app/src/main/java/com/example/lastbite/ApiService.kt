@@ -1,6 +1,7 @@
 package com.example.lastbite
 
 import com.example.lastbite.models.Area
+import com.example.lastbite.models.Location
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.User
@@ -59,5 +60,8 @@ interface ApiService {
 
     @GET("stores")
     fun getStores(): Call<List<Store>>
+
+    @POST("location")
+    fun receiveLocation(@Body location: Location): Call<Void>
 
 }

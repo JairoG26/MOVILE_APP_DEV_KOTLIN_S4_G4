@@ -3,17 +3,12 @@ package com.example.lastbite
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
-import android.content.Context
-import android.content.Context.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -47,6 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var allStoresRecyclerView: RecyclerView
     private val storeViewModel: StoreViewModel by viewModels()
     private val productViewModel: ProductViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var storeAdapter: StoreAdapter
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
     private var photoBitmap: Bitmap? = null
@@ -258,6 +254,8 @@ class HomeFragment : Fragment() {
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             Toast.makeText(requireContext(), "Image taken", Toast.LENGTH_SHORT).show()
+            getUserLocation()
+            homeViewModel.sendUserLocation(userLocation)
             val data = result.data
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             if (imageBitmap != null) {
