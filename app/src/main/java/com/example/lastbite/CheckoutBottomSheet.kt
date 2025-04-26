@@ -2,6 +2,8 @@ package com.example.lastbite
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +11,17 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
+import androidx.lifecycle.lifecycleScope
 import com.example.lastbite.activities.OrderAcceptedActivity
+import com.example.lastbite.models.Cart
+import com.example.lastbite.models.CartProduct
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class CheckoutBottomSheet : BottomSheetDialogFragment() {
@@ -46,16 +53,50 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
         val confirmButton = view.findViewById<Button>(R.id.confirmCheckout)
         confirmButton.setOnClickListener {
-            orderStatusViewModel.isOrderAccepted.value = true
-            cartViewModel.clearCart()
-            Toast.makeText(requireContext(), "Pedido confirmado", Toast.LENGTH_SHORT).show()
+            val userId = SessionManager.getUser()?.user_id
+            val status = "ACTIVE"
+            val newCart = Cart(cart_id = null, user_id = userId, status = status)
 
-            dismiss() // Cierra el BottomSheet
+            // Lanzamos la corrutina
+            viewLifecycleOwner.lifecycleScope.launch {
+                val createdCart = cartViewModel.createCartSuspend(newCart)
 
-            // Iniciar nueva actividad
-            val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)
-            startActivity(intent)
+                if (createdCart == null) {
+                    Toast.makeText(requireContext(), "Error al crear el carrito", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
 
+                val activeCart = withContext(Dispatchers.IO) {
+                    cartViewModel.getActiveCart(userId)
+                    delay(100) // opcional: esperar a que se actualice LiveData
+                    cartViewModel.activeCart
+                }
+
+                if (activeCart == null) {
+                    Toast.makeText(requireContext(), "Error al obtener el carrito activo", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                withContext(Dispatchers.IO) {
+                    cartViewModel.cartItems.value?.forEach { item ->
+                        val newCartProduct = CartProduct(
+                            product_id = item.productId,
+                            cart_id = activeCart.cart_id,
+                            quantity = item.quantity
+                        )
+                        cartViewModel.createCartProduct(newCartProduct)
+                    }
+                }
+
+                cartViewModel.clearCart()
+                orderStatusViewModel.isOrderAccepted.value = true
+
+                Toast.makeText(requireContext(), "Pedido confirmado", Toast.LENGTH_SHORT).show()
+                dismiss()
+
+                val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

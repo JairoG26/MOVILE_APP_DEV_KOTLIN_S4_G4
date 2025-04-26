@@ -100,10 +100,16 @@ class ProductDetailFragment : Fragment() {
                     name = product.name,
                     unitPrice = product.unit_price,
                     image = product.image,
-                    quantity = quantity
+                    quantity = quantity,
+                    storeId = product.store_id,
+                    cart_id = null
                 )
-                cartViewModel.addItem(cartItem)
-                Toast.makeText(requireContext(), "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+                val success = cartViewModel.addItem(cartItem)
+                if (success) {
+                    Toast.makeText(requireContext(), "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Solo puedes añadir productos de una tienda a la vez", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
