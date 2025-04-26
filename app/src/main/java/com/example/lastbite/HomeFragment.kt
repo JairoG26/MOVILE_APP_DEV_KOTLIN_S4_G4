@@ -204,22 +204,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
-        var exit : Boolean = false
 
         if (!isOnline()) {
-            while (!exit) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Lost connection")
-                    .setMessage("You require an active connection to continue using the app. Please reconnect.")
-                    .setPositiveButton("Try again"){ dialog, which ->
-                        if (isOnline()) {
-                            exit = true
-                            dialog.dismiss()
-                        }
-                    }
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.show()
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Lost connection")
+            .setMessage("You require an active connection to continue using the app. Please reconnect.")
+            .setPositiveButton("Try again"){ dialog, which ->
+                if (isOnline()) {
+                    dialog.dismiss()
+                }
             }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
         }
 
         orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
