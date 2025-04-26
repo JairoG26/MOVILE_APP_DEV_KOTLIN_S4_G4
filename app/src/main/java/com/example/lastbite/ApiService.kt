@@ -1,6 +1,9 @@
 package com.example.lastbite
 
 import com.example.lastbite.models.Area
+import com.example.lastbite.models.Cart
+import com.example.lastbite.models.CartItem
+import com.example.lastbite.models.CartProduct
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.User
@@ -60,4 +63,25 @@ interface ApiService {
     @GET("stores")
     fun getStores(): Call<List<Store>>
 
+    /// Carts
+
+    @GET("carts")
+    fun getCarts(): Call<List<Cart>>
+
+    @POST("carts/")
+    fun createCart(@Body request: Cart): Call<Cart>
+
+    @GET("carts/{id}")
+    fun getCartById(@Path("id") cartId: Int): Call<Cart>
+
+    @GET("carts/user/{userId}/active")
+    fun getActiveCartByUserId(@Path("userId") userId: Int): Call<Cart>
+
+    @PUT("carts/{id}/status")
+    fun updateCart(@Path("id") cartId: Int, @Body request: Cart): Call<Cart>
+
+    /// Carts Products
+
+    @POST("cart_products/")
+    fun createCartProduct(@Body request: CartProduct): Call<CartProduct>
 }

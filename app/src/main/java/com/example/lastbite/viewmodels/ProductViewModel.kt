@@ -1,5 +1,8 @@
 package com.example.lastbite.viewmodels
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.lastbite.models.Product
@@ -63,4 +66,12 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+    fun hayConexion(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
 }

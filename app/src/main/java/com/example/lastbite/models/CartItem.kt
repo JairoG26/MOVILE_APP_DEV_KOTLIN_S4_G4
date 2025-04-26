@@ -6,4 +6,6 @@ data class CartItem(
     val unitPrice: Float,
     val image: String,
     var quantity: Int,
+    val storeId: Int,
+    val cart_id: Int?
 )
