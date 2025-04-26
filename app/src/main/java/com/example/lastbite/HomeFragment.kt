@@ -1,15 +1,22 @@
 package com.example.lastbite
 
+import android.Manifest
 import android.app.Activity
-import androidx.fragment.app.viewModels
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
+import android.content.Context.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +26,16 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import android.Manifest
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.Cart
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
+import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
@@ -44,6 +55,27 @@ class HomeFragment : Fragment() {
     private val cartViewModel = SingletonCartViewModel.instance
     private var photoBitmap: Bitmap? = null
     private var userLocation: Location? = null
+
+    /*private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        // network is available for use
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+        }
+
+        // Network capabilities have changed for the network
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) {
+            super.onCapabilitiesChanged(network, networkCapabilities)
+            val unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+        }
+
+        // lost network connection
+        override fun onLost(network: Network) {
+            super.onLost(network)
+        }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -174,7 +206,21 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
+
+        if (!isOnline()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Lost connection")
+            .setMessage("You require an active connection to continue using the app. Please reconnect.")
+            .setPositiveButton("Try again"){ dialog, which ->
+                if (isOnline()) {
+                    dialog.dismiss()
+                }
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
 
         orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
             orderStatusViewModel.isPhotoTaken.observe(viewLifecycleOwner) { photoTaken ->
@@ -190,6 +236,28 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun isOnline() : Boolean {
+        /* val networkRequest = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .build()*/
+
+        val connectivityManager = getSystemService(requireContext(), ConnectivityManager::class.java) as ConnectivityManager
+        // connectivityManager.requestNetwork(networkRequest, networkCallback)
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+            else -> false
+        }
+    }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {

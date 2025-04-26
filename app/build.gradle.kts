@@ -4,6 +4,8 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
+    //id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    //id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -81,4 +83,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    //implementation("com.google.dagger:hilt-android:2.56.1")
+    //ksp("com.google.dagger:hilt-compiler:2.56.1")
 }
