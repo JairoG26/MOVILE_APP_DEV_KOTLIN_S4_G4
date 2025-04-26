@@ -10,13 +10,6 @@
         android:contentDescription="@string/home_icon"
         android:icon="@drawable/home_icon" />
 
-    <item
-        android:id="@+id/cartIcon"
-        android:layout_width="61dp"
-        android:layout_height="58dp"
-        android:contentDescription="@string/cart_icon"
-        android:icon="@drawable/shopping_cart_icon"
-        android:title="@string/my_cart"/>
 
     <item
         android:id="@+id/navigationIcon"

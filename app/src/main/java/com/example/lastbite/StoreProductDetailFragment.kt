@@ -42,26 +42,34 @@ class StoreProductDetailFragment : Fragment() {
         val saveButton = view.findViewById<Button>(R.id.btnSave)
 
         deleteButton.setOnClickListener {
-            productViewModel.deleteProduct(productId)
+            if (!productViewModel.hayConexion(requireContext())) {
+                Toast.makeText(requireContext(), "You need to have internet to do this", Toast.LENGTH_SHORT).show()
+            } else {
+                productViewModel.deleteProduct(productId)
+            }
         }
 
         saveButton.setOnClickListener {
-            val updatedProduct = Product(
-                product_id = null,
-                name = productName.text.toString(),
-                unit_price = productPrice.text.toString().toFloat(),
-                detail = productDetail.text.toString(),
-                product_type = productType.text.toString(),
-                score = productScore.text.toString().toFloat(),
-                image = imageUrl.text.toString(),
-                store_id = StoreManager.storeId!!
-            )
-            productViewModel.updateProduct(productId, updatedProduct)
+            if (!productViewModel.hayConexion(requireContext())) {
+                Toast.makeText(requireContext(), "You need to have internet to do this", Toast.LENGTH_SHORT).show()
+            } else {
+                val updatedProduct = Product(
+                    product_id = null,
+                    name = productName.text.toString(),
+                    unit_price = productPrice.text.toString().toFloat(),
+                    detail = productDetail.text.toString(),
+                    product_type = productType.text.toString(),
+                    score = productScore.text.toString().toFloat(),
+                    image = imageUrl.text.toString(),
+                    store_id = StoreManager.storeId!!
+                )
+                productViewModel.updateProduct(productId, updatedProduct)
+            }
         }
 
         productViewModel.productDeleted.observe(viewLifecycleOwner) { wasDeleted ->
             if (wasDeleted) {
-                Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Product deleted", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressed()
             } else {
                 Toast.makeText(requireContext(), "Error al eliminar", Toast.LENGTH_SHORT).show()
@@ -69,7 +77,7 @@ class StoreProductDetailFragment : Fragment() {
         }
         productViewModel.productUpdated.observe(viewLifecycleOwner) { wasUpdated ->
             if (wasUpdated) {
-                Toast.makeText(requireContext(), "Producto actualizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Product Updated", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressed()
             } else {
                 Toast.makeText(requireContext(), "Error al actualizar", Toast.LENGTH_SHORT).show()

@@ -12,6 +12,7 @@
         android:textSize="18sp"
         android:layout_marginBottom="12dp"
         android:layout_width="wrap_content"
+        android:textColor="@color/black"
         android:layout_height="wrap_content"/>
 
     <TextView
@@ -20,11 +21,13 @@
         android:textSize="18sp"
         android:layout_marginBottom="24dp"
         android:layout_width="wrap_content"
+        android:textColor="@color/black"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnLogout"
         android:text="Logout"
+        android:textColor="@color/white"
         android:backgroundTint="@color/principal_green"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
