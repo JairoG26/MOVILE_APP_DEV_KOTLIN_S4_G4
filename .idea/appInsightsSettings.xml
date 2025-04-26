@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.lastbite" />
+                  <option name="mobileSdkAppId" value="1:279460729617:android:0e44aa818c81201f3032b0" />
+                  <option name="projectId" value="lastbite-5dd6f" />
+                  <option name="projectNumber" value="279460729617" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
