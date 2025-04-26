@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.CartAdapter
@@ -27,9 +28,22 @@ class CartFragment : Fragment() {
         cartAdapter = CartAdapter(emptyList())
         cartRecyclerView.adapter = cartAdapter
 
-        // Observas el LiveData
+        val emptyCartMessage = view.findViewById<TextView>(R.id.emptyCartMessage)
+        val checkoutBtn = view.findViewById<View>(R.id.btnCheckout)
+
+        // Observa el LiveData
         cartViewModel.cartItems.observe(viewLifecycleOwner) { cartItems ->
             cartAdapter.updateItems(cartItems)
+
+            val isEmpty = cartItems.isEmpty()
+            emptyCartMessage.visibility = if (isEmpty) View.VISIBLE else View.GONE
+            checkoutBtn.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        }
+
+        // Configura el botón
+        checkoutBtn.setOnClickListener {
+            val bottomSheet = CheckoutBottomSheet()
+            bottomSheet.show(parentFragmentManager, "CheckoutBottomSheet")
         }
 
         return view

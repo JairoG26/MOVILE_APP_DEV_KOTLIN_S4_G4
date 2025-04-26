@@ -24,12 +24,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import android.Manifest
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lastbite.models.Cart
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
 import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.ProductViewModel
+import com.example.lastbite.viewmodels.SingletonCartViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
@@ -45,6 +48,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var storeAdapter: StoreAdapter
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
+    private val cartViewModel = SingletonCartViewModel.instance
     private var photoBitmap: Bitmap? = null
     private var userLocation: Location? = null
 
@@ -254,6 +258,7 @@ class HomeFragment : Fragment() {
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             Toast.makeText(requireContext(), "Image taken", Toast.LENGTH_SHORT).show()
+
             getUserLocation()
             homeViewModel.sendUserLocation(userLocation)
             val data = result.data
