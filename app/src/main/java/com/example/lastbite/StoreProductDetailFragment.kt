@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -35,11 +37,17 @@ class StoreProductDetailFragment : Fragment() {
         val productPrice = view.findViewById<EditText>(R.id.etPrice)
         val productImage = view.findViewById<ImageView>(R.id.ivImage)
         val productDetail = view.findViewById<EditText>(R.id.etDetail)
-        val productType = view.findViewById<EditText>(R.id.etType)
+        val productType = view.findViewById<TextView>(R.id.etType)
         val productScore = view.findViewById<EditText>(R.id.etScore)
         val imageUrl = view.findViewById<EditText>(R.id.etImageUrl)
         val deleteButton = view.findViewById<Button>(R.id.btnDelete)
         val saveButton = view.findViewById<Button>(R.id.btnSave)
+        val spinner: Spinner = view.findViewById(R.id.spinner_status)
+        val options = arrayOf("PRODUCT", "SUBSCRIPTION")
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
 
         deleteButton.setOnClickListener {
             if (!productViewModel.hayConexion(requireContext())) {
@@ -58,7 +66,7 @@ class StoreProductDetailFragment : Fragment() {
                     name = productName.text.toString(),
                     unit_price = productPrice.text.toString().toFloat(),
                     detail = productDetail.text.toString(),
-                    product_type = productType.text.toString(),
+                    product_type = spinner.selectedItem.toString(),
                     score = productScore.text.toString().toFloat(),
                     image = imageUrl.text.toString(),
                     store_id = StoreManager.storeId!!

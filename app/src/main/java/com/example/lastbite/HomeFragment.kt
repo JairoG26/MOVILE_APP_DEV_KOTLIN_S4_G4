@@ -1,6 +1,5 @@
 package com.example.lastbite
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
