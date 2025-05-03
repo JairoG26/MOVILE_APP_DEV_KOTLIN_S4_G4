@@ -1,6 +1,9 @@
 package com.example.lastbite
 
 import com.example.lastbite.models.Area
+import com.example.lastbite.models.Cart
+import com.example.lastbite.models.CartProduct
+import com.example.lastbite.models.Location
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.User

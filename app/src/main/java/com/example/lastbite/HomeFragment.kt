@@ -24,7 +24,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import android.Manifest
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.Cart
