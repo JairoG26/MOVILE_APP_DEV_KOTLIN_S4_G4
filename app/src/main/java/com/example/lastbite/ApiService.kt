@@ -52,6 +52,9 @@ interface ApiService {
     @PUT("products/{id}")
     fun updateProduct(@Path("id") productId: Int, @Body product: Product): Call<Product>
 
+    @GET("products/store/{store_id}/top3")
+    fun getTop3Products(@Path("store_id") store_id: Int): Call<List<Product>>
+
     /// Stores Services
 
     @GET("stores/{id}")
