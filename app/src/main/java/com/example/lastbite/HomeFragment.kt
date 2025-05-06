@@ -99,34 +99,21 @@ class HomeFragment : Fragment() {
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
-            nearbyRecyclerView.adapter = storeAdapter
+            //nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
-
-            if (userLocation != null) {
-                val nearbyStores = stores.filter { store ->
-                    val distance = calculateDistance(
-                        userLocation!!.latitude,
-                        userLocation!!.longitude,
-                        store.latitude,
-                        store.longitude
-                    )
-                    distance < 1.0
-                }
-
-                val nearbyAdapter = StoreAdapter(nearbyStores) { store -> goToProductFragment(store) }
-                nearbyRecyclerView.adapter = nearbyAdapter
-            } else {
-                // Si no hay ubicación aún, muestra todas por ahora
-                nearbyRecyclerView.adapter = storeAdapter
-            }
-            
         }
+
+        storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
+            val adapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
+            nearbyRecyclerView.adapter = adapter
+        }
+
+        requestLocationPermission()
         storeViewModel.loadStores()
 
         btnCamera.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
-        requestLocationPermission()
         return view
     }
 
@@ -168,26 +155,9 @@ class HomeFragment : Fragment() {
                 userLocation = it
                 Log.d("UBICACIÓN", "Latitud: ${it.latitude}, Longitud: ${it.longitude}")
                 // Aquí podrías llamar a tu función para filtrar tiendas cercanas
+                storeViewModel.loadNearByStores(it.latitude, it.longitude)
             }
         }
-    }
-
-    fun calculateDistance(
-        lat1: Double, lon1: Double,
-        lat2: Double, lon2: Double
-    ): Double {
-        val earthRadius = 6371.0 // Radio de la Tierra en km
-
-        val dLat = Math.toRadians(lat2 - lat1)
-        val dLon = Math.toRadians(lon2 - lon1)
-
-        val a = sin(dLat / 2).pow(2.0) +
-                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-                sin(dLon / 2).pow(2.0)
-
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return earthRadius * c
     }
 
     private fun goToProductFragment(store: Store) {
