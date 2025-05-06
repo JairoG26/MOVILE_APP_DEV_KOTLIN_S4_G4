@@ -85,4 +85,20 @@ class ProductRepository {
         })
     }
 
+    fun getTop3Products(storeId: Int, callback: (List<Product>?) -> Unit) {
+        apiService.getTop3Products(storeId).enqueue(object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // 🔹 Pasamos la lista de productos
+                } else {
+                    callback(null) // 🔹 En caso de error, devolvemos null
+                }
+            }
+
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                callback(null) // 🔹 Error de conexión, también devolvemos null
+            }
+        })
+    }
+
 }

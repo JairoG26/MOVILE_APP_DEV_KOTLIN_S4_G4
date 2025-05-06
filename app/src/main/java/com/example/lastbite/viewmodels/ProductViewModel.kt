@@ -22,6 +22,8 @@ class ProductViewModel : ViewModel() {
     val productDeleted: LiveData<Boolean> = _productDeleted
     private val _productUpdated = MutableLiveData<Boolean>()
     val productUpdated: LiveData<Boolean> = _productUpdated
+    private val _top3Products = MutableLiveData<List<Product>>()
+    val top3Products: LiveData<List<Product>> get() = _top3Products
 
     fun loadProductsByStore(storeId: Int) {
         repository.fetchProducts(storeId) { productList ->
@@ -72,6 +74,12 @@ class ProductViewModel : ViewModel() {
         val network = cm.activeNetwork ?: return false
         val capabilities = cm.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    fun getTop3Products(storeId: Int) {
+        repository.getTop3Products(storeId) { productList ->
+            _top3Products.postValue(productList ?: emptyList()) // 🔹 Si es null, mandamos lista vacía
+        }
     }
 
 }

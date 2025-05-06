@@ -39,4 +39,17 @@
         app:backgroundTint="@color/principal_green"
         app:tint="@color/white" />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabTopProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Top 3 Products"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        android:contentDescription="Top 3 Products"
+        android:src="@drawable/add_white_icon"
+        app:backgroundTint="@color/principal_green"
+        app:tint="@color/white"/>
+
 </FrameLayout>
