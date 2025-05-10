@@ -6,15 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.CartAdapter
+import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class CartFragment : Fragment() {
 
     private lateinit var cartRecyclerView: RecyclerView
     private lateinit var cartAdapter: CartAdapter
+    private val homeViewModel: HomeViewModel by viewModels()
     private val cartViewModel = SingletonCartViewModel.instance
 
     override fun onCreateView(
@@ -55,6 +58,8 @@ class CartFragment : Fragment() {
         // Encuentra el botón y configura el listener
         val checkoutBtn = view.findViewById<View>(R.id.btnCheckout)
         checkoutBtn.setOnClickListener {
+            /*getUserLocation()
+            homeViewModel.sendUserLocation(userLocation)*/
             val bottomSheet = CheckoutBottomSheet()
             bottomSheet.show(parentFragmentManager, "CheckoutBottomSheet")
         }

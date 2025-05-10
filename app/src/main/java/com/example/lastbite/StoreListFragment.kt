@@ -5,16 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
-import com.example.lastbite.viewmodels.AuthViewModel
-import com.example.lastbite.viewmodels.ProductViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.example.lastbite.viewmodels.UserStoreViewModel
 
@@ -76,7 +71,7 @@ class StoreListFragment : Fragment() {
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_store_nav_container, storeProductFragment) // Usa el ID del contenedor en tu Activity
-            .addToBackStack(null) // Para que el usuario pueda volver atrás
+            .addToBackStack(null) // Para que el usuario vuelva a atrás
             .commit()
     }
 }

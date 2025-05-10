@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lastbite.viewmodels.AuthViewModel
 import com.example.lastbite.R
+import com.example.lastbite.builders.SignUpBuilder
 import com.example.lastbite.viewmodels.SingletonSignUpViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -69,7 +70,18 @@ class SignUpActivity : AppCompatActivity() {
             val verification_code = signUpViewModel.verification_code
 
             if (email.isNotEmpty() && name.isNotEmpty() && password.isNotEmpty() && password == etConfirmPassword.text.toString().trim()) {
-                authViewModel.registerUser(email, password, name, mobile_number, verification_code, area_id, user_type, description)
+                // authViewModel.registerUser(email, password, name, mobile_number, verification_code, area_id, user_type, description)
+                val signUpData = SignUpBuilder()
+                    .email(email)
+                    .password(password)
+                    .name(name)
+                    .mobile_number(mobile_number)
+                    .verification_code(verification_code)
+                    .area_id(area_id)
+                    .user_type(user_type)
+                    .description(description)
+                    .build()
+                authViewModel.registerUser(signUpData)
             } else {
                 Toast.makeText(this, "Por favor ingresa todos los campos", Toast.LENGTH_SHORT).show()
             }

@@ -3,6 +3,7 @@ package com.example.lastbite.repositories
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Product
+import com.example.lastbite.models.ProductReceived
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,9 +31,9 @@ class ProductRepository {
         apiService.createProduct(product).enqueue(object : Callback<Product> {
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 if (response.isSuccessful) {
-                    callback(response.body()) // Producto creado exitosamente
+                    callback(response.body()) // Producto generado exitosamente
                 } else {
-                    callback(null) // Falló la creación
+                    callback(null) // Falló la generación
                 }
             }
 
@@ -74,7 +75,7 @@ class ProductRepository {
         })
     }
 
-    fun deleteProduct(productId: Int, callback: (Boolean) -> Unit) {
+    fun deleteProduct(productId: Int, callback: (Boolean) -> Unit) { // () Especifica un tipo de retorno
         apiService.deleteProduct(productId).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 callback(response.isSuccessful)
@@ -82,6 +83,19 @@ class ProductRepository {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback(false)
             }
+        })
+    }
+
+    fun deliveryProductReceived(imageString : String, callback: (Boolean) -> Unit) {
+        apiService.storeImage(ProductReceived(imageString)).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                callback(false)
+            }
+
         })
     }
 
