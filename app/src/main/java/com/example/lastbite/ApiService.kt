@@ -2,10 +2,12 @@ package com.example.lastbite
 
 import com.example.lastbite.models.Area
 import com.example.lastbite.models.Cart
-import com.example.lastbite.models.CartItem
 import com.example.lastbite.models.CartProduct
+import com.example.lastbite.models.Location
 import com.example.lastbite.models.Product
+import com.example.lastbite.models.ProductReceived
 import com.example.lastbite.models.Store
+import com.example.lastbite.models.StoreCount
 import com.example.lastbite.models.User
 import com.example.lastbite.models.UserStore
 import com.example.lastbite.models.Zone
@@ -90,4 +92,13 @@ interface ApiService {
 
     @POST("cart_products/")
     fun createCartProduct(@Body request: CartProduct): Call<CartProduct>
+
+    @POST("location")
+    fun receiveLocation(@Body location: Location): Call<Void>
+
+    @POST("product_received")
+    fun storeImage(@Body imageString : ProductReceived): Call<Void>
+
+    @POST("store_counted")
+    fun receiveStoreCount(@Body storeCount: StoreCount): Call<Void>
 }

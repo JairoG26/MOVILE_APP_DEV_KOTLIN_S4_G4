@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.SessionManager
+import com.example.lastbite.models.SignUpData
 import com.example.lastbite.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
@@ -31,12 +32,12 @@ class AuthViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
-    fun registerUser(email: String, password: String, name: String, mobile_number: String?, verification_code: Int?, area_id: Int?, user_type: String, description: String?) {
-        auth.createUserWithEmailAndPassword(email, password)
+    fun registerUser(signUpData: SignUpData) {
+        auth.createUserWithEmailAndPassword(signUpData.email, signUpData.password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authStateRegister.value = true
-                    saveUserToBackend(email, name, mobile_number, verification_code, area_id, user_type, description)
+                    saveUserToBackend(signUpData)
                 } else {
                     _errorMessage.value = task.exception?.localizedMessage
                 }
@@ -71,9 +72,9 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    private fun saveUserToBackend(email: String, name: String, mobile_number: String?, verification_code: Int?, area_id: Int?, user_type: String, description: String?) {
+    private fun saveUserToBackend(signUpData: SignUpData) {
         val apiService = ApiClient.getRetrofit().create(ApiService::class.java)
-        val user = User(null, area_id, description, mobile_number, name, email, user_type, verification_code)
+        val user = User(null, signUpData.area_id, signUpData.description, signUpData.user_type, signUpData.name, signUpData.email, signUpData.user_type, signUpData.verification_code)
         val userJson = Gson().toJson(user)
         Log.d("Registro", "JSON enviado: $userJson")
         apiService.registerUser(user).enqueue(object : Callback<Void> {

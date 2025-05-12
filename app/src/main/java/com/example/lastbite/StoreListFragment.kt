@@ -5,16 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreAdapter
-import com.example.lastbite.viewmodels.AuthViewModel
-import com.example.lastbite.viewmodels.ProductViewModel
+import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.example.lastbite.viewmodels.UserStoreViewModel
 
@@ -25,6 +21,7 @@ class StoreListFragment : Fragment() {
 
     private val userStoreViewModel: UserStoreViewModel by viewModels()
     private val storeViewModel: StoreViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +33,7 @@ class StoreListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recyclerViewStores)
-        adapter = StoreAdapter(emptyList()) { store ->
+        adapter = StoreAdapter(emptyList(), null) { store ->
             Log.d("DEBUG", "Tiendas recibidas: ${store}")
             goToStoreDetail(store)
         }
@@ -48,6 +45,7 @@ class StoreListFragment : Fragment() {
         currentUser?.let {
             userStoreViewModel.fetchStoreIdsByUser(it.user_id)
             Log.d("DEBUG", "Tiendas recibidas: ${it}")
+            adapter.updateUserId(it.user_id)
         }
 
         // Paso 3: Cuando ya tengamos los IDs, pedimos las tiendas
@@ -58,7 +56,7 @@ class StoreListFragment : Fragment() {
         // Paso 4: Observar tiendas cargadas y mostrar en el RecyclerView
         storeViewModel.storesByUser.observe(viewLifecycleOwner) { storeList ->
             Log.d("DEBUG", "Tiendas recibidas: ${storeList.size}")
-            adapter = StoreAdapter(storeList) { store ->
+            adapter = StoreAdapter(storeList, homeViewModel) { store ->
                 goToStoreDetail(store)
             }
             recyclerView.adapter = adapter
@@ -76,7 +74,7 @@ class StoreListFragment : Fragment() {
 
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.frame_store_nav_container, storeProductFragment) // Usa el ID del contenedor en tu Activity
-            .addToBackStack(null) // Para que el usuario pueda volver atrás
+            .addToBackStack(null) // Para que el usuario vuelva a atrás
             .commit()
     }
 }

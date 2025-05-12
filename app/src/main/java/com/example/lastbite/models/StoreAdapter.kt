@@ -9,8 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
+import com.example.lastbite.viewmodels.HomeViewModel
 
-class StoreAdapter(private val stores: List<Store>, private val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+class StoreAdapter(private val stores: List<Store>, private val homeViewModel: HomeViewModel?, val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+
+    private var user_id : Int? = null
 
     class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val storeImage: ImageView = view.findViewById(R.id.storeImage)
@@ -30,8 +33,18 @@ class StoreAdapter(private val stores: List<Store>, private val onItemClick: (St
 
         holder.itemView.setOnClickListener {
             onItemClick(store) // Llamamos a la función y pasamos el restaurante seleccionado
+            if (homeViewModel != null && user_id != null) {
+                homeViewModel.countStore(store, user_id!!)
+                Log.d("STORE", "object sent: $store")
+            } else {
+                Log.d("STORE", "HomeVM is null: $store")
+            }
         }
     }
 
     override fun getItemCount(): Int = stores.size
+
+    fun updateUserId(userId: Int?) {
+        user_id = userId
+    }
 }
