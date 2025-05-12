@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.lastbite.R
 
 class NoInternetFragment : Fragment() {
 

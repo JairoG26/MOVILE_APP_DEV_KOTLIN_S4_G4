@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.lastbite.R
+import com.example.lastbite.SessionManager
 import com.example.lastbite.activities.AuthActivity
 
 class AccountFragment : Fragment() {

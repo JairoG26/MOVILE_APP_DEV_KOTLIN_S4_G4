@@ -1,4 +1,4 @@
-package com.example.lastbite.models
+package com.example.lastbite.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
+import com.example.lastbite.models.CartItem
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class CartAdapter (private var items: List<CartItem>) :

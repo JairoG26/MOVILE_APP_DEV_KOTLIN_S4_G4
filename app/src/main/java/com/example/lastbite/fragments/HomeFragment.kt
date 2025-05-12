@@ -1,8 +1,7 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -24,13 +23,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.Store
-import com.example.lastbite.models.StoreAdapter
+import com.example.lastbite.adapters.StoreAdapter
 import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import com.example.lastbite.R
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 

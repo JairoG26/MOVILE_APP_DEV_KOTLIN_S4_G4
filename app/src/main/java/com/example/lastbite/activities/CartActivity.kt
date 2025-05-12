@@ -1,23 +1,15 @@
 package com.example.lastbite.activities
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.lastbite.CartFragment
-import com.example.lastbite.HomeFragment
+import com.example.lastbite.fragments.CartFragment
+import com.example.lastbite.fragments.HomeFragment
 import com.example.lastbite.R
-import com.example.lastbite.models.CartAdapter
-import com.example.lastbite.databinding.ActivityCartListBinding
-import com.example.lastbite.models.CartItem
+import com.example.lastbite.adapters.CartAdapter
 import com.example.lastbite.viewmodels.CartViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class CartActivity : AppCompatActivity() {
 

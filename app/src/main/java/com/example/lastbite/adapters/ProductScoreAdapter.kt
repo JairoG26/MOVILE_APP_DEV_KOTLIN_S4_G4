@@ -1,4 +1,4 @@
-package com.example.lastbite.models
+package com.example.lastbite.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.lastbite.R
+import com.example.lastbite.models.Product
 
 class ProductScoreAdapter(context: Context, private val products: List<Product>) :
     ArrayAdapter<Product>(context, 0, products) {

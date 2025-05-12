@@ -6,11 +6,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.lastbite.AccountFragment
-import com.example.lastbite.CartFragment
+import com.example.lastbite.fragments.AccountFragment
 import com.example.lastbite.NetworkChangeReceiver
-import com.example.lastbite.NoInternetFragment
-import com.example.lastbite.StoreListFragment
+import com.example.lastbite.fragments.NoInternetFragment
+import com.example.lastbite.fragments.StoreListFragment
 import com.example.lastbite.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

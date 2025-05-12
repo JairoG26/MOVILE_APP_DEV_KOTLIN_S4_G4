@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
-import com.example.lastbite.AccountFragment
-import com.example.lastbite.CartFragment
-import com.example.lastbite.HomeFragment
+import com.example.lastbite.fragments.AccountFragment
+import com.example.lastbite.fragments.CartFragment
+import com.example.lastbite.fragments.HomeFragment
 import com.example.lastbite.R
 
 class HomeActivity : AppCompatActivity() {

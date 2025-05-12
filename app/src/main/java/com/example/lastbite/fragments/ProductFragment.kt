@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lastbite.databinding.FragmentProductBinding
+import com.example.lastbite.R
 import com.example.lastbite.models.Product
-import com.example.lastbite.models.ProductAdapter
+import com.example.lastbite.adapters.ProductAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
 
 class ProductFragment : Fragment() {

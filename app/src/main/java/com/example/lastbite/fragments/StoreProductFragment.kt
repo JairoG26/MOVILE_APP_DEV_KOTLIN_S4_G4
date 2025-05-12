@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,14 +11,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lastbite.R
 import com.example.lastbite.models.Product
-import com.example.lastbite.models.ProductAdapter
-import com.example.lastbite.models.ProductScoreAdapter
-import com.example.lastbite.models.StoreProductAdapter
+import com.example.lastbite.adapters.ProductScoreAdapter
+import com.example.lastbite.adapters.StoreProductAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton

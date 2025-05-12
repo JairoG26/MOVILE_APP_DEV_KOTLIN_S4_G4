@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 import android.content.ContentValues
 import android.net.Uri
 import android.os.Bundle
@@ -14,10 +14,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.lastbite.R
+import com.example.lastbite.StoreManager
 import com.example.lastbite.models.Product
 import com.example.lastbite.viewmodels.ProductViewModel
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

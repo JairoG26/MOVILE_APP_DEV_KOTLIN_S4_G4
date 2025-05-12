@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
@@ -15,10 +14,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
-import com.example.lastbite.models.CartItem
+import com.example.lastbite.R
+import com.example.lastbite.StoreManager
 import com.example.lastbite.models.Product
 import com.example.lastbite.viewmodels.ProductViewModel
-import com.example.lastbite.viewmodels.SingletonCartViewModel
 
 class StoreProductDetailFragment : Fragment() {
 

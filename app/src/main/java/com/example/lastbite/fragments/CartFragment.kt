@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lastbite.models.CartAdapter
+import com.example.lastbite.CheckoutBottomSheet
+import com.example.lastbite.R
+import com.example.lastbite.adapters.CartAdapter
 import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 

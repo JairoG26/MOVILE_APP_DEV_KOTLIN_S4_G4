@@ -1,4 +1,4 @@
-package com.example.lastbite.models
+package com.example.lastbite.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
+import com.example.lastbite.models.Store
 import com.example.lastbite.viewmodels.HomeViewModel
 
 class StoreAdapter(private val stores: List<Store>, private val homeViewModel: HomeViewModel?, val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {

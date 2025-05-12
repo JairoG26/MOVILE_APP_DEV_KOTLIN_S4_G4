@@ -1,4 +1,4 @@
-package com.example.lastbite
+package com.example.lastbite.fragments
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,11 @@ import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lastbite.R
+import com.example.lastbite.SessionManager
+import com.example.lastbite.StoreManager
 import com.example.lastbite.models.Store
-import com.example.lastbite.models.StoreAdapter
+import com.example.lastbite.adapters.StoreAdapter
 import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.example.lastbite.viewmodels.UserStoreViewModel
