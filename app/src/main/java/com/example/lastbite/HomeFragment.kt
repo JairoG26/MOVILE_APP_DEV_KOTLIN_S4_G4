@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         }
 
         storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
-            val adapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
+            val adapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
             nearbyRecyclerView.adapter = adapter
         }
 
@@ -109,10 +109,10 @@ class HomeFragment : Fragment() {
     private fun requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            locationPermissionRequest.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             getUserLocation()
         }
@@ -144,7 +144,7 @@ class HomeFragment : Fragment() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         if (ActivityCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
