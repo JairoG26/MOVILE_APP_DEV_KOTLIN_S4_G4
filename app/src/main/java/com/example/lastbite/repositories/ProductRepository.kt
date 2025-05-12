@@ -88,6 +88,22 @@ class ProductRepository {
         })
     }
 
+    fun getTop3Products(storeId: Int, callback: (List<Product>?) -> Unit) {
+        apiService.getTop3Products(storeId).enqueue(object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if (response.isSuccessful) {
+                    callback(response.body()) // 🔹 Pasamos la lista de productos
+                } else {
+                    callback(null) // 🔹 En caso de error, devolvemos null
+                }
+            }
+
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                callback(null) // 🔹 Error de conexión, también devolvemos null
+            }
+        })
+    }
+    
     fun deliveryProductReceived(imageString : String, callback: (Boolean) -> Unit) {
         apiService.storeImage(ProductReceived(null, imageString)).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -98,8 +114,6 @@ class ProductRepository {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback(false)
             }
-
         })
     }
-
 }

@@ -22,6 +22,9 @@ class StoreViewModel : ViewModel() {
     private val _storesByUser = MutableLiveData<List<Store>>()
     val storesByUser: LiveData<List<Store>> get() = _storesByUser
 
+    private val _nearByStores = MutableLiveData<List<Store>>()
+    val nearByStores: LiveData<List<Store>> get() = _nearByStores
+
     fun loadStores() {
         repository.fetchStores { storeList -> 
             Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
@@ -33,6 +36,13 @@ class StoreViewModel : ViewModel() {
         repository.fetchStoresByIds(storeIds) { storeList ->
             Log.d("DEBUG", "storeIds: $storeIds")
             _storesByUser.postValue(storeList ?: emptyList()) // Si no hay tiendas, mandamos lista vacía
+        }
+    }
+
+    fun loadNearByStores(latitude: Double, longitude: Double) {
+        repository.fetchNearbyStores(latitude, longitude) { storeList ->
+            Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
+            _nearByStores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
     }
 

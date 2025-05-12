@@ -1,9 +1,14 @@
 package com.example.lastbite
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,14 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.ProductAdapter
+import com.example.lastbite.models.ProductScoreAdapter
 import com.example.lastbite.models.StoreProductAdapter
 import com.example.lastbite.viewmodels.ProductViewModel
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class StoreProductFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val productViewModel: ProductViewModel by viewModels()
+    private var shouldShowDialog = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +59,23 @@ class StoreProductFragment : Fragment() {
                 goToProductDetail(product)
             }
         }
+
+        productViewModel.top3Products.observe(viewLifecycleOwner) { products ->
+            if (shouldShowDialog) {
+                showTopProductsDialog(products)
+                shouldShowDialog = false
+            }
+        }
+
+        val fabTopProducts = view.findViewById<ExtendedFloatingActionButton>(R.id.fabTopProducts)
+
+        val storeId = arguments?.getInt("storeId") ?: 0
+        fabTopProducts.setOnClickListener {
+            shouldShowDialog = true
+            productViewModel.getTop3Products(storeId)
+        }
     }
+
 
 
     private fun goToProductDetail(product: Product) {
@@ -65,5 +89,27 @@ class StoreProductFragment : Fragment() {
             .replace(R.id.frame_store_nav_container, productDetailFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun showTopProductsDialog(products: List<Product>) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_product_list, null)
+        val listView = dialogView.findViewById<ListView>(R.id.product_list_view)
+
+        val adapter = ProductScoreAdapter(requireContext(), products)
+        listView.adapter = adapter
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            //.setPositiveButton("Close", null)
+            .create()
+
+        // Hacer el fondo del diálogo transparente
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(
+            ContextCompat.getColor(requireContext(), R.color.principal_green)
+        )
+
+        dialog.show()
     }
 }

@@ -62,6 +62,22 @@ class StoreRepository {
         })
     }
 
+    fun fetchNearbyStores(lat: Double, lon: Double, callback: (List<Store>?) -> Unit) {
+        apiService.getNearByStores(lat, lon).enqueue(object : Callback<List<Store>> {
+            override fun onResponse(call: Call<List<Store>>, response: Response<List<Store>>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Store>>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+    
     fun countStore(storeCount: StoreCount, callback: (Boolean) -> Unit) {
         apiService.receiveStoreCount(storeCount).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

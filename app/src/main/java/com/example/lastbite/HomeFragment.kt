@@ -1,6 +1,5 @@
 package com.example.lastbite
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -79,34 +78,21 @@ class HomeFragment : Fragment() {
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
-            nearbyRecyclerView.adapter = storeAdapter
+            //nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
-
-            if (userLocation != null) {
-                val nearbyStores = stores.filter { store ->
-                    val distance = homeViewModel.calculateDistance(
-                        userLocation!!.latitude,
-                        userLocation!!.longitude,
-                        store.latitude,
-                        store.longitude
-                    )
-                    distance < 1.0
-                }
-
-                val nearbyAdapter = StoreAdapter(nearbyStores, null) { store -> goToProductFragment(store) }
-                nearbyRecyclerView.adapter = nearbyAdapter
-            } else {
-                // Si no hay ubicación aún, muestra todas por ahora
-                nearbyRecyclerView.adapter = storeAdapter
-            }
-            
         }
+
+        storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
+            val adapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
+            nearbyRecyclerView.adapter = adapter
+        }
+
+        requestLocationPermission()
         storeViewModel.loadStores()
 
         btnCamera.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
-        requestLocationPermission()
         return view
     }
 
@@ -149,6 +135,7 @@ class HomeFragment : Fragment() {
                 homeViewModel.sendUserLocation(userLocation)
                 Log.d("UBICACIÓN", "Latitud: ${it.latitude}, Longitud: ${it.longitude}")
                 // Aquí podrías llamar a tu función para filtrar tiendas cercanas
+                storeViewModel.loadNearByStores(it.latitude, it.longitude)
             }
         }
     }*/
