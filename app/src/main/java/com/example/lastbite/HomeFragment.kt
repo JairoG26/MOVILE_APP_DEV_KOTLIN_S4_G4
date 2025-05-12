@@ -3,6 +3,7 @@ package com.example.lastbite
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -30,6 +31,7 @@ import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -58,9 +60,10 @@ class HomeFragment : Fragment() {
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         forYouRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+        storeAdapter = StoreAdapter(emptyList(), null) {
+            store -> goToProductFragment(store)
+        }
 
-
-        storeAdapter = StoreAdapter(emptyList()) { store -> goToProductFragment(store) }
         allStoresRecyclerView.adapter = storeAdapter
         nearbyRecyclerView.adapter = storeAdapter
         forYouRecyclerView.adapter = storeAdapter
@@ -74,7 +77,7 @@ class HomeFragment : Fragment() {
         }
 
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
-            storeAdapter = StoreAdapter(stores) { store -> goToProductFragment(store) }
+            storeAdapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
             allStoresRecyclerView.adapter = storeAdapter
             nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
@@ -90,7 +93,7 @@ class HomeFragment : Fragment() {
                     distance < 1.0
                 }
 
-                val nearbyAdapter = StoreAdapter(nearbyStores) { store -> goToProductFragment(store) }
+                val nearbyAdapter = StoreAdapter(nearbyStores, null) { store -> goToProductFragment(store) }
                 nearbyRecyclerView.adapter = nearbyAdapter
             } else {
                 // Si no hay ubicación aún, muestra todas por ahora
@@ -165,7 +168,13 @@ class HomeFragment : Fragment() {
                 val location = fusedLocationClient.lastLocation.await()
                 location?.let {
                     userLocation = it
-                    homeViewModel.sendUserLocation(it)
+                    if (homeViewModel.isOnline(requireContext())) {
+                        homeViewModel.sendUserLocation(it)
+                    }
+                    else {
+                        homeViewModel.storeLocation(it, requireContext())
+                        Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
+                    }
                     Log.d("UBICACIÓN", "Lat: ${it.latitude}, Long: ${it.longitude}")
                 }
             } catch (e: Exception) {
@@ -233,6 +242,7 @@ class HomeFragment : Fragment() {
                 photoBitmap = imageBitmap
                 homeViewModel.storePhoto(imageBitmap)
                 // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
+                // Glide.with(this).load(imageBitmap).into(view.findViewById(R.id.storeImage))
             }
         }
     }

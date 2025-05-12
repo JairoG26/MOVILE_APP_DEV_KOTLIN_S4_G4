@@ -7,8 +7,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Store
+import com.example.lastbite.models.StoreCount
 
 class StoreRepository {
+
     private val apiService = ApiClient.instance.create(ApiService::class.java)
 
     // Función que obtiene tiendas por los IDs de usuario
@@ -56,6 +58,18 @@ class StoreRepository {
 
             override fun onFailure(call: Call<List<Store>>, t: Throwable) {
                 callback(null)
+            }
+        })
+    }
+
+    fun countStore(storeCount: StoreCount, callback: (Boolean) -> Unit) {
+        apiService.receiveStoreCount(storeCount).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                callback(response.isSuccessful)
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                callback(false)
             }
         })
     }

@@ -1,5 +1,6 @@
 package com.example.lastbite.repositories
 
+import android.util.Log
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Product
@@ -9,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ProductRepository {
+
     private val apiService = ApiClient.instance.create(ApiService::class.java)
 
     fun fetchProducts(storeId: Int, callback: (List<Product>?) -> Unit) {
@@ -87,9 +89,10 @@ class ProductRepository {
     }
 
     fun deliveryProductReceived(imageString : String, callback: (Boolean) -> Unit) {
-        apiService.storeImage(ProductReceived(imageString)).enqueue(object : Callback<Void> {
+        apiService.storeImage(ProductReceived(null, imageString)).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 callback(response.isSuccessful)
+                // Log.d("PRODUCT_RECEIVED", "Location JSON sent: $locationJson")
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {

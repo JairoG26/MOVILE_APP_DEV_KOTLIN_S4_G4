@@ -32,8 +32,7 @@ class LocationActivity : AppCompatActivity() {
         val btnNext: Button = findViewById(R.id.btnNext)
 
         // Inicializar ViewModel con Repository y ApiService
-        val apiService = ApiClient.getRetrofit().create(ApiService::class.java)
-        val repository = LocationRepository(apiService)
+        val repository = LocationRepository()
 
 
         locationViewModel = ViewModelProvider(this, ViewModelFactory(repository)).get(
