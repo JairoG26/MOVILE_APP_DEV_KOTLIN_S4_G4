@@ -102,6 +102,7 @@ class HomeViewModel : ViewModel() {
     fun storePhoto(image : Bitmap) {
 
         val image64 = bitmapToBase64(image)
+        Log.d("IMAGE", "The image was converted to Base64")
         repositoryProduct.deliveryProductReceived(image64, callback = {
             _stateUpdatePhoto.value = it
         })
