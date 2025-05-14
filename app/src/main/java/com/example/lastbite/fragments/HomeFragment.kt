@@ -58,8 +58,11 @@ class HomeFragment : Fragment() {
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         forYouRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        storeAdapter = StoreAdapter(emptyList(), null) {
-                store -> goToProductFragment(store)
+        storeAdapter = StoreAdapter(emptyList()) {
+                store, user_id -> goToProductFragment(store)
+            if (user_id != null) {
+                homeViewModel.countStore(store, user_id)
+            }
         }
 
         allStoresRecyclerView.adapter = storeAdapter
@@ -75,14 +78,22 @@ class HomeFragment : Fragment() {
         }
 
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
-            storeAdapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
+            storeAdapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
+                if (user_id != null) {
+                    homeViewModel.countStore(store, user_id)
+                }
+            }
             allStoresRecyclerView.adapter = storeAdapter
             //nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
         }
 
         storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
-            val adapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
+            val adapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
+                if (user_id != null) {
+                    homeViewModel.countStore(store, user_id)
+                }
+            }
             nearbyRecyclerView.adapter = adapter
         }
 
@@ -155,15 +166,15 @@ class HomeFragment : Fragment() {
                 location?.let {
                     userLocation = it
                     homeViewModel.sendUserLocation(it)
-                    /*
-                    if (homeViewModel.isOnline(requireContext())) {
-                        homeViewModel.sendUserLocation(it)
-                    }
-                    else {
-                        homeViewModel.storeLocation(it, requireContext())
-                        Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
-                    }
-                     */
+                    /*context?.let { context ->
+                        if (homeViewModel.isOnline(context)) {
+                            homeViewModel.sendUserLocation(it)
+                        }
+                        else {
+                            homeViewModel.storeLocation(it, context)
+                            Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
+                        }
+                    }*/
                     Log.d("UBICACIÓN", "Lat: ${it.latitude}, Long: ${it.longitude}")
                     storeViewModel.loadNearByStores(it.latitude, it.longitude)
                 }

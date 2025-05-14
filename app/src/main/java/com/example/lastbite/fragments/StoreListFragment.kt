@@ -36,7 +36,7 @@ class StoreListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recyclerViewStores)
-        adapter = StoreAdapter(emptyList(), null) { store ->
+        adapter = StoreAdapter(emptyList()) { store, _ ->
             Log.d("DEBUG", "Tiendas recibidas: ${store}")
             goToStoreDetail(store)
         }
@@ -59,7 +59,7 @@ class StoreListFragment : Fragment() {
         // Paso 4: Observar tiendas cargadas y mostrar en el RecyclerView
         storeViewModel.storesByUser.observe(viewLifecycleOwner) { storeList ->
             Log.d("DEBUG", "Tiendas recibidas: ${storeList.size}")
-            adapter = StoreAdapter(storeList, homeViewModel) { store ->
+            adapter = StoreAdapter(storeList) { store, _ ->
                 goToStoreDetail(store)
             }
             recyclerView.adapter = adapter

@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
-    //id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("com.google.devtools.ksp")
     //id("com.google.dagger.hilt.android")
 }
 
@@ -41,6 +41,7 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -76,6 +77,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
+    implementation("androidx.room:room-runtime:2.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("androidx.room:room-ktx:2.7.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,7 +87,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
     //implementation("com.google.dagger:hilt-android:2.56.1")
     //ksp("com.google.dagger:hilt-compiler:2.56.1")
+    ksp("androidx.room:room-compiler:2.7.1")
 }
