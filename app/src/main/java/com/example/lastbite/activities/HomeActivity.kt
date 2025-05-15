@@ -9,17 +9,23 @@ import com.example.lastbite.fragments.AccountFragment
 import com.example.lastbite.fragments.CartFragment
 import com.example.lastbite.fragments.HomeFragment
 import com.example.lastbite.R
+import com.example.lastbite.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
-        setContentView(R.layout.activity_home)
+        //setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        bottomNavigationView = findViewById(R.id.bottomNavigation)
+        // bottomNavigationView = findViewById(R.id.bottomNavigation)
+        bottomNavigationView = binding.bottomNavigation
+
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.homeIcon -> {
