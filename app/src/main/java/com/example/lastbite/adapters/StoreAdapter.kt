@@ -12,7 +12,7 @@ import com.example.lastbite.R
 import com.example.lastbite.models.Store
 import com.example.lastbite.viewmodels.HomeViewModel
 
-class StoreAdapter(private val stores: List<Store>, private val homeViewModel: HomeViewModel?, val onItemClick: (Store) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
+class StoreAdapter(private val stores: List<Store>, val onItemClick: (Store, Int?) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     private var user_id : Int? = null
 
@@ -33,13 +33,18 @@ class StoreAdapter(private val stores: List<Store>, private val homeViewModel: H
         Glide.with(holder.itemView.context).load(store.logo).into(holder.storeImage)
 
         holder.itemView.setOnClickListener {
-            onItemClick(store) // Llamamos a la función y pasamos el restaurante seleccionado
-            if (homeViewModel != null && user_id != null) {
-                homeViewModel.countStore(store, user_id!!)
-                Log.d("STORE", "object sent: $store")
+            onItemClick(store, user_id) // Llamamos a la función y pasamos el restaurante seleccionado
+            /*if (homeViewModel != null) {
+                if (user_id != null) {
+                    homeViewModel.countStore(store, user_id!!)
+                    Log.d("STORE", "object sent: $store")
+                }
+                else {
+                    Log.d("STORE", "user_id is null: $store")
+                }
             } else {
                 Log.d("STORE", "HomeVM is null: $store")
-            }
+            }*/
         }
     }
 

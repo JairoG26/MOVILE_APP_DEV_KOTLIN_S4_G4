@@ -58,8 +58,11 @@ class HomeFragment : Fragment() {
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         forYouRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        storeAdapter = StoreAdapter(emptyList(), null) {
-            store -> goToProductFragment(store)
+        storeAdapter = StoreAdapter(emptyList()) {
+                store, user_id -> goToProductFragment(store)
+            if (user_id != null) {
+                homeViewModel.countStore(store, user_id)
+            }
         }
 
         allStoresRecyclerView.adapter = storeAdapter
@@ -75,14 +78,22 @@ class HomeFragment : Fragment() {
         }
 
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
-            storeAdapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
+            storeAdapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
+                if (user_id != null) {
+                    homeViewModel.countStore(store, user_id)
+                }
+            }
             allStoresRecyclerView.adapter = storeAdapter
             //nearbyRecyclerView.adapter = storeAdapter
             forYouRecyclerView.adapter = storeAdapter
         }
 
         storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
-            val adapter = StoreAdapter(stores, homeViewModel) { store -> goToProductFragment(store) }
+            val adapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
+                if (user_id != null) {
+                    homeViewModel.countStore(store, user_id)
+                }
+            }
             nearbyRecyclerView.adapter = adapter
         }
 
@@ -154,14 +165,18 @@ class HomeFragment : Fragment() {
                 val location = fusedLocationClient.lastLocation.await()
                 location?.let {
                     userLocation = it
-                    if (homeViewModel.isOnline(requireContext())) {
-                        homeViewModel.sendUserLocation(it)
-                    }
-                    else {
-                        homeViewModel.storeLocation(it, requireContext())
-                        Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
-                    }
+                    homeViewModel.sendUserLocation(it)
+                    /*context?.let { context ->
+                        if (homeViewModel.isOnline(context)) {
+                            homeViewModel.sendUserLocation(it)
+                        }
+                        else {
+                            homeViewModel.storeLocation(it, context)
+                            Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
+                        }
+                    }*/
                     Log.d("UBICACIÓN", "Lat: ${it.latitude}, Long: ${it.longitude}")
+                    storeViewModel.loadNearByStores(it.latitude, it.longitude)
                 }
             } catch (e: Exception) {
                 Log.e("UBICACIÓN", "Error al obtener ubicación", e)
@@ -192,12 +207,12 @@ class HomeFragment : Fragment() {
         if (!homeViewModel.isOnline(requireContext())) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Lost connection")
-            .setMessage("You require an active connection to continue using the app. Please reconnect.")
-            .setPositiveButton("Try again"){ dialog, which ->
-                if (homeViewModel.isOnline(requireContext())) {
-                    dialog.dismiss()
+                .setMessage("You require an active connection to continue using the app. Please reconnect.")
+                .setPositiveButton("Try again"){ dialog, which ->
+                    if (homeViewModel.isOnline(requireContext())) {
+                        dialog.dismiss()
+                    }
                 }
-            }
             val alertDialog: AlertDialog = builder.create()
             alertDialog.show()
         }
@@ -229,6 +244,8 @@ class HomeFragment : Fragment() {
                 homeViewModel.storePhoto(imageBitmap)
                 // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
                 // Glide.with(this).load(imageBitmap).into(view.findViewById(R.id.storeImage))
+            } else {
+                Log.d("IMAGE", "The image is null")
             }
         }
     }

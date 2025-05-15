@@ -10,21 +10,29 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.lastbite.R
+import com.example.lastbite.databinding.ActivityCodeBinding
 import com.example.lastbite.viewmodels.SingletonSignUpViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CodeActivity : AppCompatActivity() {
+
     private val signUpViewModel = SingletonSignUpViewModel.instance
+    private lateinit var binding: ActivityCodeBinding
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_code)
+        //setContentView(R.layout.activity_code)
+        binding = ActivityCodeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
 
-        val etCodeInput: EditText = findViewById(R.id.etCodeInput)
-        val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
+        // val etCodeInput: EditText = findViewById(R.id.etCodeInput)
+        // val fabNext: FloatingActionButton = findViewById(R.id.fabNext)
+        val etCodeInput: EditText = binding.etCodeInput
+        val fabNext: FloatingActionButton = binding.fabNext
 
         etCodeInput.requestFocus()
         etCodeInput.postDelayed({

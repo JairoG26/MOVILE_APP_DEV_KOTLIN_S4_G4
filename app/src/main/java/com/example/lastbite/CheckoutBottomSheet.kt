@@ -58,7 +58,7 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
             val newCart = Cart(cart_id = null, user_id = userId, status = status)
 
             // Lanzamos la corrutina
-            viewLifecycleOwner.lifecycleScope.launch {
+            /*viewLifecycleOwner.lifecycleScope.launch {
                 val createdCart = cartViewModel.createCartSuspend(newCart)
 
                 if (createdCart == null) {
@@ -96,7 +96,29 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
                 val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)
                 startActivity(intent)
+            }*/
+            val createdCart = cartViewModel.createCart(newCart)
+
+            cartViewModel.getActiveCart(userId)
+            cartViewModel.activeCart
+
+            cartViewModel.cartItems.value?.forEach { item ->
+                val newCartProduct = CartProduct(
+                    product_id = item.productId,
+                    cart_id = cartViewModel.activeCart?.cart_id,
+                    quantity = item.quantity
+                )
+                cartViewModel.createCartProduct(newCartProduct)
             }
+
+            cartViewModel.clearCart()
+            orderStatusViewModel.isOrderAccepted.value = true
+
+            Toast.makeText(requireContext(), "Pedido confirmado", Toast.LENGTH_SHORT).show()
+            dismiss()
+
+            val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)
+            startActivity(intent)
         }
     }
 }
