@@ -10,13 +10,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import android.util.Log
+import android.util.LruCache
 import com.example.lastbite.repositories.ProductRepository
 
 class ProductViewModel : ViewModel() {
     private val repository = ProductRepository()
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
-    private val _product = MutableLiveData<Product?>() // 🔹 Para un solo producto
+    private val _product = MutableLiveData<Product?>() // Para un solo producto
     val product: LiveData<Product?> get() = _product
     private val _productDeleted = MutableLiveData<Boolean>()
     val productDeleted: LiveData<Boolean> = _productDeleted
@@ -24,16 +25,17 @@ class ProductViewModel : ViewModel() {
     val productUpdated: LiveData<Boolean> = _productUpdated
     private val _top3Products = MutableLiveData<List<Product>>()
     val top3Products: LiveData<List<Product>> get() = _top3Products
+    private val topProductsCache = object : LruCache<Int, List<Product>>(3) {} // Cache para los productos
 
     fun loadProductsByStore(storeId: Int) {
         repository.fetchProducts(storeId) { productList ->
-            _products.postValue(productList ?: emptyList()) // 🔹 Si es null, mandamos lista vacía
+            _products.postValue(productList ?: emptyList()) // Si es null, mandamos lista vacía
         }
     }
 
     fun loadProductById(productId: Int) {
         repository.fetchProductById(productId) { product ->
-            _product.postValue(product) // 🔹 Guardamos directamente el producto
+            _product.postValue(product) // Guardamos directamente el producto
         }
     }
 
@@ -77,8 +79,16 @@ class ProductViewModel : ViewModel() {
     }
 
     fun getTop3Products(storeId: Int) {
-        repository.getTop3Products(storeId) { productList ->
-            _top3Products.postValue(productList ?: emptyList()) // 🔹 Si es null, mandamos lista vacía
+        val cached = topProductsCache[storeId]
+        if (cached != null) {
+            _top3Products.postValue(cached)
+        } else {
+            repository.getTop3Products(storeId) { productList ->
+                _top3Products.postValue(
+                    productList ?: emptyList()
+                ) // 🔹 Si es null, mandamos lista vacía
+                topProductsCache.put(storeId, productList ?: emptyList()) // Actualizamos el cache
+            }
         }
     }
 
