@@ -1,10 +1,14 @@
 package com.example.lastbite.viewmodels
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lastbite.SessionManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.Zone
 import com.example.lastbite.repositories.StoreRepository
@@ -44,6 +48,26 @@ class StoreViewModel : ViewModel() {
             Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
             _nearByStores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
+    }
+
+    fun createStore(store: Store) {
+        repository.createStore(store, SessionManager.getUser()!!.user_id!!) { createdStore ->
+            if (createdStore != null) {
+                // Tienda creada con éxito
+                Log.d("POST", "Tienda creada: ${createdStore.store_id}")
+                // Puedes realizar acciones adicionales aquí si es necesario
+            } else {
+                // Error al crear tienda
+                Log.e("POST", "Error al crear la tienda")
+            }
+        }
+    }
+
+    fun hayConexion(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
 }

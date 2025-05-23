@@ -6,9 +6,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.lastbite.ApiService
+import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
-
+import com.example.lastbite.models.UserStore
 class StoreRepository {
 
     private val apiService = ApiClient.instance.create(ApiService::class.java)
@@ -86,6 +87,38 @@ class StoreRepository {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback(false)
+            }
+        })
+    }
+
+    fun createStore(store: Store, userId: Int, callback: (Store?) -> Unit) {
+        apiService.createStore(store).enqueue(object : Callback<Store> {
+            override fun onResponse(call: Call<Store>, response: Response<Store>) {
+                val createdStore = response.body()
+                if (response.isSuccessful && createdStore != null) {
+
+                    // Segunda llamada: crear relación usuario-tienda
+                    val relationRequest = UserStore(userId, createdStore.store_id!!)
+                    apiService.createUserStore(relationRequest).enqueue(object : Callback<UserStore> {
+                        override fun onResponse(call: Call<UserStore>, response: Response<UserStore>) {
+                            if (response.isSuccessful) {
+                                callback(createdStore)
+                            } else {
+                                callback(null)
+                            }
+                        }
+
+                        override fun onFailure(call: Call<UserStore>, t: Throwable) {
+                            callback(null)
+                        }
+                    })
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<Store>, t: Throwable) {
+                callback(null)
             }
         })
     }
