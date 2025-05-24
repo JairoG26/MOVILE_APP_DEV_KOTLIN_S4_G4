@@ -188,7 +188,7 @@ class HomeFragment : Fragment() {
 
         val productFragment = ProductFragment()
         val bundle = Bundle().apply {
-            putInt("storeId", store.store_id) // Guardamos el ID como Int
+            putInt("storeId", store.store_id!!) // Guardamos el ID como Int
         }
         productFragment.arguments = bundle
 

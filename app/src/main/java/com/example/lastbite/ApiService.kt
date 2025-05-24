@@ -71,6 +71,12 @@ interface ApiService {
     @GET("stores/nearby")
     fun getNearByStores(@Query("lat") lat: Double, @Query("lon") lon: Double): Call<List<Store>>
 
+    @POST("stores/")
+    fun createStore(@Body request: Store): Call<Store>
+
+    @POST("user_store/")
+    fun createUserStore(@Body request: UserStore): Call<UserStore>
+
     /// Carts
 
     @GET("carts")

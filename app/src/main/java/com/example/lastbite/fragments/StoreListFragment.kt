@@ -16,6 +16,7 @@ import com.example.lastbite.adapters.StoreAdapter
 import com.example.lastbite.viewmodels.HomeViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.example.lastbite.viewmodels.UserStoreViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class StoreListFragment : Fragment() {
 
@@ -35,6 +36,16 @@ class StoreListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        var fabAddStore = view.findViewById<FloatingActionButton>(R.id.fabAddStore)
+
+        fabAddStore.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_store_nav_container, CreateStoreFragment()) // Usa el ID del contenedor en tu Activity
+                .addToBackStack(null) // Para que el usuario pueda volver atrás
+                .commit()
+        }
+
         recyclerView = view.findViewById(R.id.recyclerViewStores)
         adapter = StoreAdapter(emptyList()) { store, _ ->
             Log.d("DEBUG", "Tiendas recibidas: ${store}")
@@ -71,7 +82,7 @@ class StoreListFragment : Fragment() {
         val storeProductFragment = StoreProductFragment()
         StoreManager.storeId = store.store_id
         val bundle = Bundle().apply {
-            putInt("storeId", store.store_id) // Guardamos el ID como Int
+            putInt("storeId", store.store_id!!) // Guardamos el ID como Int
         }
         storeProductFragment.arguments = bundle
 
