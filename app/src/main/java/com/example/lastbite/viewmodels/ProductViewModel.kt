@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import android.util.Log
 import android.util.LruCache
+import com.example.lastbite.models.Store
 import com.example.lastbite.repositories.ProductRepository
 
 class ProductViewModel : ViewModel() {
@@ -47,6 +48,18 @@ class ProductViewModel : ViewModel() {
             } else {
                 // Error al crear producto
                 Log.e("POST", "Error al crear el producto")
+            }
+        }
+    }
+
+    fun updateStore(storeId: Int, updatedStore: Store) {
+        repository.updateStore(storeId, updatedStore) { updatedStore ->
+            if (updatedStore != null) {
+                // Producto creado con éxito
+                Log.d("PUT", "Tienda Atualizada: ${updatedStore.name}")
+            } else {
+                // Error al crear producto
+                Log.e("POST", "Error al actualizar la tienda")
             }
         }
     }

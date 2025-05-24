@@ -74,6 +74,9 @@ interface ApiService {
     @POST("stores/")
     fun createStore(@Body request: Store): Call<Store>
 
+    @PUT("stores/{id}")
+    fun updateStore(@Path("id") storeId: Int, @Body request: Store): Call<Store>
+
     @POST("user_store/")
     fun createUserStore(@Body request: UserStore): Call<UserStore>
 

@@ -122,4 +122,21 @@ class StoreRepository {
             }
         })
     }
+
+    fun updateStore(storeId: Int, store: Store, callback: (Store?) -> Unit) {
+        apiService.updateStore(storeId, store).enqueue(object : Callback<Store> {
+            override fun onResponse(call: Call<Store>, response: Response<Store>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<Store>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
 }

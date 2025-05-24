@@ -42,12 +42,20 @@ class StoreProductFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var fabAddProduct = view.findViewById<FloatingActionButton>(R.id.fabAddProduct)
+        var fabUpdateStore = view.findViewById<ExtendedFloatingActionButton>(R.id.fabUpdateStore)
         recyclerView = view.findViewById(R.id.recyclerProducts)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         fabAddProduct.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_store_nav_container, CreateProductFragment()) // Usa el ID del contenedor en tu Activity
+                .addToBackStack(null) // Para que el usuario pueda volver atrás
+                .commit()
+        }
+
+        fabUpdateStore.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_store_nav_container, UpdateStoreFragment()) // Usa el ID del contenedor en tu Activity
                 .addToBackStack(null) // Para que el usuario pueda volver atrás
                 .commit()
         }

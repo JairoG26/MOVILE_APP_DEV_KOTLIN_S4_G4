@@ -53,6 +53,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+    implementation(libs.firebase.storage.ktx)
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation("androidx.compose.material3:material3:1.2.0-rc01")
     implementation("androidx.compose.ui:ui:1.5.4")

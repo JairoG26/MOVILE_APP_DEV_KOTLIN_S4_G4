@@ -26,6 +26,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:scrollbars="vertical" />
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -36,6 +37,20 @@
         android:layout_margin="16dp"
         android:contentDescription="Agregar producto"
         android:src="@drawable/add_white_icon"
+        app:backgroundTint="@color/principal_green"
+        app:tint="@color/white" />
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabUpdateStore"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="16dp"
+        android:contentDescription="Update Store"
+        android:src="@drawable/add_white_icon"
+        android:text="Update Store"
+        android:textColor="@color/white"
         app:backgroundTint="@color/principal_green"
         app:tint="@color/white" />
 

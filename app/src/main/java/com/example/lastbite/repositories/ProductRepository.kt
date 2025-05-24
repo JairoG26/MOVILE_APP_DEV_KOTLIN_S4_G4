@@ -5,6 +5,7 @@ import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.ProductReceived
+import com.example.lastbite.models.Store
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,6 +58,21 @@ class ProductRepository {
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
                 callback(null) // Error de red
+            }
+        })
+    }
+
+    fun updateStore(storeId: Int, updatedStore: Store, callback: (Store?) -> Unit) {
+        apiService.updateStore(storeId, updatedStore).enqueue(object : Callback<Store> {
+            override fun onResponse(call: Call<Store>, response: Response<Store>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null) // Falló la actualización
+                }
+            }
+            override fun onFailure(call: Call<Store>, t: Throwable) {
+                callback(null)
             }
         })
     }

@@ -63,6 +63,19 @@ class StoreViewModel : ViewModel() {
         }
     }
 
+    fun updateStore(storeId: Int, store: Store) {
+        repository.updateStore(storeId, store) { updatedStore ->
+            if (updatedStore != null) {
+                // Tienda actualizada con éxito
+                Log.d("PUT", "Tienda actualizada: ${updatedStore.store_id}")
+                // Puedes realizar acciones adicionales aquí si es necesario
+            } else {
+                // Error al actualizar tienda
+                Log.e("PUT", "Error al actualizar la tienda")
+            }
+        }
+    }
+
     fun hayConexion(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = cm.activeNetwork ?: return false
