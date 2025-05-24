@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.example.lastbite.R
 import com.example.lastbite.SessionManager
 import com.example.lastbite.activities.AuthActivity
+import com.example.lastbite.activities.Top1StoreActivity
 
 class AccountFragment : Fragment() {
 
@@ -23,6 +24,7 @@ class AccountFragment : Fragment() {
         val tvName = view.findViewById<TextView>(R.id.tvName)
         val tvEmail = view.findViewById<TextView>(R.id.tvEmail)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
+        val top1Store = view.findViewById<Button>(R.id.top1Store)
 
         // Obtener usuario desde SessionManager
         val user = SessionManager.getUser()
@@ -34,6 +36,12 @@ class AccountFragment : Fragment() {
             SessionManager.logout()
             // Redirigir al AuthActivity
             val intent = Intent(requireContext(), AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
+        top1Store.setOnClickListener {
+            val intent = Intent(requireContext(), Top1StoreActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
