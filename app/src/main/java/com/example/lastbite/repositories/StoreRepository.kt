@@ -9,6 +9,7 @@ import com.example.lastbite.ApiService
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
+import com.example.lastbite.models.StoreList
 import com.example.lastbite.models.UserStore
 class StoreRepository {
 
@@ -87,6 +88,30 @@ class StoreRepository {
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 callback(false)
+            }
+        })
+    }
+
+    fun getTop1Store(userId: Int?, callback: (Boolean, Store) -> Unit) {
+        apiService.getTop1Store(userId).enqueue(object : Callback<Store> {
+            override fun onResponse(call: Call<Store>, response: Response<Store>) {
+                val top1Stores = response.body()
+                if (response.isSuccessful) {
+                    if (top1Stores != null) {
+                        callback(true, top1Stores)
+                    } else {
+                        callback(true, Store(null, "No NIT", "No NAME", "No ADDRESSS",
+                            0.0F, 0.0F, "No LOGO", "Closed", "..."))
+                    }
+                } else {
+                    callback(false, Store(null, "No NIT", "No NAME", "No ADDRESSS",
+                        0.0F, 0.0F, "No LOGO", "Closed", "..."))
+                }
+            }
+
+            override fun onFailure(call: Call<Store>, t: Throwable) {
+                callback(false, Store(null, "No NIT", "No NAME", "No ADDRESSS",
+                    0.0F, 0.0F, "No LOGO", "Closed", "..."))
             }
         })
     }

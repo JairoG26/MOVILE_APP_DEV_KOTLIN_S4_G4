@@ -8,6 +8,7 @@ import com.example.lastbite.models.Product
 import com.example.lastbite.models.ProductReceived
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
+import com.example.lastbite.models.StoreList
 import com.example.lastbite.models.User
 import com.example.lastbite.models.UserStore
 import com.example.lastbite.models.Zone
@@ -107,4 +108,7 @@ interface ApiService {
 
     @POST("store_counted")
     fun receiveStoreCount(@Body storeCount: StoreCount): Call<Void>
+
+    @GET("store_counted/top1/{userId}")
+    fun getTop1Store(@Path("userId") userId: Int?): Call<Store>
 }
