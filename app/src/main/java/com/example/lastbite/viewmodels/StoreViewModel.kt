@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import android.util.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,8 @@ class StoreViewModel : ViewModel() {
     private val _nearByStores = MutableLiveData<List<Store>>()
     val nearByStores: LiveData<List<Store>> get() = _nearByStores
 
+    private val storesCache = object : LruCache<Int, List<Store>>(8) {}
+
     fun loadStores() {
         repository.fetchStores { storeList -> 
             Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
@@ -37,9 +40,15 @@ class StoreViewModel : ViewModel() {
     }
 
     fun fetchStoresByIds(storeIds: List<Int>) {
-        repository.fetchStoresByIds(storeIds) { storeList ->
-            Log.d("DEBUG", "storeIds: $storeIds")
-            _storesByUser.postValue(storeList ?: emptyList()) // Si no hay tiendas, mandamos lista vacía
+        val cached = storesCache[SessionManager.getUser()!!.user_id]
+        if (cached != null) {
+            _storesByUser.postValue(cached)
+        } else {
+            repository.fetchStoresByIds(storeIds) { storeList ->
+                Log.d("DEBUG", "storeIds: $storeIds")
+                _storesByUser.postValue(storeList ?: emptyList()) // Si no hay tiendas, mandamos lista vacía
+                storesCache.put(SessionManager.getUser()!!.user_id, storeList)
+            }
         }
     }
 
