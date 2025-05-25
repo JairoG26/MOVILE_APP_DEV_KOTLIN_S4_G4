@@ -3,8 +3,6 @@ package com.example.lastbite.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.lastbite.R
 import com.example.lastbite.databinding.ActivityAuthBinding
@@ -22,15 +20,15 @@ class AuthActivity : AppCompatActivity() {
 
         // val signInButton: Button = findViewById(R.id.btnSignIn)
         // val signUpButton: TextView = findViewById(R.id.btnSignUp)
-        val signInButton: Button = binding.btnSignIn
-        val signUpButton: TextView = binding.btnSignUp
+        // val signInButton: Button = binding.btnSignIn
+        // val signUpButton: TextView = binding.btnSignUp
 
-        signInButton.setOnClickListener {
+        binding.btnSignIn.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 
-        signUpButton.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
             val intent = Intent(this, StartSignUpActivity::class.java)
             startActivity(intent)
         }
