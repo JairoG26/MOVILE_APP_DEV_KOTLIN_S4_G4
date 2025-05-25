@@ -3,8 +3,6 @@ package com.example.lastbite.activities
 import android.R
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -17,8 +15,8 @@ import com.example.lastbite.viewmodels.AuthViewModel
 
 class SignInActivity : AppCompatActivity() {
 
-    private lateinit var authViewModel: AuthViewModel
     private lateinit var binding: ActivitySignInBinding
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +31,13 @@ class SignInActivity : AppCompatActivity() {
         /*val emailEditText: EditText = findViewById(R.id.emailInput)
         val passwordEditText: EditText = findViewById(R.id.passwordInput)
         val signInButton: Button = findViewById(R.id.btnSignIn)*/
-        val emailEditText: EditText = binding.emailInput
-        val passwordEditText: EditText = binding.passwordInput
-        val signInButton: Button = binding.btnSignIn
+        // val emailEditText: EditText = binding.emailInput
+        // val passwordEditText: EditText = binding.passwordInput
+        // val signInButton: Button = binding.btnSignIn
 
         authViewModel.authStateLogIn.observe(this) { isAuthenticated ->
             if (isAuthenticated) {
-                Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sing in completed.", Toast.LENGTH_SHORT).show()
 
                 authViewModel.user.observe(this) { user ->
                     SessionManager.saveUser(user)
@@ -59,19 +57,24 @@ class SignInActivity : AppCompatActivity() {
                     finish()
                 }
             } else {
-                Toast.makeText(this, "Error en el inicio de sesión", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "There was an error signing in.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        signInButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim()
-            val password = passwordEditText.text.toString().trim()
+        binding.btnSignIn.setOnClickListener {
+            val email = binding.emailInput.text.toString().trim()
+            val password = binding.passwordInput.text.toString().trim()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 authViewModel.signInUser(email, password)
             } else {
-                Toast.makeText(this, "Ingresa email y contraseña", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter the email and password.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.tvGoToSignUp.setOnClickListener {
+            val intent = Intent(this, StartSignUpActivity::class.java)
+            startActivity(intent)
         }
     }
 }

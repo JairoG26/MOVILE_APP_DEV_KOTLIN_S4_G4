@@ -11,20 +11,24 @@ import com.example.lastbite.NetworkChangeReceiver
 import com.example.lastbite.fragments.NoInternetFragment
 import com.example.lastbite.fragments.StoreListFragment
 import com.example.lastbite.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.lastbite.databinding.ActivityStoreHomeBinding
 
 class StoreHomeActivity : AppCompatActivity() {
 
-    private lateinit var bottomNavigationView: BottomNavigationView
+    // private lateinit var bottomNavigationView: BottomNavigationView
     private var networkReceiver: NetworkChangeReceiver? = null
+    private lateinit var binding : ActivityStoreHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
-        setContentView(R.layout.activity_store_home)
+        binding = ActivityStoreHomeBinding.inflate(layoutInflater)
+        //setContentView(R.layout.activity_store_home)
+        setContentView(binding.root)
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationStore)
-        bottomNavigationView.setOnItemSelectedListener { menuItem ->
+        // bottomNavigationView = findViewById(R.id.bottomNavigationStore)
+        binding.bottomNavigationStore.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.homeIcon -> {
                     replaceFragment(StoreListFragment())
