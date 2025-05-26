@@ -68,7 +68,7 @@ class SignInActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                authViewModel.signInUser(email, password)
+                authViewModel.signInUser(email, password, applicationContext)
             } else {
                 Toast.makeText(this, "Ingresa email y contraseña", Toast.LENGTH_SHORT).show()
             }

@@ -1,5 +1,6 @@
 package com.example.lastbite.viewmodels
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,7 +45,7 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    fun signInUser(email: String, password: String) {
+    fun signInUser(email: String, password: String, appContext: Context) {
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
@@ -53,8 +54,10 @@ class AuthViewModel : ViewModel() {
                     userRepository.signInUser(email) { response, user ->
                         _stateUserSignedIn.value = response
                         _user.value = user
-                        Log.d("AuthVM", "User retrieved: ${_user.value}")
+                        Log.d("AuthVM.signInUser", "User retrieved: ${_user.value}")
                         _userType.value = user.user_type // "STORE" or "CUSTOMER"
+                        userRepository.storeUserID(user.user_id, appContext)
+                        Log.d("AuthVM.signInUser", "The User ID stored was: ${user.user_id}")
                     }
                 } else {
                     _authStateLogIn.value = false
