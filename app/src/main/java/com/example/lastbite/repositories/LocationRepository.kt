@@ -19,12 +19,10 @@ class LocationRepository() {
     private val fileLocationName: String = "location_stored"
 
     fun getZones(): Call<List<Zone>> {
-
         return apiService.getZones()
     }
 
     fun getAreas(): Call<List<Area>> {
-
         return apiService.getAreas()
     }
 
