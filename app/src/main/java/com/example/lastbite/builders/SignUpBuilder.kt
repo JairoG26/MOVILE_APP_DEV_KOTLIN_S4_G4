@@ -4,33 +4,25 @@ import com.example.lastbite.models.SignUpData
 
 class SignUpBuilder {
 
-    private var email : String = ""
-    private var password : String = ""
     private var name : String = ""
+    private var user_email : String = ""
     private var mobile_number : String? = ""
-    private var verification_code : Int? = 0
     private var area_id : Int? = 0
     private var user_type : String = ""
     private var description : String? = ""
-
-    fun email(value : String) = apply {
-        this.email = value
-    }
-
-    fun password(value : String) = apply {
-        this.password = value
-    }
+    private var verification_code : Int? = 0
+    private var password : String = ""
 
     fun name(value : String) = apply {
         this.name = value
     }
 
-    fun mobile_number(value : String?) = apply {
-        this.mobile_number = value
+    fun user_email(value : String) = apply {
+        this.user_email = value
     }
 
-    fun verification_code(value : Int?) = apply {
-        this.verification_code = value
+    fun mobile_number(value : String?) = apply {
+        this.mobile_number = value
     }
 
     fun area_id(value : Int?) = apply {
@@ -45,7 +37,15 @@ class SignUpBuilder {
         this.description = value
     }
 
+    fun verification_code(value : Int?) = apply {
+        this.verification_code = value
+    }
+
+    fun password(value : String) = apply {
+        this.password = value
+    }
+
     fun build() : SignUpData {
-        return SignUpData(email, password, name, mobile_number, verification_code, area_id, user_type, description)
+        return SignUpData(name, user_email, password, mobile_number, area_id, user_type, description, verification_code)
     }
 }

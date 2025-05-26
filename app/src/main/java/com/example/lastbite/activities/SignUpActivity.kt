@@ -74,7 +74,7 @@ class SignUpActivity : AppCompatActivity() {
             if (email.isNotEmpty() && name.isNotEmpty() && password.isNotEmpty() && password == binding.confirmPasswordInput.text.toString().trim()) {
                 // authViewModel.registerUser(email, password, name, mobile_number, verification_code, area_id, user_type, description)
                 val signUpData = SignUpBuilder()
-                    .email(email)
+                    .user_email(email)
                     .password(password)
                     .name(name)
                     .mobile_number(mobile_number)
