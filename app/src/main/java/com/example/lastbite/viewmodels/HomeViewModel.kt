@@ -81,28 +81,35 @@ class HomeViewModel : ViewModel() {
         return earthRadius * c
     }
 
-    fun sendUserLocation(locationReceived: Location?) {
+    fun sendUserLocation(locationReceived: Location?, context: Context) {
 
         if (locationReceived == null) {
-            Log.d("HomeViewModel", "Location is null")
+            Log.d("HomeVM.sendUserLocation", "The location is null.")
         } else {
-            val location = LocationData(null, locationReceived.latitude, locationReceived.longitude, 0)
-            val locationJson = Gson().toJson(location)
-            locationRepository.sendLocation(location, callback = {
-                _stateSendLocation.value = it
-            })
-            Log.d("HomeViewModel", "Location JSON sent: $locationJson")
+            if (isOnline(context)) {
+                val location = LocationData(null, locationReceived.latitude, locationReceived.longitude, 0)
+                val locationJson = Gson().toJson(location)
+                locationRepository.sendLocation(location, callback = {
+                    _stateSendLocation.value = it
+                })
+                Log.d("HomeVM.sendUserLocation", "Location JSON sent: $locationJson")
+            } else {
+                Log.d("HomeVM.sendUserLocation", "The app is in an offline context. The location" +
+                        " will be written in a local file.")
+                storeLocation(locationReceived, context)
+            }
         }
     }
 
     fun storeLocation(location: Location, context: Context) {
+
         locationRepository.storeLocation(location, context)
     }
 
     fun storePhoto(image : Bitmap) {
 
         val image64 = bitmapToBase64(image)
-        Log.d("IMAGE", "The image was converted to Base64")
+        Log.d("HomeVM.storePhoto", "The image was converted to Base64.")
         repositoryProduct.deliveryProductReceived(image64, callback = {
             _stateUpdatePhoto.value = it
         })

@@ -1,5 +1,6 @@
 package com.example.lastbite.repositories
 
+import android.content.Context
 import android.util.Log
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
@@ -10,10 +11,12 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.lastbite.UserSharedPreferenceManager
 
 class UserRepository {
 
     private val apiService = ApiClient.getRetrofit().create(ApiService::class.java)
+    private val userSharedPreferenceManager = UserSharedPreferenceManager()
 
     fun signInUser(email: String, callback: (Boolean, User) -> Unit) {
 
@@ -28,8 +31,8 @@ class UserRepository {
                     }
                 } else {
                     callback(false, User())
-                    Log.d("UserRepo", "The response was not \"successful\", and" +
-                            "the user was not found.")
+                    Log.d("UserRepo.signInUser", "The response was not \"successful\", and" +
+                            " the user was not found.")
                 }
             }
             override fun onFailure(call: Call<User>, t: Throwable) {
@@ -59,5 +62,10 @@ class UserRepository {
                 Log.d("UserRepo.storeUserInBackend", "The API response failed.")
             }
         })
+    }
+
+    fun storeUserID(user_id: Int?, appContext: Context) {
+
+        userSharedPreferenceManager.storeUserID(user_id, appContext)
     }
 }

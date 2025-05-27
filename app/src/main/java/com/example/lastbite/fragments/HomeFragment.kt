@@ -2,6 +2,7 @@ package com.example.lastbite.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -73,7 +74,7 @@ class HomeFragment : Fragment() {
             if (it) {
                 orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
             } else {
-                Toast.makeText(requireContext(), "The photo was not uploaded", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "The photo was not uploaded.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -112,7 +113,7 @@ class HomeFragment : Fragment() {
         if (isGranted) {
             getUserLocation()
         } else {
-            Toast.makeText(requireContext(), "Permiso de ubicación denegado", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Location permission denied.", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -151,10 +152,13 @@ class HomeFragment : Fragment() {
     }*/
 
     private fun getUserLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        val contextFragment : Context = requireContext()
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(contextFragment)
 
         if (ActivityCompat.checkSelfPermission(
-                requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION
+                contextFragment, android.Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
@@ -165,21 +169,14 @@ class HomeFragment : Fragment() {
                 val location = fusedLocationClient.lastLocation.await()
                 location?.let {
                     userLocation = it
-                    homeViewModel.sendUserLocation(it)
-                    /*context?.let { context ->
-                        if (homeViewModel.isOnline(context)) {
-                            homeViewModel.sendUserLocation(it)
-                        }
-                        else {
-                            homeViewModel.storeLocation(it, context)
-                            Log.d("UBICACIÓN", "No hay conexión. Se intentará escribir en un archivo.")
-                        }
-                    }*/
-                    Log.d("UBICACIÓN", "Lat: ${it.latitude}, Long: ${it.longitude}")
+                    homeViewModel.sendUserLocation(it, contextFragment)
+                    Log.d("HomeFragment.getUserLocation", "The Location has the following" +
+                            " coordinates: Lat: ${it.latitude}, Long: ${it.longitude}")
                     storeViewModel.loadNearByStores(it.latitude, it.longitude)
                 }
             } catch (e: Exception) {
-                Log.e("UBICACIÓN", "Error al obtener ubicación", e)
+                Log.e("HomeFragment.getUserLocation", "There was an error" +
+                        " retrieving the location", e)
             }
         }
     }
@@ -204,12 +201,14 @@ class HomeFragment : Fragment() {
 
         getUserLocation()
 
-        if (!homeViewModel.isOnline(requireContext())) {
-            val builder = AlertDialog.Builder(requireContext())
+        val contextFragment : Context = requireContext()
+
+        if (!homeViewModel.isOnline(contextFragment)) {
+            val builder = AlertDialog.Builder(contextFragment)
             builder.setTitle("Lost connection")
                 .setMessage("You require an active connection to continue using the app. Please reconnect.")
                 .setPositiveButton("Try again"){ dialog, which ->
-                    if (homeViewModel.isOnline(requireContext())) {
+                    if (homeViewModel.isOnline(contextFragment)) {
                         dialog.dismiss()
                     }
                 }
@@ -232,20 +231,22 @@ class HomeFragment : Fragment() {
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            Toast.makeText(requireContext(), "Image taken", Toast.LENGTH_SHORT).show()
 
-            getUserLocation()
-            homeViewModel.sendUserLocation(userLocation)
+        if (result.resultCode == Activity.RESULT_OK) {
+            val contextFragment : Context = requireContext()
+            Toast.makeText(contextFragment, "Image taken.", Toast.LENGTH_SHORT).show()
+
             val data = result.data
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             if (imageBitmap != null) {
                 photoBitmap = imageBitmap
                 homeViewModel.storePhoto(imageBitmap)
+                getUserLocation()
+                homeViewModel.sendUserLocation(userLocation, contextFragment)
                 // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
                 // Glide.with(this).load(imageBitmap).into(view.findViewById(R.id.storeImage))
             } else {
-                Log.d("IMAGE", "The image is null")
+                Log.d("HomeFragment.startForResult", "The image is null.")
             }
         }
     }

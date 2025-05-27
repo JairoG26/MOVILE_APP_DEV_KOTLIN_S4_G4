@@ -4,19 +4,18 @@ import android.content.Context
 import android.util.Log
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
+import com.example.lastbite.LocationFileManager
 import com.example.lastbite.models.Area
 import com.example.lastbite.models.Location
 import com.example.lastbite.models.Zone
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 
 class LocationRepository() {
 
     private val apiService = ApiClient.instance.create(ApiService::class.java)
-    private lateinit var fileWithLocation: File
-    private val fileLocationName: String = "location_stored"
+    private val locationFileManager = LocationFileManager()
 
     fun getZones(): Call<List<Zone>> {
         return apiService.getZones()
@@ -39,24 +38,8 @@ class LocationRepository() {
         })
     }
 
-    private fun generateFileForStoringLocation(context: Context) {
-
-        fileWithLocation = File(context.filesDir, fileLocationName)
-        // fileWithLocation = File(context.cacheDir, fileLocationName)
-        Log.d("LOCATION", "File generated.")
-    }
-
     fun storeLocation(location: android.location.Location, context: Context) {
 
-        if (!::fileWithLocation.isInitialized) {
-            generateFileForStoringLocation(context)
-        }
-
-        val fileContent = "${location.latitude}, ${location.longitude} \n"
-        context.openFileOutput(fileLocationName, Context.MODE_APPEND).use {
-            it.write(fileContent.toByteArray())
-        }
-
-        Log.d("LOCATION", "File written.")
+        locationFileManager.storeLocation(location, context)
     }
 }
