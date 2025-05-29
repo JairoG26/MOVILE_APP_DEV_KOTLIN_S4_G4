@@ -7,21 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lastbite.R
 import com.example.lastbite.SessionManager
 import com.example.lastbite.models.Store
-import com.example.lastbite.models.StoreCount
-import com.example.lastbite.repositories.StoreRepository
 import com.example.lastbite.viewmodels.HomeViewModel
-import com.google.gson.Gson
 
 class StoreAdapter(private val stores: List<Store>, val onItemClick: (Store, Int?) -> Unit) : RecyclerView.Adapter<StoreAdapter.StoreViewHolder>() {
 
     private var user_id : Int? = null
-    private val _stateStoreCounted = MutableLiveData<Boolean>()
-    private val storeRepository = StoreRepository()
+    private val homeViewModel = HomeViewModel()
 
     class StoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val storeImage: ImageView = view.findViewById(R.id.storeImage)
@@ -54,13 +49,8 @@ class StoreAdapter(private val stores: List<Store>, val onItemClick: (Store, Int
             }*/
             val currentUser = SessionManager.getUser()
             currentUser?.let {
-                val storeCount = StoreCount(null, store.store_id, it.user_id, 0)
-                Log.d("StoreAdapter", "The User_ID is: $it.user_id")
-                val storeCountJson = Gson().toJson(storeCount)
-                storeRepository.countStore(storeCount, callback = {
-                    _stateStoreCounted.value = it
-                })
-                Log.d("StoreAdapter", "StoreCount JSON sent: $storeCountJson")
+                Log.d("StoreAdapter", "The User_ID is: ${it.user_id}")
+                homeViewModel.countStore(store, it.user_id)
             }
         }
     }

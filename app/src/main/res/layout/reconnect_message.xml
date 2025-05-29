@@ -66,7 +66,7 @@
             android:layout_marginStart="100dp"
             android:layout_marginEnd="100dp"
             android:layout_weight="1"
-            android:text="Reconnect"
+            android:text="Okay"
             android:textColorHighlight="@color/principal_green"
             android:textColorHint="@color/principal_green"
             android:textColorLink="@color/principal_green"

@@ -1,6 +1,13 @@
 package com.example.lastbite.fragments
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +20,14 @@ import com.bumptech.glide.Glide
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.lastbite.R
+import com.example.lastbite.SessionManager
+import com.example.lastbite.UserSharedPreferenceManager
 import com.example.lastbite.models.CartItem
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 
@@ -22,11 +36,13 @@ class ProductDetailFragment : Fragment() {
     private val cartViewModel = SingletonCartViewModel.instance
     private val productViewModel: ProductViewModel by viewModels()
 
+    private val userSharedPreferenceManager = UserSharedPreferenceManager()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.activity_food_item_detail, container, false)
+        val view = inflater.inflate(R.layout.fragment_food_item_detail, container, false)
 
         val productId = arguments?.getInt("productId") ?: 0
         productViewModel.loadProductById(productId)
@@ -105,12 +121,84 @@ class ProductDetailFragment : Fragment() {
                 val success = cartViewModel.addItem(cartItem)
                 if (success) {
                     Toast.makeText(requireContext(), "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+                    val currentUser = SessionManager.getUser()
+                    if (currentUser != null) {
+                        currentUser.user_id?.let { it1 ->
+                            Log.d("PDFragment", "The User_ID is ${currentUser.user_id}")
+                            productViewModel.calculateLeastVisitedStore(
+                                it1
+                            )
+                        }
+                    }
+
                 } else {
-                    Toast.makeText(requireContext(), "Solo puedes añadir productos de una tienda a la vez", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "You may only add products of a single store at the same time.", Toast.LENGTH_LONG).show()
                 }
             }
         }
 
+        generateNotificationChannel()
+
+        productViewModel.leastVisitedStore.observe(viewLifecycleOwner) { store_name ->
+            val contextFragment : Context = requireContext()
+            val builder = generateNotification(store_name, contextFragment)
+            requestNotificationPermission(contextFragment, builder)
+        }
+
         return view
+    }
+
+    private fun generateNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "Last Bite",
+                "Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Least Visited Store"
+            }
+
+            val notificationManager: NotificationManager =
+                context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun generateNotification(storeName: String, contextFragment: Context): NotificationCompat.Builder {
+
+        val builder = NotificationCompat.Builder(contextFragment, "Last Bite")
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("$storeName is looking for you")
+            .setContentText("You have forgotten them :(")
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("$storeName is your least visited store. " +
+                        "Why don't you check out what they have for you?"))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+        return builder
+    }
+
+    private fun requestNotificationPermission(contextFragment: Context, builder: NotificationCompat.Builder) {
+        with(NotificationManagerCompat.from(contextFragment)) {
+            if (ActivityCompat.checkSelfPermission(
+                    contextFragment,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            notify(1, builder.build())
+        }
+    }
+
+    private val notificationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(requireContext(), "Notification permission granted.", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(requireContext(), "Notification permission denied.", Toast.LENGTH_LONG).show()
+        }
     }
 }

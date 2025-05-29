@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.lastbite.ApiService
+import com.example.lastbite.StoreCountSparseArrayCacheManager
 import com.example.lastbite.models.Product
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
@@ -14,9 +15,11 @@ import com.example.lastbite.models.UserStore
 class StoreRepository {
 
     private val apiService = ApiClient.instance.create(ApiService::class.java)
+    private val storeCountSparseArrayCacheManager = StoreCountSparseArrayCacheManager()
 
     // Función que obtiene tiendas por los IDs de usuario
     fun fetchStoresByIds(storeIds: List<Int>, callback: (List<Store>?) -> Unit) {
+
         val stores = mutableListOf<Store>()
         val calls = storeIds.map { storeId ->
             // Hacemos la llamada para cada storeId
@@ -49,6 +52,7 @@ class StoreRepository {
     }
 
     fun fetchStores(callback: (List<Store>?) -> Unit) {
+
         apiService.getStores().enqueue(object : Callback<List<Store>> {
             override fun onResponse(call: Call<List<Store>>, response: Response<List<Store>>) {
                 if (response.isSuccessful) {
@@ -65,6 +69,7 @@ class StoreRepository {
     }
 
     fun fetchNearbyStores(lat: Double, lon: Double, callback: (List<Store>?) -> Unit) {
+
         apiService.getNearByStores(lat, lon).enqueue(object : Callback<List<Store>> {
             override fun onResponse(call: Call<List<Store>>, response: Response<List<Store>>) {
                 if (response.isSuccessful) {
@@ -80,7 +85,8 @@ class StoreRepository {
         })
     }
     
-    fun countStore(storeCount: StoreCount, callback: (Boolean) -> Unit) {
+    fun countStoreNetwork(storeCount: StoreCount, callback: (Boolean) -> Unit) {
+
         apiService.receiveStoreCount(storeCount).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 callback(response.isSuccessful)
@@ -92,7 +98,17 @@ class StoreRepository {
         })
     }
 
+    fun countStoreCache(storeCount: StoreCount) {
+
+        storeCountSparseArrayCacheManager.store(storeCount)
+    }
+
+    fun getStoreCountFromCache(storeID: Int): Int {
+        return storeCountSparseArrayCacheManager.getRegistry(storeID)
+    }
+
     fun getTop1Store(userId: Int?, callback: (Boolean, Store) -> Unit) {
+
         apiService.getTop1Store(userId).enqueue(object : Callback<Store> {
             override fun onResponse(call: Call<Store>, response: Response<Store>) {
                 val top1Stores = response.body()
@@ -117,6 +133,7 @@ class StoreRepository {
     }
 
     fun createStore(store: Store, userId: Int, callback: (Store?) -> Unit) {
+
         apiService.createStore(store).enqueue(object : Callback<Store> {
             override fun onResponse(call: Call<Store>, response: Response<Store>) {
                 val createdStore = response.body()
@@ -149,6 +166,7 @@ class StoreRepository {
     }
 
     fun updateStore(storeId: Int, store: Store, callback: (Store?) -> Unit) {
+
         apiService.updateStore(storeId, store).enqueue(object : Callback<Store> {
             override fun onResponse(call: Call<Store>, response: Response<Store>) {
                 if (response.isSuccessful) {
