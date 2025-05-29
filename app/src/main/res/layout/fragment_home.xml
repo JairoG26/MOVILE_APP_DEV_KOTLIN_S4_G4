@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <!-- Barra de búsqueda -->
     <com.google.android.material.search.SearchBar
         android:layout_width="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="1dp"
         android:layout_height="39dp"
-        android:backgroundTint="@color/gray_background"/>
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/gray_background" />
 
     <ImageView
+        android:id="@+id/imageMT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/banner"/>
+        android:src="@drawable/banner" />
 
     <!-- Tarjeta pequeña (ejemplo de promoción o info) -->
     <androidx.cardview.widget.CardView
@@ -32,18 +33,18 @@
             android:id="@+id/CameraLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:background="@color/white"
-            android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <!-- Imagen a la izquierda -->
             <ImageView
                 android:id="@+id/storeImage"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/colombiaflagicon"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/colombiaflagicon" />
 
             <!-- Contenedor de texto y botón -->
             <LinearLayout
@@ -55,12 +56,12 @@
 
                 <TextView
                     android:id="@+id/orderStatus"
-                    android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="Tu pedido está en progreso..."
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/orderConfirmation"
@@ -84,8 +85,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,51 +97,51 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 android:text="For You"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:paddingBottom="8dp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerForYou"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false" />
 
             <!-- Sección: NearBy Stores -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NearBy Stores"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:paddingTop="16dp"
-                android:paddingBottom="8dp"/>
+                android:paddingBottom="8dp"
+                android:text="NearBy Stores"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerNearby"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false" />
 
             <!-- Sección: All Stores -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Stores"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:paddingTop="16dp"
-                android:paddingBottom="8dp"/>
+                android:paddingBottom="8dp"
+                android:text="All Stores"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerAllStores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

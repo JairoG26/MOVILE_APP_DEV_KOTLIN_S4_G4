@@ -91,4 +91,5 @@ dependencies {
     //implementation("com.google.dagger:hilt-android:2.56.1")
     //ksp("com.google.dagger:hilt-compiler:2.56.1")
     ksp("androidx.room:room-compiler:2.7.1")
+    implementation("com.github.imagekit-developer.imagekit-android:imagekit-android:3.0.1")
 }

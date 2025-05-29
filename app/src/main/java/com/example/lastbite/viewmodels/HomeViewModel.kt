@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import android.location.Location
+import android.media.Image
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.MutableLiveData
@@ -15,10 +16,13 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
+import com.example.lastbite.repositories.BannerRepository
 import com.example.lastbite.repositories.LocationRepository
 import com.example.lastbite.repositories.ProductRepository
 import com.example.lastbite.repositories.StoreRepository
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
@@ -27,16 +31,26 @@ import kotlin.math.sqrt
 
 class HomeViewModel : ViewModel() {
 
-    // private val authViewModel: AuthViewModel
-    private val _stateBack = MutableLiveData<Boolean>()
+    private val _stateLoadBanner = MutableLiveData<Boolean>()
+    // val stateLoadBanner : LiveData<Boolean> = _stateLoadBanner
+    // private val bannerRepository = BannerRepository()
+
     private val _stateUpdatePhoto = MutableLiveData<Boolean>()
     val stateUpdatePhoto : LiveData<Boolean> = _stateUpdatePhoto
     private val repositoryProduct = ProductRepository()
+
     private val _stateSendLocation = MutableLiveData<Boolean>()
     // val stateSendLocation : LiveData<Boolean> = _stateSendLocation
     private val locationRepository = LocationRepository()
+
     private val _stateStoreCounted = MutableLiveData<Boolean>()
     private val storeRepository = StoreRepository()
+
+    /*fun loadBanner(context: Context) {
+        bannerRepository.load(context, callback = {
+            _stateLoadBanner.value = it
+        })
+    }*/
 
     fun isOnline(context : Context) : Boolean {
 
@@ -106,13 +120,33 @@ class HomeViewModel : ViewModel() {
         locationRepository.storeLocation(location, context)
     }
 
-    fun storePhoto(image : Bitmap) {
+    fun countStore(store : Store, user_id : Int?) {
 
-        val image64 = bitmapToBase64(image)
-        Log.d("HomeVM.storePhoto", "The image was converted to Base64.")
-        repositoryProduct.deliveryProductReceived(image64, callback = {
-            _stateUpdatePhoto.value = it
+        if (store == null) {
+            Log.d("HomeViewModel", "The store is null.")
+        }
+        val storeCount = StoreCount(null, store.store_id, user_id, 0)
+        val storeCountJson = Gson().toJson(storeCount)
+        storeRepository.countStoreCache(storeCount)
+        storeRepository.countStoreNetwork(storeCount, callback = {
+            _stateStoreCounted.value = it
         })
+        Log.d("HomeViewModel", "StoreCount JSON sent: $storeCountJson")
+    }
+
+    suspend fun storePhoto(image : Bitmap) {
+
+        withContext(Dispatchers.IO) {
+            Log.d("HomeVM.storePhoto", "The IO coroutine code block just started to be executed.")
+            repositoryProduct.deliveryProductReceivedCache(image)
+            withContext(Dispatchers.IO) {
+                val image64 = bitmapToBase64(image)
+                Log.d("HomeVM.storePhoto", "The image was converted to Base64.")
+                repositoryProduct.deliveryProductReceivedNetwork(image64, callback = {
+                    _stateUpdatePhoto.value = it
+                })
+            }
+        }
     }
 
     private fun bitmapToBase64(bitmap: Bitmap): String {
@@ -122,18 +156,4 @@ class HomeViewModel : ViewModel() {
         val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
-
-    fun countStore(store : Store, user_id : Int) {
-
-        if (store == null) {
-            Log.d("HomeViewModel", "StoreCount is null")
-        }
-        val storeCount = StoreCount(null, store.store_id, user_id, 0)
-        val storeCountJson = Gson().toJson(storeCount)
-        storeRepository.countStore(storeCount, callback = {
-            _stateStoreCounted.value = it
-        })
-        Log.d("HomeViewModel", "StoreCount JSON sent: $storeCountJson")
-    }
-
 }

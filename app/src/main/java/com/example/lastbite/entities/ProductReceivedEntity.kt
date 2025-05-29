@@ -1,4 +1,4 @@
-package com.example.lastbite.models
+package com.example.lastbite.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

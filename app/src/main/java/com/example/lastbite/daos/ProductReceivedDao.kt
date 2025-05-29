@@ -1,8 +1,6 @@
-package com.example.lastbite
+package com.example.lastbite.daos
 
 import androidx.room.Dao
-import androidx.room.Query
-import com.example.lastbite.models.ProductReceived
 
 @Dao
 interface ProductReceivedDao {

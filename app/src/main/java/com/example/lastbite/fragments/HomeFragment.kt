@@ -1,5 +1,6 @@
 package com.example.lastbite.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -20,6 +21,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +32,9 @@ import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
 import androidx.lifecycle.lifecycleScope
+import com.example.lastbite.ProductReceivedLRUCacheManager
 import com.example.lastbite.R
+import com.example.lastbite.repositories.ProductRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -45,11 +49,45 @@ class HomeFragment : Fragment() {
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
     private var photoBitmap: Bitmap? = null
     private var userLocation: Location? = null
+    // private val imageKitManager: ImageKitManager = ImageKitManager()
+    // private val productRepository = ProductRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // val imageMT = view.findViewById<ImageView>(R.id.imageMT)
+        // homeViewModel.loadBanner(requireContext())
+        /*imageKitManager.initService(requireContext().applicationContext)
+        ImageKit.getInstance()
+            .url(
+                src = "https://ik.imagekit.io/lastbite/banner",
+                // transformationPosition = TransformationPosition.PATH
+            )
+            .setResponsive(
+                view = view.findViewById<ImageView>(R.id.imageMT))
+            .create()*/
+
+        val contextFragment : Context = requireContext()
+        if (!homeViewModel.isOnline(contextFragment)) {
+            val builder = AlertDialog.Builder(contextFragment)
+            val layoutInflater : LayoutInflater = LayoutInflater.from(contextFragment)
+            val promptView : View = layoutInflater.inflate(R.layout.reconnect_message, null)
+            val alertButton = promptView.findViewById<Button>(R.id.button)
+            builder.setView(promptView)
+            val alertDialog: AlertDialog = builder.create()
+            alertButton.setOnClickListener{
+                // val currentFragment = requireActivity().supportFragmentManager.fragments.last()
+                /*val currentFragment = HomeFragment()
+                val fragmentTransaction = requireFragmentManager().beginTransaction()
+                fragmentTransaction.detach(currentFragment).attach(currentFragment).commit()*/
+                // requireFragmentManager().beginTransaction().replace(R.id.llHome, HomeFragment())
+                alertDialog.dismiss()
+                Log.d("HomeFragment", "Alert Dialog button clicked")
+            }
+            alertDialog.show()
+        }
 
         val btnCamera = view.findViewById<Button>(R.id.orderConfirmation)
         forYouRecyclerView = view.findViewById(R.id.recyclerForYou)
@@ -59,11 +97,12 @@ class HomeFragment : Fragment() {
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         forYouRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+        /*homeViewModel.stateLoadBanner.observe(viewLifecycleOwner) {
+            imageMT.visibility = if (it.image) View.VISIBLE else View.GONE
+        }*/
+
         storeAdapter = StoreAdapter(emptyList()) {
                 store, user_id -> goToProductFragment(store)
-            if (user_id != null) {
-                homeViewModel.countStore(store, user_id)
-            }
         }
 
         allStoresRecyclerView.adapter = storeAdapter
@@ -72,6 +111,8 @@ class HomeFragment : Fragment() {
 
         homeViewModel.stateUpdatePhoto.observe(viewLifecycleOwner) {
             if (it) {
+                // val storeImage = view.findViewById<ImageView>(R.id.storeImage)
+                // storeImage.setImageBitmap(productRepository.getDeliveryProductReceivedFromCache("Product 1"))
                 orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
             } else {
                 Toast.makeText(requireContext(), "The photo was not uploaded.", Toast.LENGTH_SHORT).show()
@@ -80,9 +121,6 @@ class HomeFragment : Fragment() {
 
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
-                if (user_id != null) {
-                    homeViewModel.countStore(store, user_id)
-                }
             }
             allStoresRecyclerView.adapter = storeAdapter
             //nearbyRecyclerView.adapter = storeAdapter
@@ -91,9 +129,6 @@ class HomeFragment : Fragment() {
 
         storeViewModel.nearByStores.observe(viewLifecycleOwner) { stores ->
             val adapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
-                if (user_id != null) {
-                    homeViewModel.countStore(store, user_id)
-                }
             }
             nearbyRecyclerView.adapter = adapter
         }
@@ -104,6 +139,7 @@ class HomeFragment : Fragment() {
         btnCamera.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
+
         return view
     }
 
@@ -120,10 +156,10 @@ class HomeFragment : Fragment() {
     private fun requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            locationPermissionRequest.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             getUserLocation()
         }
@@ -158,7 +194,7 @@ class HomeFragment : Fragment() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(contextFragment)
 
         if (ActivityCompat.checkSelfPermission(
-                contextFragment, android.Manifest.permission.ACCESS_FINE_LOCATION
+                contextFragment, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
@@ -201,10 +237,12 @@ class HomeFragment : Fragment() {
 
         getUserLocation()
 
-        val contextFragment : Context = requireContext()
-
+        /*val contextFragment : Context = requireContext()
+        // imageKitManager.initService(requireContext().applicationContext)
+        // imageKitManager.getImage()
         if (!homeViewModel.isOnline(contextFragment)) {
             val builder = AlertDialog.Builder(contextFragment)
+            /*
             builder.setTitle("Lost connection")
                 .setMessage("You require an active connection to continue using the app. Please reconnect.")
                 .setPositiveButton("Try again"){ dialog, which ->
@@ -213,8 +251,8 @@ class HomeFragment : Fragment() {
                     }
                 }
             val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
-        }
+            alertDialog.show()*/
+        }*/
 
         orderStatusViewModel.isOrderAccepted.observe(viewLifecycleOwner) { accepted ->
             orderStatusViewModel.isPhotoTaken.observe(viewLifecycleOwner) { photoTaken ->
@@ -240,7 +278,10 @@ class HomeFragment : Fragment() {
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             if (imageBitmap != null) {
                 photoBitmap = imageBitmap
-                homeViewModel.storePhoto(imageBitmap)
+                lifecycleScope.launch {
+                    homeViewModel.storePhoto(imageBitmap)
+                    Log.d("HomeFragment", "The coroutine has been executed.")
+                }
                 getUserLocation()
                 homeViewModel.sendUserLocation(userLocation, contextFragment)
                 // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón

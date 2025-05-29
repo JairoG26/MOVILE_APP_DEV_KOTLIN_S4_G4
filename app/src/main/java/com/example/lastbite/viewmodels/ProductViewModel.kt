@@ -15,6 +15,7 @@ import com.example.lastbite.models.Store
 import com.example.lastbite.repositories.ProductRepository
 
 class ProductViewModel : ViewModel() {
+
     private val repository = ProductRepository()
     private val _products = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> get() = _products
@@ -27,6 +28,9 @@ class ProductViewModel : ViewModel() {
     private val _top3Products = MutableLiveData<List<Product>>()
     val top3Products: LiveData<List<Product>> get() = _top3Products
     private val topProductsCache = object : LruCache<Int, List<Product>>(3) {} // Cache para los productos
+    private val _stateLeastVisitedStore = MutableLiveData<Boolean>()
+    private val _leastVisitedStore = MutableLiveData<String>()
+    val leastVisitedStore : LiveData<String> = _leastVisitedStore
 
     fun loadProductsByStore(storeId: Int) {
         repository.fetchProducts(storeId) { productList ->
@@ -43,11 +47,11 @@ class ProductViewModel : ViewModel() {
     fun createProduct(product: Product) {
         repository.createProduct(product) { createdProduct ->
             if (createdProduct != null) {
-                // Producto creado con éxito
-                Log.d("POST", "Producto creado: ${createdProduct.name}")
+                // Producto generar con éxito
+                Log.d("ProductVM", "The following product was generated: ${createdProduct.name}")
             } else {
-                // Error al crear producto
-                Log.e("POST", "Error al crear el producto")
+                // Error al generar producto
+                Log.e("ProductVM", "There was an error generating the product.")
             }
         }
     }
@@ -55,16 +59,17 @@ class ProductViewModel : ViewModel() {
     fun updateStore(storeId: Int, updatedStore: Store) {
         repository.updateStore(storeId, updatedStore) { updatedStore ->
             if (updatedStore != null) {
-                // Producto creado con éxito
-                Log.d("PUT", "Tienda Atualizada: ${updatedStore.name}")
+                // Producto generado con éxito
+                Log.d("ProductVM", "The following store was updated: ${updatedStore.name}")
             } else {
-                // Error al crear producto
-                Log.e("POST", "Error al actualizar la tienda")
+                // Error al generar producto
+                Log.e("ProductVM", "There was an error updating the store.")
             }
         }
     }
 
     fun deleteProduct(productId: Int) {
+
         repository.deleteProduct(productId) { success ->
             if (success) {
                 _productDeleted.postValue(true)
@@ -75,6 +80,7 @@ class ProductViewModel : ViewModel() {
     }
 
     fun updateProduct(productId: Int, updatedProduct: Product) {
+
         repository.updateProduct(productId, updatedProduct) { updatedProduct ->
             if (updatedProduct != null) {
                 _productUpdated.postValue(true)
@@ -85,6 +91,7 @@ class ProductViewModel : ViewModel() {
     }
 
     fun hayConexion(context: Context): Boolean {
+
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = cm.activeNetwork ?: return false
         val capabilities = cm.getNetworkCapabilities(network) ?: return false
@@ -92,6 +99,7 @@ class ProductViewModel : ViewModel() {
     }
 
     fun getTop3Products(storeId: Int) {
+
         val cached = topProductsCache[storeId]
         if (cached != null) {
             _top3Products.postValue(cached)
@@ -102,6 +110,14 @@ class ProductViewModel : ViewModel() {
                 ) // 🔹 Si es null, mandamos lista vacía
                 topProductsCache.put(storeId, productList ?: emptyList()) // Actualizamos el cache
             }
+        }
+    }
+
+    fun calculateLeastVisitedStore(userID: Int) {
+
+        repository.calculateLeastVisitedStore(userID) { callback, store_name ->
+            _stateLeastVisitedStore.value = callback
+            _leastVisitedStore.value = store_name.name
         }
     }
 
