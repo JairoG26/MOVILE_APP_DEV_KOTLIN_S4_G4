@@ -89,7 +89,6 @@ class HomeFragment : Fragment() {
             alertDialog.show()
         }
 
-        val btnCamera = view.findViewById<Button>(R.id.orderConfirmation)
         forYouRecyclerView = view.findViewById(R.id.recyclerForYou)
         nearbyRecyclerView = view.findViewById(R.id.recyclerNearby)
         allStoresRecyclerView = view.findViewById(R.id.recyclerAllStores)
@@ -109,16 +108,6 @@ class HomeFragment : Fragment() {
         nearbyRecyclerView.adapter = storeAdapter
         forYouRecyclerView.adapter = storeAdapter
 
-        homeViewModel.stateUpdatePhoto.observe(viewLifecycleOwner) {
-            if (it) {
-                // val storeImage = view.findViewById<ImageView>(R.id.storeImage)
-                // storeImage.setImageBitmap(productRepository.getDeliveryProductReceivedFromCache("Product 1"))
-                orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
-            } else {
-                Toast.makeText(requireContext(), "The photo was not uploaded.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         storeViewModel.stores.observe(viewLifecycleOwner) { stores ->
             storeAdapter = StoreAdapter(stores) { store, user_id -> goToProductFragment(store)
             }
@@ -136,8 +125,18 @@ class HomeFragment : Fragment() {
         requestLocationPermission()
         storeViewModel.loadStores()
 
+        val btnCamera = view.findViewById<Button>(R.id.orderConfirmation)
         btnCamera.setOnClickListener {
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+        homeViewModel.stateUpdatePhoto.observe(viewLifecycleOwner) {
+            if (it) {
+                // val storeImage = view.findViewById<ImageView>(R.id.storeImage)
+                // storeImage.setImageBitmap(productRepository.getDeliveryProductReceivedFromCache("Product 1"))
+                orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
+            } else {
+                Toast.makeText(requireContext(), "The photo was not uploaded.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
@@ -205,7 +204,6 @@ class HomeFragment : Fragment() {
                 val location = fusedLocationClient.lastLocation.await()
                 location?.let {
                     userLocation = it
-                    homeViewModel.sendUserLocation(it, contextFragment)
                     Log.d("HomeFragment.getUserLocation", "The Location has the following" +
                             " coordinates: Lat: ${it.latitude}, Long: ${it.longitude}")
                     storeViewModel.loadNearByStores(it.latitude, it.longitude)
@@ -231,11 +229,36 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val contextFragment : Context = requireContext()
+            Toast.makeText(contextFragment, "Image taken.", Toast.LENGTH_SHORT).show()
+
+            val data = result.data
+            val imageBitmap = data?.extras?.get("data") as? Bitmap
+            if (imageBitmap != null) {
+                photoBitmap = imageBitmap
+                getUserLocation()
+                lifecycleScope.launch {
+                    homeViewModel.storePhoto(imageBitmap)
+                    homeViewModel.sendUserLocation(userLocation, contextFragment)
+                    Log.d("HomeFragment", "The coroutine has been executed.")
+                }
+                // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
+                // Glide.with(this).load(imageBitmap).into(view.findViewById(R.id.storeImage))
+            } else {
+                Log.d("HomeFragment.startForResult", "The image is null.")
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
 
-        getUserLocation()
+        /* getUserLocation()
+        -- It is implicit the moment "onCreateView" is executed when "requestLocationPermission" is called*/
 
         /*val contextFragment : Context = requireContext()
         // imageKitManager.initService(requireContext().applicationContext)
@@ -264,30 +287,6 @@ class HomeFragment : Fragment() {
             if (photoBitmap != null) {
                 orderStatusViewModel.isOrderAccepted.value = false
                 photoBitmap = null
-            }
-        }
-    }
-
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-
-        if (result.resultCode == Activity.RESULT_OK) {
-            val contextFragment : Context = requireContext()
-            Toast.makeText(contextFragment, "Image taken.", Toast.LENGTH_SHORT).show()
-
-            val data = result.data
-            val imageBitmap = data?.extras?.get("data") as? Bitmap
-            if (imageBitmap != null) {
-                photoBitmap = imageBitmap
-                lifecycleScope.launch {
-                    homeViewModel.storePhoto(imageBitmap)
-                    Log.d("HomeFragment", "The coroutine has been executed.")
-                }
-                getUserLocation()
-                homeViewModel.sendUserLocation(userLocation, contextFragment)
-                // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
-                // Glide.with(this).load(imageBitmap).into(view.findViewById(R.id.storeImage))
-            } else {
-                Log.d("HomeFragment.startForResult", "The image is null.")
             }
         }
     }

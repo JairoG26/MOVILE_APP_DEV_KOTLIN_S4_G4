@@ -84,6 +84,15 @@ class StoreRepository {
             }
         })
     }
+
+    fun countStoreCache(storeCount: StoreCount) {
+
+        storeCountSparseArrayCacheManager.store(storeCount)
+    }
+
+    fun getStoreCountFromCache(storeID: Int): Int {
+        return storeCountSparseArrayCacheManager.getRegistry(storeID)
+    }
     
     fun countStoreNetwork(storeCount: StoreCount, callback: (Boolean) -> Unit) {
 
@@ -96,15 +105,6 @@ class StoreRepository {
                 callback(false)
             }
         })
-    }
-
-    fun countStoreCache(storeCount: StoreCount) {
-
-        storeCountSparseArrayCacheManager.store(storeCount)
-    }
-
-    fun getStoreCountFromCache(storeID: Int): Int {
-        return storeCountSparseArrayCacheManager.getRegistry(storeID)
     }
 
     fun getTop1Store(userId: Int?, callback: (Boolean, Store) -> Unit) {

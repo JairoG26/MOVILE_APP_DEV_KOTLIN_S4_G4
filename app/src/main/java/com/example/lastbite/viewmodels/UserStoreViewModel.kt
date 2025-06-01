@@ -21,6 +21,7 @@ class UserStoreViewModel : ViewModel() {
     val error: LiveData<String?> = _error
 
     fun fetchStoreIdsByUser(userId: Int?) {
+
         repository.getUserStoresByUserId(userId) { storeIds, errorMsg ->
             if (storeIds != null) {
                 _storeIds.value = storeIds!!

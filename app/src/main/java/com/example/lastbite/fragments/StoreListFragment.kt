@@ -48,7 +48,7 @@ class StoreListFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerViewStores)
         adapter = StoreAdapter(emptyList()) { store, _ ->
-            Log.d("DEBUG", "Tiendas recibidas: ${store}")
+            Log.d("StoreListFragment", "The fetched stores are the following: ${store}")
             goToStoreDetail(store)
         }
         recyclerView.adapter = adapter
@@ -58,7 +58,7 @@ class StoreListFragment : Fragment() {
         val currentUser = SessionManager.getUser()
         currentUser?.let {
             userStoreViewModel.fetchStoreIdsByUser(it.user_id)
-            Log.d("DEBUG", "Tiendas recibidas: ${it}")
+            Log.d("StoreListFragment", "The fetched stores are the following: ${it}")
             adapter.updateUserId(it.user_id)
         }
 
@@ -69,7 +69,7 @@ class StoreListFragment : Fragment() {
 
         // Paso 4: Observar tiendas cargadas y mostrar en el RecyclerView
         storeViewModel.storesByUser.observe(viewLifecycleOwner) { storeList ->
-            Log.d("DEBUG", "Tiendas recibidas: ${storeList.size}")
+            Log.d("StoreListFragment", "The fetched stores are the following: ${storeList.size}")
             adapter = StoreAdapter(storeList) { store, _ ->
                 goToStoreDetail(store)
             }

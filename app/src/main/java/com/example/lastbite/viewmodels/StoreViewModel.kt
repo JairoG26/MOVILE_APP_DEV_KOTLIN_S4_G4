@@ -14,9 +14,6 @@ import com.example.lastbite.models.Store
 import com.example.lastbite.models.Zone
 import com.example.lastbite.repositories.StoreRepository
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class StoreViewModel : ViewModel() {
     private val repository = StoreRepository()
@@ -32,11 +29,11 @@ class StoreViewModel : ViewModel() {
 
     private val storesCache = object : LruCache<Int, List<Store>>(8) {}
 
-    fun loadStores() {
-        repository.fetchStores { storeList -> 
-            Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
-            _stores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
-        }
+    fun isOnline(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     fun fetchStoresByIds(storeIds: List<Int>) {
@@ -45,16 +42,23 @@ class StoreViewModel : ViewModel() {
             _storesByUser.postValue(cached)
         } else {
             repository.fetchStoresByIds(storeIds) { storeList ->
-                Log.d("DEBUG", "storeIds: $storeIds")
+                Log.d("StoreVM", "The store IDs fetched are the following: $storeIds")
                 _storesByUser.postValue(storeList ?: emptyList()) // Si no hay tiendas, mandamos lista vacía
                 storesCache.put(SessionManager.getUser()!!.user_id, storeList)
             }
         }
     }
 
+    fun loadStores() {
+        repository.fetchStores { storeList -> 
+            Log.d("StoreVM", "The fetched stores are the following: ${storeList?.size}")
+            _stores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
+        }
+    }
+
     fun loadNearByStores(latitude: Double, longitude: Double) {
         repository.fetchNearbyStores(latitude, longitude) { storeList ->
-            Log.d("DEBUG", "Stores recibidos: ${storeList?.size}")
+            Log.d("StoreVM", "The fetched stores are the following: ${storeList?.size}")
             _nearByStores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
     }
@@ -62,12 +66,10 @@ class StoreViewModel : ViewModel() {
     fun createStore(store: Store) {
         repository.createStore(store, SessionManager.getUser()!!.user_id!!) { createdStore ->
             if (createdStore != null) {
-                // Tienda creada con éxito
-                Log.d("POST", "Tienda creada: ${createdStore.store_id}")
-                // Puedes realizar acciones adicionales aquí si es necesario
+                Log.d("StoreVM", "The store with ID ${createdStore.store_id} was generated.")
             } else {
-                // Error al crear tienda
-                Log.e("POST", "Error al crear la tienda")
+                // Error al generar tienda
+                Log.e("StoreVM", "There was an error generating the store.")
             }
         }
     }
@@ -75,21 +77,11 @@ class StoreViewModel : ViewModel() {
     fun updateStore(storeId: Int, store: Store) {
         repository.updateStore(storeId, store) { updatedStore ->
             if (updatedStore != null) {
-                // Tienda actualizada con éxito
-                Log.d("PUT", "Tienda actualizada: ${updatedStore.store_id}")
-                // Puedes realizar acciones adicionales aquí si es necesario
+                Log.d("StoreVM", "The store with ID ${updatedStore.store_id} was updated.")
             } else {
                 // Error al actualizar tienda
-                Log.e("PUT", "Error al actualizar la tienda")
+                Log.e("StoreVM", "There was an error updating the store.")
             }
         }
     }
-
-    fun hayConexion(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = cm.activeNetwork ?: return false
-        val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    }
-
 }

@@ -41,6 +41,7 @@ class CreateStoreFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val etName = view.findViewById<EditText>(R.id.etStoreName)
         val etNit = view.findViewById<EditText>(R.id.etNit)
         val etAddress = view.findViewById<EditText>(R.id.etAddress)
@@ -57,11 +58,11 @@ class CreateStoreFragment : Fragment() {
                     try {
                         val imageUrl = uploadImageToFirebaseAsync(photoUri!!)
                         etImageUrl.setText(imageUrl)
-                        Toast.makeText(requireContext(), "Imagen subida", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "The image was uploaded.", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
                         Toast.makeText(
                             requireContext(),
-                            "Error al subir la imagen",
+                            "There was an error uploading the image.",
                             Toast.LENGTH_SHORT
                         ).show()
                         e.printStackTrace()
@@ -71,14 +72,14 @@ class CreateStoreFragment : Fragment() {
         }
 
         btnSave.setOnClickListener {
-            if (!storeViewModel.hayConexion(requireContext())) {
+            if (!storeViewModel.isOnline(requireContext())) {
                 Toast.makeText(
                     requireContext(),
-                    "You need to have internet to do this",
+                    "You require a network connection for doing this.",
                     Toast.LENGTH_SHORT
                 ).show()
             } else if (etImageUrl.text.isNullOrEmpty()){
-                Toast.makeText(requireContext(), "Image is blank or is not uploaded yet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "The image is blank or is not uploaded yet.", Toast.LENGTH_SHORT).show()
             } else {
                 val name = etName.text.toString()
                 val nit = etNit.text.toString()
@@ -100,7 +101,7 @@ class CreateStoreFragment : Fragment() {
                 )
 
                 storeViewModel.createStore(newStore)
-                Toast.makeText(requireContext(), "Store created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "The store was generated.", Toast.LENGTH_SHORT).show()
                 requireActivity().onBackPressed()
             }
         }
@@ -116,6 +117,7 @@ class CreateStoreFragment : Fragment() {
     }
 
     private fun createImageUri(): Uri? {
+
         val contentValues = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
