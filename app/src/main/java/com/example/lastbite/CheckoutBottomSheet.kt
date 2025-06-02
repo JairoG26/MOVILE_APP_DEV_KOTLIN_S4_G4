@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,6 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.lastbite.activities.OrderAcceptedActivity
 import com.example.lastbite.models.Cart
-import com.example.lastbite.models.CartProduct
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -37,12 +37,13 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
 
         val costText = view.findViewById<TextView>(R.id.costText)
 
         cartViewModel.cartItems.observe(viewLifecycleOwner) { cartItems ->
-            val total = cartItems.sumOf { it.unitPrice.toDouble() * it.quantity.toInt() }
+            val total = cartItems.sumOf { it.unitPrice.toDouble() * it.quantity }
             costText.text = "$ %.2f".format(total)
         }
 
@@ -97,24 +98,15 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
                 val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)
                 startActivity(intent)
             }*/
-            val createdCart = cartViewModel.createCart(newCart)
+
+            cartViewModel.createCart(newCart)
 
             cartViewModel.getActiveCart(userId)
-            cartViewModel.activeCart
-
-            cartViewModel.cartItems.value?.forEach { item ->
-                val newCartProduct = CartProduct(
-                    product_id = item.productId,
-                    cart_id = cartViewModel.activeCart?.cart_id,
-                    quantity = item.quantity
-                )
-                cartViewModel.createCartProduct(newCartProduct)
-            }
 
             cartViewModel.clearCart()
             orderStatusViewModel.isOrderAccepted.value = true
 
-            Toast.makeText(requireContext(), "Pedido confirmado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "The order was confirmed.", Toast.LENGTH_SHORT).show()
             dismiss()
 
             val intent = Intent(requireContext(), OrderAcceptedActivity::class.java)

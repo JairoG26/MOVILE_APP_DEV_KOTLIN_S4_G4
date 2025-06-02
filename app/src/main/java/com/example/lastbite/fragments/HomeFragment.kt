@@ -123,6 +123,7 @@ class HomeFragment : Fragment() {
         }
 
         requestLocationPermission()
+
         storeViewModel.loadStores()
 
         val btnCamera = view.findViewById<Button>(R.id.orderConfirmation)
@@ -206,6 +207,7 @@ class HomeFragment : Fragment() {
                     userLocation = it
                     Log.d("HomeFragment.getUserLocation", "The Location has the following" +
                             " coordinates: Lat: ${it.latitude}, Long: ${it.longitude}")
+                    homeViewModel.sendUserLocation(userLocation, contextFragment)
                     storeViewModel.loadNearByStores(it.latitude, it.longitude)
                 }
             } catch (e: Exception) {
@@ -242,7 +244,6 @@ class HomeFragment : Fragment() {
                 getUserLocation()
                 lifecycleScope.launch {
                     homeViewModel.storePhoto(imageBitmap)
-                    homeViewModel.sendUserLocation(userLocation, contextFragment)
                     Log.d("HomeFragment", "The coroutine has been executed.")
                 }
                 // orderStatusViewModel.isOrderAccepted.value = false // Ocultas el botón
@@ -256,9 +257,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val cameraButton = view.findViewById<LinearLayout>(R.id.CameraLayout)
-
-        /* getUserLocation()
-        -- It is implicit the moment "onCreateView" is executed when "requestLocationPermission" is called*/
 
         /*val contextFragment : Context = requireContext()
         // imageKitManager.initService(requireContext().applicationContext)

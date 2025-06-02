@@ -1,5 +1,6 @@
 package com.example.lastbite.repositories
 
+import android.util.Log
 import com.example.lastbite.ApiClient
 import com.example.lastbite.ApiService
 import com.example.lastbite.models.Cart
@@ -14,6 +15,7 @@ class CartRepository {
     private val apiService = ApiClient.instance.create(ApiService::class.java)
 
     fun createCart(cart: Cart, callback: (Cart?) -> Unit) {
+
         apiService.createCart(cart).enqueue(object : Callback<Cart> {
             override fun onResponse(call: Call<Cart>, response: Response<Cart>) {
                 if (response.isSuccessful) {
@@ -35,22 +37,26 @@ class CartRepository {
     }
 
     fun createCartProduct(cartProduct: CartProduct, callback: (CartProduct?) -> Unit) {
+
         apiService.createCartProduct(cartProduct).enqueue(object : Callback<CartProduct> {
             override fun onResponse(call: Call<CartProduct>, response: Response<CartProduct>) {
                 if (response.isSuccessful) {
                     callback(response.body())
                 } else {
                     callback(null)
+                    Log.d("CartRepo.\"createCartProduct\"", "The response was not \"successful.\"")
                 }
             }
 
             override fun onFailure(call: Call<CartProduct>, t: Throwable) {
                 callback(null)
+                Log.d("CartRepo.\"createCartProduct\"", "The API response failed.")
             }
         })
     }
 
     fun getCarts(callback: (List<Cart>?) -> Unit) {
+
         apiService.getCarts().enqueue(object : Callback<List<Cart>> {
             override fun onResponse(call: Call<List<Cart>>, response: Response<List<Cart>>) {
                 if (response.isSuccessful) {
@@ -67,6 +73,7 @@ class CartRepository {
     }
 
     fun getActiveCart(userId: Int, callback: (Cart?) -> Unit) {
+
         apiService.getActiveCartByUserId(userId).enqueue(object : Callback<Cart> {
             override fun onResponse(call: Call<Cart>, response: Response<Cart>) {
                 if (response.isSuccessful) {
@@ -83,6 +90,7 @@ class CartRepository {
     }
 
     fun updateCart(cartId: Int, cart: Cart, callback: (Cart?) -> Unit) {
+
         apiService.updateCart(cartId, cart).enqueue(object : Callback<Cart> {
             override fun onResponse(call: Call<Cart>, response: Response<Cart>) {
                 if (response.isSuccessful) {

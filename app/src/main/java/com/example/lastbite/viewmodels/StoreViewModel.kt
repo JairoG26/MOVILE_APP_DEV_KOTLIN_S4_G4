@@ -8,14 +8,13 @@ import android.util.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.lastbite.SessionManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.Zone
 import com.example.lastbite.repositories.StoreRepository
-import kotlinx.coroutines.launch
 
 class StoreViewModel : ViewModel() {
+
     private val repository = StoreRepository()
 
     private val _stores = MutableLiveData<List<Store>>()
@@ -51,14 +50,14 @@ class StoreViewModel : ViewModel() {
 
     fun loadStores() {
         repository.fetchStores { storeList -> 
-            Log.d("StoreVM", "The fetched stores are the following: ${storeList?.size}")
+            Log.d("StoreVM", "The total of fetched stores is ${storeList?.size}.")
             _stores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
     }
 
     fun loadNearByStores(latitude: Double, longitude: Double) {
         repository.fetchNearbyStores(latitude, longitude) { storeList ->
-            Log.d("StoreVM", "The fetched stores are the following: ${storeList?.size}")
+            Log.d("StoreVM", "The total of fetched stores is ${storeList?.size}.")
             _nearByStores.postValue(storeList ?: emptyList()) // Si es null, manda una lista vacía
         }
     }

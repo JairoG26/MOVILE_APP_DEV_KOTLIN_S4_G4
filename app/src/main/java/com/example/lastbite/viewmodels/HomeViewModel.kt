@@ -137,7 +137,7 @@ class HomeViewModel : ViewModel() {
     suspend fun storePhoto(image : Bitmap) {
 
         withContext(Dispatchers.IO) {
-            Log.d("HomeVM.storePhoto", "The IO coroutine code block just started to be executed.")
+            Log.d("HomeVM.storePhoto", "The IO coroutine code just started to be executed.")
             repositoryProduct.deliveryProductReceivedCache(image)
             withContext(Dispatchers.IO) {
                 val image64 = bitmapToBase64(image)
