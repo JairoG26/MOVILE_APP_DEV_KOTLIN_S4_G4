@@ -30,7 +30,7 @@
             android:id="@+id/etStoreName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Product Name"
+            android:hint="Store Name"
             android:textColor="@color/black"
             android:inputType="text" />
 
