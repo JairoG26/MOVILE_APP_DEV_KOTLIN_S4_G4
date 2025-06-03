@@ -30,6 +30,9 @@ class StoreViewModel : ViewModel() {
     private val _nearByStores = MutableLiveData<List<Store>>()
     val nearByStores: LiveData<List<Store>> get() = _nearByStores
 
+    private val _store = MutableLiveData<Store?>()
+    val store: LiveData<Store?> get() = _store
+
     private val storesCache = object : LruCache<Int, List<Store>>(8) {}
 
     fun loadStores() {
@@ -81,6 +84,20 @@ class StoreViewModel : ViewModel() {
             } else {
                 // Error al actualizar tienda
                 Log.e("PUT", "Error al actualizar la tienda")
+            }
+        }
+    }
+
+    fun getStoreById(storeId: Int) {
+        repository.getStoreById(storeId) { store ->
+            if (store != null) {
+                // Tienda encontrada
+                Log.d("GET", "Tienda encontrada: ${store.store_id}")
+                _store.postValue(store)
+                // Puedes realizar acciones adicionales aquí si es necesario
+            } else {
+                // Tienda no encontrada
+                Log.e("GET", "Tienda no encontrada")
             }
         }
     }

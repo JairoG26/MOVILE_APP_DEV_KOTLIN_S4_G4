@@ -56,18 +56,6 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    fun updateStore(storeId: Int, updatedStore: Store) {
-        repository.updateStore(storeId, updatedStore) { updatedStore ->
-            if (updatedStore != null) {
-                // Producto generado con éxito
-                Log.d("ProductVM", "The following store was updated: ${updatedStore.name}")
-            } else {
-                // Error al generar producto
-                Log.e("ProductVM", "There was an error updating the store.")
-            }
-        }
-    }
-
     fun deleteProduct(productId: Int) {
 
         repository.deleteProduct(productId) { success ->

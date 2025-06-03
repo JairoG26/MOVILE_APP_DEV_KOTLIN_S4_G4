@@ -51,6 +51,21 @@ class StoreRepository {
         }
     }
 
+    fun getStoreById(storeId: Int, callback: (Store?) -> Unit) {
+        apiService.getStoreById(storeId).enqueue(object : Callback<Store> {
+            override fun onResponse(call: Call<Store>, response: Response<Store>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    callback(null)
+                }
+            }
+            override fun onFailure(call: Call<Store>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
     fun fetchStores(callback: (List<Store>?) -> Unit) {
 
         apiService.getStores().enqueue(object : Callback<List<Store>> {

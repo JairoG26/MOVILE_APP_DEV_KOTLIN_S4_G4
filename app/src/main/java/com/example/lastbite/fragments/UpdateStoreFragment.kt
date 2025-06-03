@@ -50,6 +50,21 @@ class UpdateStoreFragment : Fragment() {
         val etLatitude = view.findViewById<EditText>(R.id.etLatitude)
         etImageUrl = view.findViewById(R.id.etImageUrl) // Inicializado antes de usarse
         val btnSave = view.findViewById<Button>(R.id.btnSaveStore)
+        val storeId = StoreManager.storeId
+        Toast.makeText(requireContext(), "Store ID: $storeId", Toast.LENGTH_SHORT).show()
+        if (storeId != null) {
+            storeViewModel.getStoreById(storeId)
+
+            storeViewModel.store.observe(viewLifecycleOwner) { store ->
+                store?.let {
+                    etName.setText(it.name)
+                    etNit.setText(it.nit)
+                    etAddress.setText(it.address)
+                    etLongitude.setText(it.longitude.toString())
+                    etLatitude.setText(it.latitude.toString())
+                }
+            }
+        }
 
         // Cargar SharedPreferences
         val prefs = requireContext().getSharedPreferences("store_prefs", Context.MODE_PRIVATE)
