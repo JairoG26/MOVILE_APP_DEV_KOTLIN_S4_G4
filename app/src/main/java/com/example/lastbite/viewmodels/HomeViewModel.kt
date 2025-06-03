@@ -6,22 +6,26 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import android.location.Location
 import android.media.Image
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.lifecycle.MutableLiveData
 import com.example.lastbite.models.Location as LocationData
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.lastbite.NetworkManager
+import com.example.lastbite.SessionManager
 import com.example.lastbite.models.Store
 import com.example.lastbite.models.StoreCount
 import com.example.lastbite.repositories.BannerRepository
 import com.example.lastbite.repositories.LocationRepository
+import com.example.lastbite.repositories.OrderRepository
 import com.example.lastbite.repositories.ProductRepository
 import com.example.lastbite.repositories.StoreRepository
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -30,6 +34,8 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class HomeViewModel : ViewModel() {
+
+    private val networkManager = NetworkManager()
 
     private val _stateLoadBanner = MutableLiveData<Boolean>()
     // val stateLoadBanner : LiveData<Boolean> = _stateLoadBanner
@@ -43,6 +49,10 @@ class HomeViewModel : ViewModel() {
     // val stateSendLocation : LiveData<Boolean> = _stateSendLocation
     private val locationRepository = LocationRepository()
 
+    private val orderRepository = OrderRepository()
+    private val _theyHadOrderedHere = MutableLiveData<Boolean>()
+    val theyHadOrderedHere : LiveData<Boolean> = _theyHadOrderedHere
+
     private val _stateStoreCounted = MutableLiveData<Boolean>()
     private val storeRepository = StoreRepository()
 
@@ -51,30 +61,6 @@ class HomeViewModel : ViewModel() {
             _stateLoadBanner.value = it
         })
     }*/
-
-    fun isOnline(context : Context) : Boolean {
-
-        /* val networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .build()*/
-
-        val connectivityManager = getSystemService(context, ConnectivityManager::class.java) as ConnectivityManager
-        // connectivityManager.requestNetwork(networkRequest, networkCallback)
-
-        val network = connectivityManager.activeNetwork ?: return false
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-        return when {
-
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-
-            else -> false
-        }
-    }
 
     fun calculateDistance (
         lat1: Double, lon1: Double,
@@ -100,7 +86,11 @@ class HomeViewModel : ViewModel() {
         if (locationReceived == null) {
             Log.d("HomeVM.sendUserLocation", "The location is null.")
         } else {
-            if (isOnline(context)) {
+            viewModelScope.launch {
+                isWhereTheyHadOrdered(locationReceived)
+            }
+
+            if (networkManager.isOnline(context)) {
                 val location = LocationData(null, locationReceived.latitude, locationReceived.longitude, 0)
                 val locationJson = Gson().toJson(location)
                 locationRepository.sendLocation(location, callback = {
@@ -117,13 +107,30 @@ class HomeViewModel : ViewModel() {
 
     fun storeLocation(location: Location, context: Context) {
 
+        Log.d("HomeVM.storeLocation", "The function execution just started.")
         locationRepository.storeLocation(location, context)
+    }
+
+    private suspend fun isWhereTheyHadOrdered(location: Location) {
+
+        withContext(Dispatchers.IO) {
+            val locationString = "${location.latitude}, ${location.longitude}"
+            val order = SessionManager.getUser()?.user_id?.let {
+                orderRepository.getLastOrderByUserID(
+                    it
+                )
+            }
+            if (order != null) {
+                _theyHadOrderedHere.postValue(locationString == order.location)
+            }
+
+        }
     }
 
     fun countStore(store : Store, user_id : Int?) {
 
         if (store == null) {
-            Log.d("HomeViewModel", "The store is null.")
+            Log.d("HomeVM.countStore", "The store is null.")
         }
         val storeCount = StoreCount(null, store.store_id, user_id, 0)
         val storeCountJson = Gson().toJson(storeCount)
@@ -131,7 +138,7 @@ class HomeViewModel : ViewModel() {
         storeRepository.countStoreNetwork(storeCount, callback = {
             _stateStoreCounted.value = it
         })
-        Log.d("HomeViewModel", "StoreCount JSON sent: $storeCountJson")
+        Log.d("HomeVM.countStore", "StoreCount JSON sent: $storeCountJson")
     }
 
     suspend fun storePhoto(image : Bitmap) {

@@ -40,6 +40,11 @@ class LocationRepository() {
 
     fun storeLocation(location: android.location.Location, context: Context) {
 
+        Log.d("LocationRepo.storeLocation", "The function execution just started.")
         locationFileManager.storeLocation(location, context)
+    }
+
+    fun readLocation(context: Context) : String {
+        return locationFileManager.readLocation(context)
     }
 }

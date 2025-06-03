@@ -20,16 +20,27 @@ class LocationFileManager {
 
     fun storeLocation(location: android.location.Location, context: Context) {
 
+        Log.d("LocationFM.storeLocation", "The function execution just started.")
+
         if (!::fileWithLocation.isInitialized) {
             generateFileForStoringLocation(context)
         }
 
         val fileContent = "${location.latitude}, ${location.longitude} \n"
-        context.openFileOutput(fileLocationName, Context.MODE_APPEND).use {
+        context.openFileOutput(fileLocationName, Context.MODE_PRIVATE).use {
             it.write(fileContent.toByteArray())
             it.close()
         }
 
         Log.d("LocationFM.storeLocation", "The file was written.")
+    }
+
+    fun readLocation(context: Context) : String {
+
+        return context.openFileInput(fileLocationName).bufferedReader().useLines { lines ->
+            lines.fold("") { some, text ->
+                text
+            }
+        }
     }
 }

@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import com.example.lastbite.R
 
 class OrderAcceptedActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.order_accepted)
 

@@ -12,25 +12,33 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class CartRepository {
+
     private val apiService = ApiClient.instance.create(ApiService::class.java)
 
-    fun createCart(cart: Cart, callback: (Cart?) -> Unit) {
+    fun createCart(cart: Cart, callback: (Cart) -> Unit) {
 
         apiService.createCart(cart).enqueue(object : Callback<Cart> {
             override fun onResponse(call: Call<Cart>, response: Response<Cart>) {
+                val cartGenerated = response.body()
                 if (response.isSuccessful) {
-                    callback(response.body())
+                    if (cartGenerated != null) {
+                        Log.d("CartRepo.\"createCart\"", "The cart was generated.")
+                        callback(cartGenerated)
+                    }
+
                 } else {
-                    callback(null)
+
+                    callback(Cart(-1, -1, "NULL"))
                 }
             }
             override fun onFailure(call: Call<Cart>, t: Throwable) {
-                callback(null)
+                Log.e("CartRepo.\"createCart\"", "There was an error generating the cart.")
+                callback(Cart(-1, -1, "NULL"))
             }
         })
     }
 
-    suspend fun createCartSuspend(cart: Cart): Cart? = suspendCancellableCoroutine { cont ->
+    suspend fun createCartSuspend(cart: Cart): Cart = suspendCancellableCoroutine { cont ->
         createCart(cart) { createdCart ->
             cont.resume(createdCart, null)
         }

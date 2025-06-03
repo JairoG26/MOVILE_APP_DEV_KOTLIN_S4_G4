@@ -20,6 +20,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import androidx.fragment.app.viewModels
@@ -32,11 +34,18 @@ import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.example.lastbite.viewmodels.StoreViewModel
 import com.google.android.gms.location.LocationServices
 import androidx.lifecycle.lifecycleScope
+import com.example.lastbite.LocalDatabase
+import com.example.lastbite.LocationManager
+import com.example.lastbite.NetworkManager
 import com.example.lastbite.ProductReceivedLRUCacheManager
 import com.example.lastbite.R
+import com.example.lastbite.entities.OrderEntity
+import com.example.lastbite.models.Order
 import com.example.lastbite.repositories.ProductRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -49,6 +58,9 @@ class HomeFragment : Fragment() {
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
     private var photoBitmap: Bitmap? = null
     private var userLocation: Location? = null
+    // private val locationManager = LocationManager()
+    private val notificationManager = com.example.lastbite.NotificationManager()
+    private val networkManager = NetworkManager()
     // private val imageKitManager: ImageKitManager = ImageKitManager()
     // private val productRepository = ProductRepository()
 
@@ -69,8 +81,13 @@ class HomeFragment : Fragment() {
                 view = view.findViewById<ImageView>(R.id.imageMT))
             .create()*/
 
+        /*viewLifecycleOwner.lifecycleScope.launch {
+            networkManager.init()
+        }*/
+
         val contextFragment : Context = requireContext()
-        if (!homeViewModel.isOnline(contextFragment)) {
+
+        if (!networkManager.isOnline(contextFragment)) {
             val builder = AlertDialog.Builder(contextFragment)
             val layoutInflater : LayoutInflater = LayoutInflater.from(contextFragment)
             val promptView : View = layoutInflater.inflate(R.layout.reconnect_message, null)
@@ -122,7 +139,10 @@ class HomeFragment : Fragment() {
             nearbyRecyclerView.adapter = adapter
         }
 
-        requestLocationPermission()
+        requestLocationPermission(contextFragment)
+        /*storeViewModel.loadNearByStores(locationManager.userLocation?.latitude ?: 0.0,
+            locationManager.userLocation?.longitude ?: 0.0
+        )*/
 
         storeViewModel.loadStores()
 
@@ -146,14 +166,16 @@ class HomeFragment : Fragment() {
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
+        val contextFragment : Context = requireContext()
         if (isGranted) {
             getUserLocation()
+            // locationManager.getUserLocation(contextFragment, viewLifecycleOwner)
         } else {
-            Toast.makeText(requireContext(), "Location permission denied.", Toast.LENGTH_LONG).show()
+            Toast.makeText(contextFragment, "Location permission denied.", Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun requestLocationPermission() {
+    private fun requestLocationPermission(context: Context) {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -162,6 +184,7 @@ class HomeFragment : Fragment() {
             locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         } else {
             getUserLocation()
+            // locationManager.getUserLocation(contextFragment, viewLifecycleOwner)
         }
     }
 
@@ -207,7 +230,8 @@ class HomeFragment : Fragment() {
                     userLocation = it
                     Log.d("HomeFragment.getUserLocation", "The Location has the following" +
                             " coordinates: Lat: ${it.latitude}, Long: ${it.longitude}")
-                    homeViewModel.sendUserLocation(userLocation, contextFragment)
+                    homeViewModel.sendUserLocation(it, contextFragment)
+                    homeViewModel.storeLocation(it, contextFragment)
                     storeViewModel.loadNearByStores(it.latitude, it.longitude)
                 }
             } catch (e: Exception) {
@@ -231,6 +255,29 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
+    private fun requestNotificationPermission(contextFragment: Context, builder: NotificationCompat.Builder) {
+        with(NotificationManagerCompat.from(contextFragment)) {
+            if (ActivityCompat.checkSelfPermission(
+                    contextFragment,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionRequest.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            notify(2, builder.build())
+        }
+    }
+
+    private val notificationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(requireContext(), "Notification permission granted.", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(requireContext(), "Notification permission denied.", Toast.LENGTH_LONG).show()
+        }
+    }
+
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
 
         if (result.resultCode == Activity.RESULT_OK) {
@@ -241,8 +288,7 @@ class HomeFragment : Fragment() {
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             if (imageBitmap != null) {
                 photoBitmap = imageBitmap
-                getUserLocation()
-                lifecycleScope.launch {
+                viewLifecycleOwner.lifecycleScope.launch {
                     homeViewModel.storePhoto(imageBitmap)
                     Log.d("HomeFragment", "The coroutine has been executed.")
                 }
@@ -286,6 +332,17 @@ class HomeFragment : Fragment() {
                 orderStatusViewModel.isOrderAccepted.value = false
                 photoBitmap = null
             }
+        }
+
+        val contextFragment : Context = requireContext()
+
+        notificationManager.generateNotificationChannel(contextFragment, "User " +
+                "re-visiting a place where they had ordered")
+
+        homeViewModel.theyHadOrderedHere.observe(viewLifecycleOwner) {
+            val builder = notificationManager.generateNotificationRevisitedPlace(contextFragment,"User " +
+                    "re-visiting a place where they had ordered")
+            requestNotificationPermission(contextFragment, builder)
         }
     }
 }

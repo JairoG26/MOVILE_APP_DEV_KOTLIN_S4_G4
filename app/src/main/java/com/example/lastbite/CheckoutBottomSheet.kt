@@ -2,9 +2,6 @@ package com.example.lastbite
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +9,27 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.example.lastbite.activities.OrderAcceptedActivity
+import com.example.lastbite.entities.OrderEntity
 import com.example.lastbite.models.Cart
+import com.example.lastbite.repositories.LocationRepository
+import com.example.lastbite.viewmodels.CheckoutBottomSheetViewModel
 import com.example.lastbite.viewmodels.SingletonCartViewModel
 import com.example.lastbite.viewmodels.SingletonOrderStatusViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
+    // private var cartGenerated : Cart? = null
+    private var total : Float = 0.0F
+
+    private val checkoutBottomSheetViewModel = CheckoutBottomSheetViewModel()
     private val cartViewModel = SingletonCartViewModel.instance
     private val orderStatusViewModel = SingletonOrderStatusViewModel.instance
 
@@ -43,7 +47,7 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
         val costText = view.findViewById<TextView>(R.id.costText)
 
         cartViewModel.cartItems.observe(viewLifecycleOwner) { cartItems ->
-            val total = cartItems.sumOf { it.unitPrice.toDouble() * it.quantity }
+            total = cartItems.sumOf { it.unitPrice.toDouble() * it.quantity }.toFloat()
             costText.text = "$ %.2f".format(total)
         }
 
@@ -54,16 +58,18 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
         val confirmButton = view.findViewById<Button>(R.id.confirmCheckout)
         confirmButton.setOnClickListener {
+
+            Toast.makeText(requireContext(), "Processing order....", Toast.LENGTH_SHORT).show()
+
             val userId = SessionManager.getUser()?.user_id
-            val status = "ACTIVE"
-            val newCart = Cart(cart_id = null, user_id = userId, status = status)
+            val newCart = Cart(cart_id = null, user_id = userId, status = "ACTIVE")
 
             // Lanzamos la corrutina
             /*viewLifecycleOwner.lifecycleScope.launch {
                 val createdCart = cartViewModel.createCartSuspend(newCart)
 
                 if (createdCart == null) {
-                    Toast.makeText(requireContext(), "Error al crear el carrito", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error al generar el carrito", Toast.LENGTH_SHORT).show()
                     return@launch
                 }
 
@@ -101,9 +107,20 @@ class CheckoutBottomSheet : BottomSheetDialogFragment() {
 
             cartViewModel.createCart(newCart)
 
+            cartViewModel.cartGenerated.observe(viewLifecycleOwner) {
+                // cartGenerated = it
+                // Order generation:
+                viewLifecycleOwner.lifecycleScope.launch {
+
+                    checkoutBottomSheetViewModel.storeLastOrder(requireContext(), userId, it, total)
+                }
+            }
+
+
             cartViewModel.getActiveCart(userId)
 
             cartViewModel.clearCart()
+
             orderStatusViewModel.isOrderAccepted.value = true
 
             Toast.makeText(requireContext(), "The order was confirmed.", Toast.LENGTH_SHORT).show()

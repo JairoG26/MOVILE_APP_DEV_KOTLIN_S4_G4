@@ -4,15 +4,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.lastbite.entities.OrderEntity
 import com.example.lastbite.models.Cart
 import com.example.lastbite.models.CartItem
 import com.example.lastbite.models.CartProduct
 import com.example.lastbite.repositories.CartRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 class CartViewModel: ViewModel() {
 
     private val _cartItems = MutableLiveData<List<CartItem>>(emptyList())
     val cartItems: LiveData<List<CartItem>> get() = _cartItems
+    private val _cartGenerated = MutableLiveData<Cart>()
+    val cartGenerated : LiveData<Cart> = _cartGenerated
     var cartsCount: Int = 0
     private val _activeCart = MutableLiveData<Cart?>()
     val activeCart: LiveData<Cart?> = _activeCart
@@ -79,18 +86,17 @@ class CartViewModel: ViewModel() {
     fun createCart(cart: Cart) {
 
         repository.createCart(cart) { createdCart ->
-            if (createdCart != null) {
-                Log.d("CartVM.generateCart", "The cart was generated.")
-            } else {
-                Log.e("CartVM.generateCart", "There was an error generating the cart.")
-            }
+            _cartGenerated.value = createdCart
         }
+
+        Log.d("CartVM.\"generateCart\"", "The function execution just ended.")
     }
 
-    suspend fun createCartSuspend(cart: Cart): Cart? {
+    suspend fun createCartSuspend(cart: Cart): Cart {
 
         val createdCart = repository.createCartSuspend(cart)
         if (createdCart != null) {
+            _cartGenerated.value = createdCart
             Log.d("CartVM.generateCartSuspend", "The cart was generated.")
         } else {
             Log.e("CartVM.generateCartSuspend", "There was an error generating the cart.")
